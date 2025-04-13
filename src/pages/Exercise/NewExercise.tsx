@@ -6,6 +6,8 @@ import {v4 as uuidv4} from 'uuid';
 import Fields from "./Fields.tsx";
 import Tags from "./Tags.tsx";
 import TargetGroups from "./TargetGroups.tsx";
+import EquipmentPicker from "../common/EquipmentPicker/EquipmentPicker.tsx";
+import Equipments from "./Equipments.tsx";
 const NewExercise: React.FC = () => {
 
     
@@ -80,7 +82,10 @@ const NewExercise: React.FC = () => {
             setGroupName('');
         }
     }
-    
+    //TODO: Add instructions
+    //TODO: Add Preview Exercise where the app shows the view of other users
+    //TODO: Test that everything works
+    //TODO: Add automatic tests
     return ( 
         <div>
             <div>
@@ -118,7 +123,7 @@ const NewExercise: React.FC = () => {
                         <div className="flex flex-col gap-2">
                             <h3 className="font-bold text-xl">Fields</h3>
                             <Fields key='fields-create-field' addField={addField} />
-                            <div className="flex flex-col gap-2 h-[100px] overflow-x-hidden overflow-y-auto">
+                            <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded">
                                 {fields?.length > 0 ? fields.map((field, index)=>(
                                         <div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded" id={'field-'+index} key={field.name}>
                                             <h4>{field.name}</h4>
@@ -126,17 +131,18 @@ const NewExercise: React.FC = () => {
                                             <p>{field.unit}</p>
                                             <button type="button" onClick={()=>setFields((fields)=>[...fields.filter(item=>item==field)])}><img className=" w-[20px] h-[20px]" src={IconLibrary.No}  alt=""></img></button>
                                         </div>
-                                )): <h3>No fields created</h3>}
+                                )): <p className="px-2 py-1 font-bold">No fields created</p>}
                             </div>
                         </div>
+                        
                     </div>
                     <div className="w-1/2 flex flex-col gap-[20px]">
                         <div>
                             <h3 className="font-bold text-xl">Tags</h3>
                             <Tags addTag={addTag} author={"system"} allTags={exerciseTags} />
                             
-                            <div className="flex flex-col gap-2 h-[200px] overflow-x-hidden overflow-y-auto primary-color rounded">
-                                {exerciseTags?.length > 0 ? exerciseTags.map((item)=><div key={item.name+item.color} className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded"><div className="h-[15px] w-[15px] rounded" style={{backgroundColor: item.color}}></div><p>{item.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setExerciseTags((exerciseTags)=>[...exerciseTags.filter(it=>it.id!==item.id)]) }/></div>) : ''}
+                            <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded">
+                                {exerciseTags?.length > 0 ? exerciseTags.map((item)=><div key={item.name+item.color} className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded"><div className="h-[15px] w-[15px] rounded" style={{backgroundColor: item.color}}></div><p>{item.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setExerciseTags((exerciseTags)=>[...exerciseTags.filter(it=>it.id!==item.id)]) }/></div>) : <p className="px-2 py-1 font-bold">No Tags</p>}
                             </div>
                         </div>
                         <div className="flex flex-col gap-2">
@@ -147,19 +153,19 @@ const NewExercise: React.FC = () => {
                                 <button type="button" onClick={handleAddGroup}><img className="w-[30px] h-[30px]"  src={IconLibrary.Add} alt="" /></button>
                             </div>  
                             {showGroups ? <TargetGroups closeModal={()=>setShowGroups(false)} currentItems={muscleGroups} addItem={addmuscleGroups} /> : null}
-                            <div className="flex flex-col gap-2 h-[200px] overflow-x-hidden overflow-y-auto primary-color rounded">
-                                {muscleGroups?.length > 0 ? muscleGroups.map((item, index)=><div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded" key={item.name+index} ><div></div><p>{item.name}</p><img className=" w-[20px] h-[20px]" src={IconLibrary.No} onClick={()=>setMuscleGroups((muscleGroups)=>[...muscleGroups.filter(it=>it.id!==item.id)]) }/></div>) : ''}
+                            <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded">
+                                {muscleGroups?.length > 0 ? muscleGroups.map((item, index)=><div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded" key={item.name+index} ><div></div><p>{item.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setMuscleGroups((muscleGroups)=>[...muscleGroups.filter(it=>it.id!==item.id)]) }/></div>) : <p className="px-2 py-1 font-bold">No Target Muscles</p>}
                             </div>
                         </div> 
                         <div >
                             <h3 className="font-bold text-xl">Equipment</h3>
-                            {/* <CreateEquipment addEquipment={addEquipment} allItems={equipments} /> */}
-                            <div >
-                                {equipments?.length > 0 ? equipments.map((item,index)=><div key={item.name+index} >
+                            <Equipments addEquipment={addEquipment} allItems={equipments} />
+                            <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded mt-2">
+                                {equipments?.length > 0 ? equipments.map((item,index)=><div key={item.name+index} className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded">
                                     <p>{item.name}</p>
                                     <div>{item.attributes && item.attributes.length > 0 ? item.attributes.map((item, index)=>(<p key={'attribute-'+index}>{item.value} {item.unit}</p>)): null}</div>
-                                    <img className=" w-[20px] h-[20px]" src={IconLibrary.No} onClick={()=>setEquipments((equipments)=>[...equipments.filter(it=>it.id!==item.id)]) }/>
-                                </div>) : ''}
+                                    <img className="w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setEquipments((equipments)=>[...equipments.filter(it=>it.id!==item.id)]) }/>
+                                </div>) : <p className="px-2 py-1 font-bold">No Equipment</p>}
                             </div>
                         </div>
 

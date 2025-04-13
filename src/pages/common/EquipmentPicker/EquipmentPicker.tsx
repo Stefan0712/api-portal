@@ -1,9 +1,8 @@
 import React from 'react';
-import styles from '../styles/DefaultItemPicker.module.css';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+import styles from '../TagPicker/TagPicker.module.css';
 import { useState } from 'react';
 import { IconLibrary } from '../../../IconLibrary';
+import { defaultEquipment as defaultItems } from '../../../constants/defaultEquipment';
 
 interface Equipment {
     id: string;
@@ -23,7 +22,6 @@ interface EquipmentPickerProps {
 }
 const EquipmentPicker: React.FC<EquipmentPickerProps> = ({closeModal, addItem, currentItems}) => {
 
-    const defaultItems = useSelector((state: RootState)=>state.user.equipment);
 
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [items, setItems] = useState<Equipment[]>(defaultItems || []);
@@ -52,11 +50,11 @@ const EquipmentPicker: React.FC<EquipmentPickerProps> = ({closeModal, addItem, c
         <div className={styles['tag-picker']}>
             <div className={styles.top}>
                 <h3>My Equipment</h3>
-                <button type="button" className="clear-button" onClick={closeModal}><img src={IconLibrary.Close} className="small-icon" alt="" /></button>
+                <button type="button" className="clear-button" onClick={closeModal}><img src={IconLibrary.Close} className="w-[20px] h-[20px]" alt="" /></button>
             </div>
             <div className={styles['search-bar']}>
-                <input className={styles['search-input']} type="text" minLength={0} maxLength={20} onChange={(e)=>handleSeach(e.target.value)} value={searchQuery} placeholder='Search...'></input>
-                <img className="small-icon" src={IconLibrary.Search} />
+                <input className={`${styles['search-input']} h-[40px] rounded w-full pl-[10px] secondary-color`} type="text" minLength={0} maxLength={20} onChange={(e)=>handleSeach(e.target.value)} value={searchQuery} placeholder='Search...'></input>
+                <img className="w-[20px] h-[20px]" src={IconLibrary.Search} />
             </div>
             <div className={styles.results}>
                 {items?.length > 0 ? items.map((item,index)=>
@@ -69,7 +67,7 @@ const EquipmentPicker: React.FC<EquipmentPickerProps> = ({closeModal, addItem, c
                                         <p>{item.attributes[0]?.value} {item.attributes[0]?.unit}</p>
                                     </div> : null}
                             </div>
-                            <button type="button" className="clear-button" onClick={()=>addItem(item)}><img src={IconLibrary.Add} className="small-icon" alt="" /></button>
+                            <button type="button" className="clear-button" onClick={()=>addItem(item)}><img src={IconLibrary.Add} className="w-[20px] h-[20px]" alt="" /></button>
                         </div>
                     )
                 ):<p>Items not found</p>}

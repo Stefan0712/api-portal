@@ -1,9 +1,8 @@
-import styles from './CreateExercise.module.css';
 import React from 'react';
 import { useState } from 'react';
 import {v4 as uuidv4} from 'uuid';
-import {IconLibrary} from '../../../IconLibrary';
-import EquipmentPicker from '../../common/EquipmentPicker/EquipmentPicker.tsx';
+import {IconLibrary} from '../../IconLibrary';
+import EquipmentPicker from '../common/EquipmentPicker/EquipmentPicker.tsx';
 
 interface Equipment {
     id: string;
@@ -21,7 +20,7 @@ interface CreateEquipmentProps {
     allItems: Equipment[];
 }
   
-const Equipment: React.FC<CreateEquipmentProps> = ({addEquipment, allItems}) => {
+const Equipments: React.FC<CreateEquipmentProps> = ({addEquipment, allItems}) => {
 
     const [name, setName] = useState<string>('');
     const [unit, setUnit] = useState<string>('');
@@ -63,15 +62,15 @@ const Equipment: React.FC<CreateEquipmentProps> = ({addEquipment, allItems}) => 
     }
 
     return ( 
-        <div className={styles['create-equipment']}>
+        <div className='flex gap-2'>
             {showEquipments ? <EquipmentPicker closeModal={()=>setShowEquipments(false)} currentItems={allItems} addItem={addEquipment} /> : null}
-            <button type="button" className="clear-button" onClick={()=>setShowEquipments(true)}><img   className="small-icon" src={IconLibrary.Search} alt=""/></button>
-            <input className={error ? 'input-error' : ''} type='text' onChange={(e)=>handleNameChange(e.target.value)} value={name} maxLength={15} placeholder='Name'/>
-            <input type='text' onChange={(e)=>handleUnitChange(e.target.value)} value={unit} placeholder='Unit'/>
-            <input type='number' onChange={(e)=>handleValueChange(e.target.value)} value={value} placeholder='Value'/>
-            <button type='button' className='clear-button' onClick={handleAddEquipment}><img src={IconLibrary.Add} className='small-icon' alt='' /></button>
+            <button type="button" onClick={()=>setShowEquipments(true)}><img   className="w-[20px] h-[20px] w-1/7" src={IconLibrary.Search} alt=""/></button>
+            <input className={`${error ? 'input-error' : ''} h-[40px] rounded w-3/7 pl-[10px] secondary-color`} type='text' onChange={(e)=>handleNameChange(e.target.value)} value={name} maxLength={15} placeholder='Name'/>
+            <input className='h-[40px] rounded w-1/7 pl-[10px] secondary-color' type='text' onChange={(e)=>handleUnitChange(e.target.value)} value={unit} placeholder='Unit'/>
+            <input className='h-[40px] rounded w-1/7 pl-[10px] secondary-color' type='number' onChange={(e)=>handleValueChange(e.target.value)} value={value} placeholder='Value'/>
+            <button type='button' onClick={handleAddEquipment}><img src={IconLibrary.Add} className="h-[20px] w-[30px]" alt='' /></button>
         </div>
      );
 }
  
-export default Equipment;
+export default Equipments;
