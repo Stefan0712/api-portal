@@ -1,10 +1,9 @@
 import React from "react";
-import styles from './Exercise.module.css';
 import { useState } from "react";
-import ColorPicker from "../../common/ColorPicker/ColorPicker.tsx";
-import { IconLibrary } from "../../../IconLibrary";
+import ColorPicker from "../common/ColorPicker/ColorPicker.tsx";
+import { IconLibrary } from "../../IconLibrary";
 import {v4 as uuidv4} from 'uuid';
-import TagPicker from "../../common/TagPicker/TagPicker.tsx";
+import TagPicker from "../common/TagPicker/TagPicker.tsx";
 
 interface Tag {
     id: string;
@@ -20,7 +19,7 @@ interface CreateTagProps {
 const Tags: React.FC<CreateTagProps> = ({addTag, author, allTags}) => {
 
     const [name, setName] = useState<string>('');
-    const [color, setColor] = useState<string>('#FFFFF');
+    const [color, setColor] = useState<string>('#FFFFFF');
     const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
     const [showTags, setShowTags] = useState<boolean>(false);
@@ -77,10 +76,10 @@ const Tags: React.FC<CreateTagProps> = ({addTag, author, allTags}) => {
         <div style={createTagStyles}>
             {showTags ? <TagPicker closeModal={()=>setShowTags(false)} currentTags={allTags} addTag={addTag} /> : null}
             {showColorPicker ? <ColorPicker closeModal={()=>setShowColorPicker(false)} getColor={setColor} currentColor={color}/> : null}
-            <button type="button" className="clear-button" onClick={()=>setShowTags(true)}><img   className="small-icon" src={IconLibrary.Search} alt=""/></button>
-            <button className={styles['colorpicker-button']} type="button" style={colorButtonStyles} onClick={()=>setShowColorPicker(true)} />
-            <input className={`${error ? 'error-input' : ''}`} type="text" name="name" id="name" onChange={(e)=>handleNameInput(e.target.value)} value={name} placeholder="Name"/>
-            <button type="button" className={styles['add-tag-button']} onClick={handleAddTag} style={addButtonStyles}><img style={{width: '40px', height: '40px'}} src={IconLibrary.Add} alt="" /></button>
+            <button type="button" onClick={()=>setShowTags(true)}><img className="w-[30px] h-[30px]" src={IconLibrary.Search} alt=""/></button>
+            <button type="button" style={colorButtonStyles} onClick={()=>setShowColorPicker(true)} />
+            <input className={` h-[40px] rounded w-full pl-[10px] secondary-color ${error ? 'input-error' : ''}`} type="text" name="name" id="name" onChange={(e)=>handleNameInput(e.target.value)} value={name} placeholder="Name"/>
+            <button type="button" onClick={handleAddTag} style={addButtonStyles}><img style={{width: '40px', height: '40px'}} src={IconLibrary.Add} alt="" /></button>
         </div>
      );
 }

@@ -4,6 +4,7 @@ import { IconLibrary } from "../../IconLibrary";
 import { TargetGroup, Tag, Equipment, Field, Exercise } from "../../types/interfaces.ts";
 import {v4 as uuidv4} from 'uuid';
 import Fields from "./Fields.tsx";
+import Tags from "./Tags.tsx";
 const NewExercise: React.FC = () => {
 
     
@@ -113,13 +114,14 @@ const NewExercise: React.FC = () => {
                                 </select>
                             <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="rest" id="rest" onChange={(e) => setRest(e.target.value)} value={rest} placeholder="Rest (sec)"></input>
                         </fieldset>
-                        <div>
+                        <div className="flex flex-col gap-2">
+                            <h3 className="font-bold text-xl">Fields</h3>
                             <Fields key='fields-create-field' addField={addField} />
-                            <div>
+                            <div className="flex flex-col gap-2 h-[100px] overflow-x-hidden overflow-y-auto">
                                 {fields?.length > 0 ? fields.map((field, index)=>(
-                                        <div id={'field-'+index} key={field.name}>
+                                        <div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded" id={'field-'+index} key={field.name}>
                                             <h4>{field.name}</h4>
-                                            <p>{field.target || null}</p>
+                                            <p className="ml-auto">{field.target || null}</p>
                                             <p>{field.unit}</p>
                                             <button type="button" onClick={()=>setFields((fields)=>[...fields.filter(item=>item==field)])}><img className=" w-[20px] h-[20px]" src={IconLibrary.No}  alt=""></img></button>
                                         </div>
@@ -129,13 +131,15 @@ const NewExercise: React.FC = () => {
                     </div>
                     <div className="w-1/2 flex flex-col gap-[20px]">
                         <div>
-                            {/* <CreateTag addTag={addTag} author={"system"} allTags={exerciseTags} /> */}
+                            <h3 className="font-bold text-xl">Tags</h3>
+                            <Tags addTag={addTag} author={"system"} allTags={exerciseTags} />
                             
-                            <div>
-                                {exerciseTags?.length > 0 ? exerciseTags.map((item)=><div key={item.name+item.color}><div style={{backgroundColor: item.color}}></div><p>{item.name}</p><img className=" w-[20px] h-[20px]" src={IconLibrary.No} onClick={()=>setExerciseTags((exerciseTags)=>[...exerciseTags.filter(it=>it.id!==item.id)]) }/></div>) : ''}
+                            <div className="flex flex-col gap-2 h-[100px] overflow-x-hidden overflow-y-auto">
+                                {exerciseTags?.length > 0 ? exerciseTags.map((item)=><div key={item.name+item.color} className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded"><div className="h-[15px] w-[15px] rounded" style={{backgroundColor: item.color}}></div><p>{item.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setExerciseTags((exerciseTags)=>[...exerciseTags.filter(it=>it.id!==item.id)]) }/></div>) : ''}
                             </div>
                         </div>
                         <div>
+                            <h3 className="font-bold text-xl">Target Muscles</h3>
                             <div>
                                 <button type="button" onClick={()=>setShowGroups(true)}><img className=" w-[20px] h-[20px]" src={IconLibrary.Search} alt=""/></button>
                                 <input type='text' name="groupName" onChange={(e)=>setGroupName(e.target.value)} value={groupName} placeholder="Muscle Name" />
@@ -147,6 +151,7 @@ const NewExercise: React.FC = () => {
                             </div>
                         </div> 
                         <div >
+                            <h3 className="font-bold text-xl">Equipment</h3>
                             {/* <CreateEquipment addEquipment={addEquipment} allItems={equipments} /> */}
                             <div >
                                 {equipments?.length > 0 ? equipments.map((item,index)=><div key={item.name+index} >

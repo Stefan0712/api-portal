@@ -1,0 +1,83 @@
+.color-picker{
+    height: 350px;
+    width: 50vw;
+    position: absolute;
+    bottom: 85px;
+    right: 15px;
+    background-color: var(--background);
+    padding: 15px 10px;
+    border-radius: 10px;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation-name: slideInModal;
+    animation-duration: 0.1s;
+}
+@keyframes slideInModal {
+    from{
+        bottom: -120%;
+        opacity: 0;
+    }
+    to{
+        bottom: 85px;
+        opacity: 1;
+    }
+}
+.header{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.hex{
+    width: 100px;
+    height: 40px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+.incorrect-hex{
+    border: 1px solid red !important;
+}
+
+.colors-container{
+    width: 100%;
+    height: 100px;
+    display: flex;
+    gap: 5px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    flex-wrap: wrap;
+}
+.color{
+    width: 30px;
+    height: 30px;
+    min-height: 30px;
+    min-width: 30px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+}
+.custom-color-inputs{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.custom-color-input{
+    width: 50px; 
+}
+.selected-color{
+    width: 40px;
+    height: 40px;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+.save-color-button{
+    height: 50px;
+    width: 150px;
+    border: 1px solid rgba(221, 221, 221, 0.1);
+    border-radius: 5px;
+    background-color: var(--secondary);
+}
