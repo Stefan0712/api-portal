@@ -1,5 +1,5 @@
 export interface Exercise {
-    _id: string;
+    _id?: string;
     sourceId?: string;
     createdAt: string; 
     updatedAt?: string | null;

@@ -1,6 +1,7 @@
 import react, { useEffect, useState } from "react";
 import axios from "axios";
 import { Exercise } from "../../types/interfaces";
+import { Link } from "react-router-dom";
 
 
 
@@ -12,7 +13,6 @@ const Exercises = () => {
         fetchItems();
     },[]);
 
-    console.log(process.env.REACT_APP_API_URL)
     const fetchItems = async () =>{
         try{
             const response = await axios.get<Exercise[]>(`${process.env.REACT_APP_API_URL}/exercise/`);
@@ -43,6 +43,7 @@ const Exercises = () => {
                 <h2>Exercises</h2>
             </div>
             <div className="items-container col-start-1 col-end-2 row-start-2 row-end-3 flex flex-col gap-[10px]">
+                <Link to={'/new-exercise'} className="w-full h-[40px] rounded primary-color items-center flex justify-center">Add Exercise</Link>
                 {items && items.length > 0 ? items.map((item, index)=> (
                     <div className={`item w-full h-[90px] primary-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getExerciseData(item._id)}>
                         <h3>{item.name}</h3>

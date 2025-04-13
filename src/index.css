@@ -41,3 +41,7 @@
 .selected-item{
     background-color: #2b2b2b !important;
 }
+.input-error{
+    border: 1px solid red;
+    color: red;
+}
