@@ -5,6 +5,7 @@ import { TargetGroup, Tag, Equipment, Field, Exercise } from "../../types/interf
 import {v4 as uuidv4} from 'uuid';
 import Fields from "./Fields.tsx";
 import Tags from "./Tags.tsx";
+import TargetGroups from "./TargetGroups.tsx";
 const NewExercise: React.FC = () => {
 
     
@@ -134,20 +135,20 @@ const NewExercise: React.FC = () => {
                             <h3 className="font-bold text-xl">Tags</h3>
                             <Tags addTag={addTag} author={"system"} allTags={exerciseTags} />
                             
-                            <div className="flex flex-col gap-2 h-[100px] overflow-x-hidden overflow-y-auto">
+                            <div className="flex flex-col gap-2 h-[200px] overflow-x-hidden overflow-y-auto primary-color rounded">
                                 {exerciseTags?.length > 0 ? exerciseTags.map((item)=><div key={item.name+item.color} className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded"><div className="h-[15px] w-[15px] rounded" style={{backgroundColor: item.color}}></div><p>{item.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setExerciseTags((exerciseTags)=>[...exerciseTags.filter(it=>it.id!==item.id)]) }/></div>) : ''}
                             </div>
                         </div>
-                        <div>
+                        <div className="flex flex-col gap-2">
                             <h3 className="font-bold text-xl">Target Muscles</h3>
-                            <div>
-                                <button type="button" onClick={()=>setShowGroups(true)}><img className=" w-[20px] h-[20px]" src={IconLibrary.Search} alt=""/></button>
-                                <input type='text' name="groupName" onChange={(e)=>setGroupName(e.target.value)} value={groupName} placeholder="Muscle Name" />
-                                <button type="button" onClick={handleAddGroup}><img className=" w-[20px] h-[20px]"  src={IconLibrary.Add} alt="" /></button>
+                            <div className="flex gap-2">
+                                <button type="button" onClick={()=>setShowGroups(true)}><img className="w-[30px] h-[30px]" src={IconLibrary.Search} alt=""/></button>
+                                <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type='text' name="groupName" onChange={(e)=>setGroupName(e.target.value)} value={groupName} placeholder="Muscle Name" />
+                                <button type="button" onClick={handleAddGroup}><img className="w-[30px] h-[30px]"  src={IconLibrary.Add} alt="" /></button>
                             </div>  
-                            {/* {showGroups ? <TargetGroupPicker closeModal={()=>setShowGroups(false)} currentItems={muscleGroups} addItem={addmuscleGroups} /> : null} */}
-                            <div>
-                                {muscleGroups?.length > 0 ? muscleGroups.map((item, index)=><div key={item.name+index} ><div></div><p>{item.name}</p><img className=" w-[20px] h-[20px]" src={IconLibrary.No} onClick={()=>setMuscleGroups((muscleGroups)=>[...muscleGroups.filter(it=>it.id!==item.id)]) }/></div>) : ''}
+                            {showGroups ? <TargetGroups closeModal={()=>setShowGroups(false)} currentItems={muscleGroups} addItem={addmuscleGroups} /> : null}
+                            <div className="flex flex-col gap-2 h-[200px] overflow-x-hidden overflow-y-auto primary-color rounded">
+                                {muscleGroups?.length > 0 ? muscleGroups.map((item, index)=><div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded" key={item.name+index} ><div></div><p>{item.name}</p><img className=" w-[20px] h-[20px]" src={IconLibrary.No} onClick={()=>setMuscleGroups((muscleGroups)=>[...muscleGroups.filter(it=>it.id!==item.id)]) }/></div>) : ''}
                             </div>
                         </div> 
                         <div >

@@ -5,13 +5,14 @@
     width: 50vw;
     height: 500px;
     border-radius: 10px;
-    background-color: var(--modal-bg);
+    background-color: #1A1A1B;
     border: 1px solid rgba(221, 221, 221, 0.1);
     padding: 0 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     animation: slideUpModal 0.1s;
+    z-index: 30;
 }
 @keyframes slideUpModal {
     from{

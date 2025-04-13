@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../styles/DefaultItemPicker.module.css';
+import styles from '../common/TagPicker/TagPicker.module.css';
 import { useState } from 'react';
 import { IconLibrary } from '../../IconLibrary';
 import {muscles as defaultItems} from '../../constants/defaultMuscles';
@@ -41,21 +41,21 @@ const TargetGroups: React.FC<TargetGroupsProps> = ({closeModal, addItem, current
 
 
     return ( 
-        <div className={styles['tag-picker']}>
+        <div className={`${styles['tag-picker']}`}>
             <div className={styles.top}>
                 <h3>My Tags</h3>
-                <button type="button" className="clear-button" onClick={closeModal}><img src={IconLibrary.Close} className="small-icon" alt="" /></button>
+                <button type="button" className="clear-button" onClick={closeModal}><img src={IconLibrary.Close} className="w-[30px] h-[30px]" alt="" /></button>
             </div>
             <div className={styles['search-bar']}>
-                <input className={styles['search-input']} type="text" minLength={0} maxLength={20} onChange={(e)=>handleSeach(e.target.value)} value={searchQuery} placeholder='Search...'></input>
-                <img className="small-icon" src={IconLibrary.Search} />
+                <input className={`${styles['search-input']} h-[40px] rounded w-full pl-[10px] secondary-color`} type="text" minLength={0} maxLength={20} onChange={(e)=>handleSeach(e.target.value)} value={searchQuery} placeholder='Search...'></input>
+                <img className="w-[30px] h-[30px]" src={IconLibrary.Search} />
             </div>
             <div className={styles.results}>
                 {items?.length > 0 ? items.map((item,index)=>
                     checkIfAdded(item) ? null : (
                         <div className={styles.tag} key={'equipment-'+item.name+index}>
                             <p className={styles.name}>{item.name}</p>
-                            <button type="button" className="clear-button" onClick={()=>addItem(item)}><img src={IconLibrary.Add} className="small-icon" alt="" /></button>
+                            <button type="button" className="clear-button" onClick={()=>addItem(item)}><img src={IconLibrary.Add} className="w-[30px] h-[30px]" alt="" /></button>
                         </div>
                     )
                 ):<p>Items not found</p>}
