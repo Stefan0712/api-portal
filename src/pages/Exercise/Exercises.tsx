@@ -35,6 +35,8 @@ const Exercises = () => {
     //TODO: Replace hardcoded author name with one found by id from the database
     //TODO: Change notes to be a string instead of an array of strings
     //TODO: Show the entire description of field on hover
+    //TODO: Make sure equipment work as expected
+    //TODO: Add colors to tags
     return ( 
         <div className="exercises p-[20px] gap-[10px]">
             <div className="items-top col-start-1 col-end-3 row-start-1 row-end-2">

@@ -57,14 +57,14 @@ export interface Field {
     isCompleted: boolean
 }
 export interface Workout {
-    id: string;
+    _id: string;
     name: string;
     description: string;
     difficulty: string;
     targetGroup: TargetGroup[];
     duration: number; 
     equipment: Equipment[];
-    exercises: string[];
+    exercises: Exercise[];
     createdAt: string; 
     updatedAt?: string; 
     authorId: string;

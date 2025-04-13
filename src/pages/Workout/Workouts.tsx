@@ -6,6 +6,7 @@ import { Workout } from "../../types/interfaces";
 
 const Workouts = () => {
     const [items, setItems] = useState<Workout[]>([])
+    const [selectedItem, setSelectedItem] = useState<Workout | null>(null);
 
     useEffect(()=>{
         fetchItems();
@@ -21,36 +22,87 @@ const Workouts = () => {
             console.error("Error fetching workouts: ", error)
         }
     }
+    const getWorkoutData = async (id: string) =>{
+        try{
+            const response = await axios.get<Workout>(`${process.env.REACT_APP_API_URL}/workout/${id}`);
+            setSelectedItem(response.data);
+            console.log(response.data)
+        } catch (error) {
+            console.error("Error fetching workout: ", error)
+        }
+    }
+    const getExercises = async( id: string) =>{
 
-    
+    }
     return ( 
-        <div className="workout p-[20px]">
+        <div className="exercises p-[20px] gap-[10px] h-full">
             <div className="items-top col-start-1 col-end-3 row-start-1 row-end-2">
                 <h2>Workouts</h2>
             </div>
-            <div className="items-container col-start-1 col-end-2 row-start-2 row-end-3 flex flex-col gap-[10px]">
+            <div className="items-container col-start-1 col-end-2 row-start-2 row-end-3 flex flex-col gap-[10px] h-full overflow-x-auto">
                 {items && items.length > 0 ? items.map((item, index)=> (
-                    <div className="item w-full h-[75px] bg-gray-900 py-[5px] px-[10px]" key={index}>
-                        <div className="flex content-between w-full">
-                            <h3>{item.name}</h3>
-                            <p>by Author Name</p>
-                        </div>
-                        <div className="flex gap-[10px]">
-                            <p>Equipment {item.equipment?.length}</p>
-                            <p>Exercises {item.exercises?.length}</p>
-                        </div>
-                        <div className="flex gap-[10px] overflow-hidden w-full">
-                            {item.targetGroup && item.targetGroup.length > 0 ? item.targetGroup.map((group,index)=><p key={'group-'+index}>{group.name}</p>):null}
-                        </div>
-                        <div className="flex gap-[10px]">
-                            <p>Duration {item.duration}</p>
-                            <p>Difficulty {item.difficulty}</p>
-                        </div>
+                    <div className={`item w-full h-[90px] primary-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getWorkoutData(item._id)}>
+                    <h3>{item.name}</h3>
+                    <div className="flex gap-[10px] overflow-hidden w-full">
+                        {item.targetGroup && item.targetGroup.length > 0 ? item.targetGroup.map((group,index)=><p key={'group-'+index}>{group.name}</p>):<p>No groups</p>}
                     </div>
+                    <div className="flex gap-[10px] overflow-hidden w-full">
+                        {item.tags && item.tags.length > 0 ? item.tags.map((tag,index)=><p key={'tag-'+index}>{tag.name}</p>):<p>No tags</p>}
+                    </div>
+                    
+                </div>
             )) : null}
             </div>
-            <div className="item-content col-start-2 col-end-3 row-start-2 row-end-3">
-                
+            <div className="item-content col-start-2 col-end-3 row-start-2 row-end-3 primary-color">
+            {selectedItem ? 
+                <div className="p-[15px] flex gap-[10px] flex-wrap">
+                    <h2 className="font-bold mb-2">{selectedItem.name}</h2>
+                    <div className="secondary-color p-[10px] rounded w-full h-[90px] flex gap-[10px]">
+                        <div className="w-2/3">
+                            <h3 className="font-bold">Description</h3>
+                            <p>{selectedItem.description || 'No description'}</p>
+                        </div>
+                        <div className="w-1/3">
+                            <p><b>Author:</b> Stefan</p>
+                            <p><b>Created at:</b> {selectedItem.createdAt || 'Not Set'}</p>
+                            <p><b>Difficulty:</b> {selectedItem.difficulty || 'Not Set'}</p>
+                        </div>
+                    </div>
+                    <div className="flex flex-col overflow-hidden secondary-color p-[10px] rounded h-[90px]" style={{ width: 'calc(50% - 5px)' }}>
+                        <h3 className="font-bold mb-2">Target Muscles</h3>
+                        <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden">
+                            {selectedItem.targetGroup && selectedItem.targetGroup.length > 0 ? selectedItem.targetGroup.map((group,index)=><p  className="primary-color px-[10px] py-[5px] rounded" key={'group-'+index}>{group.name}</p>):<p  className="primary-color px-[10px] rounded">No groups</p>}
+                        </div>
+                    </div>
+                    
+                    <div className="flex flex-col overflow-hidden secondary-color p-[10px] rounded h-[90px]" style={{ width: 'calc(50% - 5px)' }}>
+                        <h3 className="font-bold mb-2">Tags</h3>
+                        <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden">
+                            {selectedItem.tags && selectedItem.tags.length > 0 ? selectedItem.tags.map((tag,index)=><p className="primary-color px-[10px] py-[5px] rounded" key={'tag-'+index}>{tag.name}</p>):<p  className="primary-color px-[10px] rounded">No tags</p>}
+                        </div>
+                    </div>
+                   
+                    
+                    <div className="flex flex-col gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
+                        <h3 className="font-bold mb-2">Equipment</h3>
+                        <div className="flex gap-[10px]  overflow-x-hidden overflow-y-auto">
+                            {selectedItem.tags && selectedItem.tags.length > 0 ? selectedItem.tags.map((tag,index)=><p className="primary-color px-[10px] rounded" key={'tag-'+index}>{tag.name}</p>):<p  className="primary-color px-[10px] rounded">No tags</p>}
+                        </div>
+                    </div>
+                    <div className="flex flex-col gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
+                        <div className="flex gap-[10px] items-center mb-3">
+                            <h3 className="font-bold mr-auto">Exercises</h3>
+                            <p><b>Duration: </b>{selectedItem.duration || 'Not Set'} minutes</p>
+                            <p><b>Exercises: </b>{selectedItem.exercises?.length || 'Not Set'}</p>
+                        </div>
+                        <div className="flex flex-col gap-[10px] overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-500 scrollbar-track-gray-200 pr-[20px]">
+                            {selectedItem.exercises && selectedItem.exercises.length > 0 ? selectedItem.exercises.map((exercise,index)=><div className="primary-color flex-shrink-0 px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
+                                    <h3 className="w-4/5">{exercise.name || 'Unnamed exercise'}</h3>
+                                    <p className="w-1/5 text-end">{exercise.sets} {exercise.sets && exercise.sets === 1 ? 'set' : 'sets'}</p>
+                                </div>):<p  className="primary-color rounded w-full h-[40px] flex gap-[10px]">No exercises</p>}
+                        </div>
+                    </div>
+                </div> : <h2 className="font-bold p-[20px]">Select a workout</h2>}
             </div>
         </div>
      );
