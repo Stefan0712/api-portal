@@ -1,13 +1,43 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.App{
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 75px 1fr;
+    gap: 10px;
+    background-color: #111214;
+}
+.navigation{
+    width: 100%;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.exercises,
+.workouts {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 75px 1fr;
+}
+.primary-color{
+    background-color: #1a1a1a;
+}
+.secondary-color{
+    background-color: #2b2b2b;
+}
+.background-color{
+    background-color: #111214;
+}
+.accent-color{
+    color: #e85a2c;
+    background-color: #e85a2c;
+}
+.selected-item{
+    background-color: #2b2b2b !important;
 }
