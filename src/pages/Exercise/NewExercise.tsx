@@ -7,11 +7,14 @@ import Fields from "./Fields.tsx";
 import Tags from "./Tags.tsx";
 import TargetGroups from "./TargetGroups.tsx";
 import Equipments from "./Equipments.tsx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 
 const NewExercise: React.FC = () => {
+
+    const navigate = useNavigate();
 
     const [showGroups, setShowGroups] = useState<boolean>(false);
 
@@ -32,7 +35,15 @@ const NewExercise: React.FC = () => {
     const [instructions, setInstructions] = useState<string[]>([]); // State to hold the array of all instructions
     const [instruction, setInstruction] = useState<string>(''); // State to hold current value of instruction input
 
-    
+    const handleSaveExercise = async (data: Exercise) =>{
+        try{
+            const response = axios.post(`${process.env.REACT_APP_API_URL}/exercise`, data);
+            console.log("Exercise saved!", response);
+            navigate('/exercises');
+        } catch (error){
+            console.log("Error saving exercise: ",error)
+        }
+    }
 
     const handleSubmit = ()=>{
         const createdAt = new Date().toISOString(); // Get raw date and time for keeping track of when the exercise was created;
@@ -59,7 +70,8 @@ const NewExercise: React.FC = () => {
             equipment: equipments, 
             instructions: instructions || []
         };
-        console.log(exerciseData)
+        console.log(exerciseData);
+        handleSaveExercise(exerciseData);
         
     }
 
@@ -166,7 +178,7 @@ const NewExercise: React.FC = () => {
                             </div>  
                             <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded p-2 pr-[20px]">
                                 {instructions?.length > 0 ? instructions.map((instruction, index)=>(
-                                        <div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0" id={'instruction'} key={'instruction-'+index}>
+                                        <div className="w-full mh-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0" id={'instruction'} key={'instruction-'+index}>
                                             <h4>{index+1}. {instruction}</h4>
                                             <button className="ml-auto" type="button" onClick={()=>handleRemoveInstruction(instruction)}><img className="w-[20px] h-[20px]" src={IconLibrary.No}  alt=""></img></button>
                                         </div>
