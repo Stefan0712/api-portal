@@ -132,7 +132,7 @@ const Exercises = () => {
                             {selectedItem.equipment && selectedItem.equipment.length > 0 ? selectedItem.equipment.map((eq,index)=><div className="primary-color px-[10px] rounded w-full h-[40px] flex gap-3 overflow-hidden items-center" key={'tag-'+index}>
                                 <h3>{eq.name}</h3>
                                 {eq.attributes && eq.attributes.length > 0 ? <p className="ml-auto">{eq.attributes[0].value} {eq.attributes[0].unit}</p> : null}
-                            </div>):<p  className="primary-color px-[10px] rounded">No Equipment</p>}
+                            </div>):<p>No Equipment</p>}
                         </div>
                     </div>
 

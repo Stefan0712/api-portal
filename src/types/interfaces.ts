@@ -23,7 +23,7 @@ export interface Exercise {
     tags: Tag[];
     instructions: string[];
 }
-export interface TargetGroup {
+export interface TargetGroups {
     id: string;
     name: string;
     author: string;
@@ -57,22 +57,22 @@ export interface Field {
     isCompleted: boolean
 }
 export interface Workout {
-    _id: string;
+    _id?: string;
     name: string;
     description: string;
     difficulty: string;
-    targetGroup: TargetGroup[];
+    targetGroups: TargetGroups[];
     duration: number; 
+    durationUnit: string;
     equipment: Equipment[];
-    exercises: Exercise[];
+    exercises: string[];
     createdAt: string; 
     updatedAt?: string; 
     authorId: string;
     source: string;
     imageUrl?: string; 
-    isFavorite: boolean;
     isCompleted: boolean;
     visibility: string;
-    tags?: Tag[];
-    reference?: string; 
+    tags: Tag[];
+    reference: string; 
   }

@@ -7,6 +7,7 @@ import Profile from './pages/Profile.tsx';
 import Login from './pages/Login.tsx';
 import Register from './pages/Register.tsx';
 import NewExercise from './pages/Exercise/NewExercise.tsx';
+import NewWorkout from './pages/Workout/NewWorkout.tsx';
 
 
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="/exercises" element={<Exercises />} />
             <Route path="/workouts" element={<Workouts />} />
             <Route path='/new-exercise' element={<NewExercise />} />
+            <Route path='/new-workout' element={<NewWorkout />} />
             <Route path="/guides" element={<Guides />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
