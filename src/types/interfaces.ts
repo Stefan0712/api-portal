@@ -17,7 +17,7 @@ export interface Exercise {
     restUnit: string;
     visibility: string;
     fields: Field[];
-    notes: string[];
+    notes: string;
     equipment: Equipment[];
     muscleGroups: TargetGroup[];
     tags: Tag[];

@@ -26,6 +26,7 @@ const NewExercise: React.FC = () => {
     const [duration, setDuration] = useState<string>('');
     const [fields, setFields] = useState<Field[]>([]);
     const [rest, setRest] = useState<string>('');
+    const [notes, setNotes] = useState<string>('');
     const [muscleGroups, setMuscleGroups] = useState<TargetGroup[]>([]); // State that holds the array containing all Target Groups
     const [groupName, setGroupName] = useState<string>(''); // State to hold the value of Target Group input
     const [instructions, setInstructions] = useState<string[]>([]); // State to hold the array of all instructions
@@ -51,7 +52,7 @@ const NewExercise: React.FC = () => {
             rest: parseInt(rest),
             restUnit: 'seconds',
             visibility: 'private',
-            notes: [],
+            notes,
             muscleGroups, 
             fields, 
             tags: exerciseTags, 
@@ -114,7 +115,10 @@ const NewExercise: React.FC = () => {
                             <h3 className="font-bold text-xl">Exercise Info</h3> 
                             <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="name" id="name" required={true} minLength={3} maxLength={20} onChange={(e) => setName(e.target.value)} value={name} placeholder="Name"></input>
                             <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="description" id="description" onChange={(e) => setDescription(e.target.value)} value={description} minLength={0} maxLength={300} placeholder="Description"></input>
-                            <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="url" name="reference" id="reference" onChange={(e) => setReference(e.target.value)} value={reference} placeholder="Reference URL"></input>
+                            <div className="w-full flex gap-3">
+                                <input className="h-[40px] rounded w-1/2 pl-[10px] secondary-color" type="url" name="reference" id="reference" onChange={(e) => setReference(e.target.value)} value={reference} placeholder="Reference URL"></input>
+                                <input className="h-[40px] rounded w-1/2 pl-[10px] secondary-color" type="url" name="notes" id="notes" onChange={(e) => setNotes(e.target.value)} value={notes} placeholder="Notes..."></input>
+                            </div>
                             <fieldset className="flex w-full gap-[10px]">
                                     <select className="h-[40px] rounded w-full pl-[10px] secondary-color" name="difficulty" id="difficulty" onChange={(e) => setDifficulty(e.target.value)} value={difficulty}>
                                         <option value="" disabled>Difficulty</option>
