@@ -39,10 +39,11 @@ const Equipments: React.FC<CreateEquipmentProps> = ({addEquipment, allItems}) =>
         
         
     }   
-    const handleUnitChange = ( value ) =>{
+    //since input type number gives a string, I handle value as string and convert it to int when creating the equipment object
+    const handleUnitChange = ( value: string ) =>{
         setUnit(value);
     }   
-    const handleValueChange = ( value ) =>{
+    const handleValueChange = ( value: string ) =>{
         setValue(value);
     }   
     const handleAddEquipment = () =>{
@@ -64,11 +65,11 @@ const Equipments: React.FC<CreateEquipmentProps> = ({addEquipment, allItems}) =>
     return ( 
         <div className='flex gap-2'>
             {showEquipments ? <EquipmentPicker closeModal={()=>setShowEquipments(false)} currentItems={allItems} addItem={addEquipment} /> : null}
-            <button type="button" onClick={()=>setShowEquipments(true)}><img   className="w-[20px] h-[20px] w-1/7" src={IconLibrary.Search} alt=""/></button>
-            <input className={`${error ? 'input-error' : ''} h-[40px] rounded w-3/7 pl-[10px] secondary-color`} type='text' onChange={(e)=>handleNameChange(e.target.value)} value={name} maxLength={15} placeholder='Name'/>
-            <input className='h-[40px] rounded w-1/7 pl-[10px] secondary-color' type='text' onChange={(e)=>handleUnitChange(e.target.value)} value={unit} placeholder='Unit'/>
-            <input className='h-[40px] rounded w-1/7 pl-[10px] secondary-color' type='number' onChange={(e)=>handleValueChange(e.target.value)} value={value} placeholder='Value'/>
-            <button type='button' onClick={handleAddEquipment}><img src={IconLibrary.Add} className="h-[20px] w-[30px]" alt='' /></button>
+            <button type="button" onClick={()=>setShowEquipments(true)}><img   className="w-[30px] h-[30px] w-1/7" src={IconLibrary.Search} alt=""/></button>
+            <input className={`${error ? 'input-error' : ''} h-[40px] rounded w-1/3 pl-[10px] secondary-color`} type='text' onChange={(e)=>handleNameChange(e.target.value)} value={name} maxLength={15} placeholder='Name'/>
+            <input className='h-[40px] rounded w-1/3 pl-[10px] secondary-color' type='text' onChange={(e)=>handleUnitChange(e.target.value)} value={unit} placeholder='Unit'/>
+            <input className='h-[40px] rounded w-1/3 pl-[10px] secondary-color' type='number' onChange={(e)=>handleValueChange(e.target.value)} value={value} placeholder='Value'/>
+            <button type='button' onClick={handleAddEquipment}><img src={IconLibrary.Add} className="h-[40px] w-[40px]" alt='' /></button>
         </div>
      );
 }

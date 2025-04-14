@@ -8,9 +8,9 @@ interface FieldsProps {
   }
 const Fields: React.FC<FieldsProps> = ({addField}) => {
 
-    const [name, setName] = useState('');
-    const [unit, setUnit] = useState('');
-    const [target, setTarget] = useState(0);
+    const [name, setName] = useState<string>('');
+    const [unit, setUnit] = useState<string>('');
+    const [target, setTarget] = useState<string>('');
 
     const [isNameValid, setIsNameValid] = useState<boolean>(true);
     const [isUnitValid, setIsUnitValid] = useState<boolean>(true);
@@ -25,7 +25,7 @@ const Fields: React.FC<FieldsProps> = ({addField}) => {
                 id: uuidv4(),
                 name,
                 unit,
-                target: target,
+                target: parseInt(target),
                 isCompleted: false,
                 value: 0,
             }
@@ -34,7 +34,7 @@ const Fields: React.FC<FieldsProps> = ({addField}) => {
         }
     }
  
-    const addError = (type) => {
+    const addError = (type: string) => {
         console.log(type);
     
         if (type === 'name') {
@@ -52,10 +52,10 @@ const Fields: React.FC<FieldsProps> = ({addField}) => {
     }
     return ( 
         <div className="flex gap-[10px]">
-            <input className={`h-[40px] rounded w-3/6 pl-[10px] secondary-color ${!isNameValid ? 'input-error' : ''}`} type="text" name="name" onChange={(e)=>setName(e.target.value)} value={name} placeholder="Name"></input>
-            <input className="h-[40px] rounded w-1/6 pl-[10px] secondary-color" type="text" name="unit" onChange={(e)=>setUnit(e.target.value)} value={unit} placeholder="Unit"></input>  
-            <input className="h-[40px] rounded w-1/6 pl-[10px] secondary-color" type="number" name="target" onChange={(e)=>setTarget(parseInt(e.target.value))} value={target} placeholder="Target Value"></input>
-            <button className="h-[40px] w-[40px] flex justify-center items-center ml-auto" type="button" onClick={handleAddField}><img className="h-[30px] w-[30px]" src={IconLibrary.Add} alt="" /></button>
+            <input className={`h-[40px] rounded w-4/6 pl-[10px] secondary-color ${!isNameValid ? 'input-error' : ''}`} type="text" name="name" onChange={(e)=>setName(e.target.value)} value={name} placeholder="Name"></input>
+            <input className={`h-[40px] rounded w-1/6 pl-[10px] secondary-color ${!isUnitValid ? 'input-error' : ''}`} type="text" name="unit" onChange={(e)=>setUnit(e.target.value)} value={unit} placeholder="Unit"></input>  
+            <input className="h-[40px] rounded w-1/6 pl-[10px] secondary-color" type="number" name="target" onChange={(e)=>setTarget(e.target.value)} value={target} placeholder="Target Value"></input>
+            <button className="h-[40px] w-[40px] flex justify-center items-center ml-auto" type="button" onClick={handleAddField}><img className="h-[40px] w-[40px]" src={IconLibrary.Add} alt="" /></button>
         </div>
      );
 }

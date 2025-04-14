@@ -43,7 +43,8 @@ const Tags: React.FC<CreateTagProps> = ({addTag, author, allTags}) => {
         height: '50px', 
         display: 'grid', 
         gridTemplateColumns: '50px 50px 1fr 50px', 
-        gap: '5px'
+        gap: '5px',
+        backgroundColor: '#111214'
     }
 
 
@@ -66,14 +67,14 @@ const Tags: React.FC<CreateTagProps> = ({addTag, author, allTags}) => {
             setError(true);
         }
     }
-    const handleNameInput = (value) =>{
+    const handleNameInput = (value: string) =>{
         setName(value);
         if(name.length > 0 && name.length < 18 && error){
             setError(false);
         }
     }
     return ( 
-        <div style={createTagStyles}>
+        <div style={createTagStyles} className="background-color">
             {showTags ? <TagPicker closeModal={()=>setShowTags(false)} currentTags={allTags} addTag={addTag} /> : null}
             {showColorPicker ? <ColorPicker closeModal={()=>setShowColorPicker(false)} getColor={setColor} currentColor={color}/> : null}
             <button type="button" onClick={()=>setShowTags(true)}><img className="w-[30px] h-[30px]" src={IconLibrary.Search} alt=""/></button>
