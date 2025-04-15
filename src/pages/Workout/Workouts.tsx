@@ -79,7 +79,7 @@ const Workouts = () => {
                 <div className="p-[15px] flex gap-[10px] flex-wrap">
                     <div className="flex gap-[20px] align-center w-full">
                         <h2 className="font-bold mb-2">{selectedItem.name}</h2>
-                        <Link to={'/exercise/'} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
+                        <Link to={`/workout/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
                         <button className="w-[100px] h-[40px] rounded accent-background" onClick={()=>setShowModal(true)}>Delete</button>
                     </div>
                     <div className="secondary-color p-[10px] rounded w-full h-[90px] flex gap-[10px]">

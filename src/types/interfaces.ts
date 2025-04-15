@@ -65,7 +65,7 @@ export interface Workout {
     duration: number; 
     durationUnit: string;
     equipment: Equipment[];
-    exercises: string[] | Exercise[];
+    exercises: Exercise[] | string[];
     createdAt: string; 
     updatedAt?: string; 
     authorId: string;

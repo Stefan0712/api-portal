@@ -12,7 +12,7 @@ import ExercisePicker from "../common/ExercisePicker/ExercisePicker.tsx";
 
 
 
-const NewExercise: React.FC = () => {
+const NewWorkout: React.FC = () => {
 
     const navigate = useNavigate();
 
@@ -221,4 +221,4 @@ const NewExercise: React.FC = () => {
      );
 }
  
-export default NewExercise;
+export default NewWorkout;
