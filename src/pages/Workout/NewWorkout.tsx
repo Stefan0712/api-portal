@@ -83,7 +83,12 @@ const NewExercise: React.FC = () => {
         setExerciseTags((exerciseTags)=>[...exerciseTags, newItem]);
     }
     const addEquipment = (newItem: Equipment) =>{
-        setEquipments((equipments)=>[...equipments, newItem]);
+        const alreadyExists = equipments.some(item => item.id === newItem.id);
+        if (!alreadyExists) {
+            setEquipments(prev => [...prev, newItem]);
+        } else {
+            console.log("Equipment already added.");
+        }
     }
     const addmuscleGroups = (newItem: ITargetGroups) =>{
         setMuscleGroups((targetGorups)=>[...targetGorups, newItem]);
@@ -104,13 +109,20 @@ const NewExercise: React.FC = () => {
     }
     const handleAddExercise = (exercise: Exercise)=>{
         setExercises((exercises)=>[...exercises, exercise]);
+        if(exercise.equipment && exercise.equipment.length > 0){
+            exercise.equipment.forEach(item=>addEquipment(item))
+        }
     }
-
+    const handleRemoveExercise = (id: string | undefined) =>{
+        if(id){
+            setExercises(prevExercises=>[...prevExercises.filter(item=>item._id!=id)])
+        }
+    }
     //get duration based on each exercise duration that will be set as workout duration if none is specified by the user
     const getTotalDuration = () => exercises.reduce((sum, exercise) => sum + (exercise.duration ?? 0), 0);
 
 
-
+    
     //TODO: Add Preview Workout where the app shows the view of other users
     //TODO: Test that everything works
     //TODO: Add automatic tests
@@ -149,7 +161,7 @@ const NewExercise: React.FC = () => {
                                         <div className="w-full h-[40px] flex-shrink-0 flex items-center gap-4" id={exercise.name} key={index}>
                                             <h4>{exercise.name}</h4>
                                             <p className="ml-auto">{exercise.sets} sets</p>
-                                            <button type="button" onClick={() => handleAddExercise(exercise)} className="small-square transparent-bg"> <img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" /></button>
+                                            <button type="button" onClick={() => handleRemoveExercise(exercise._id)} className="small-square transparent-bg"> <img src={IconLibrary.Close} className="w-[30px] h-[30px]" alt="" /></button>
                                         </div>
                                         )
                                     ) : (

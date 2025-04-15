@@ -48,7 +48,7 @@ const Workouts = () => {
                         <div className={`item w-full h-[90px] primary-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getWorkoutData(item._id)}>
                         <h3>{item.name}</h3>
                         <div className="flex gap-[10px] overflow-hidden w-full">
-                            {item.targetGroup && item.targetGroup.length > 0 ? item.targetGroup.map((group,index)=><p key={'group-'+index}>{group.name}</p>):<p>No groups</p>}
+                            {item.targetGroups && item.targetGroups.length > 0 ? item.targetGroups.map((group,index)=><p key={'group-'+index}>{group.name}</p>):<p>No groups</p>}
                         </div>
                         <div className="flex gap-[10px] overflow-hidden w-full">
                             {item.tags && item.tags.length > 0 ? item.tags.map((tag,index)=><p key={'tag-'+index}>{tag.name}</p>):<p>No tags</p>}
@@ -77,7 +77,7 @@ const Workouts = () => {
                     <div className="flex flex-col overflow-hidden secondary-color p-[10px] rounded h-[90px]" style={{ width: 'calc(50% - 5px)' }}>
                         <h3 className="font-bold mb-2">Target Muscles</h3>
                         <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden">
-                            {selectedItem.targetGroup && selectedItem.targetGroup.length > 0 ? selectedItem.targetGroup.map((group,index)=><p  className="primary-color px-[10px] py-[5px] rounded" key={'group-'+index}>{group.name}</p>):<p  className="primary-color px-[10px] rounded">No groups</p>}
+                            {selectedItem.targetGroups && selectedItem.targetGroups.length > 0 ? selectedItem.targetGroups.map((group,index)=><p  className="primary-color px-[10px] py-[5px] rounded" key={'group-'+index}>{group.name}</p>):<p  className="primary-color px-[10px] rounded">No groups</p>}
                         </div>
                     </div>
                     
