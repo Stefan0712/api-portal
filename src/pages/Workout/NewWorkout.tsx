@@ -76,7 +76,7 @@ const NewExercise: React.FC = () => {
             equipment: equipments, 
         };
         console.log(workoutData);
-        // handleSaveWorkout(workoutData);
+        handleSaveWorkout(workoutData);
         
     }
     const addTag = (newItem: Tag) =>{
