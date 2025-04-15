@@ -8,6 +8,7 @@ import TargetGroups from "../Exercise/TargetGroups.tsx";
 import Equipments from "../Exercise/Equipments.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import ExercisePicker from "../common/ExercisePicker/ExercisePicker.tsx";
 
 
 
@@ -16,7 +17,7 @@ const NewExercise: React.FC = () => {
     const navigate = useNavigate();
 
     const [showGroups, setShowGroups] = useState<boolean>(false);
-
+    const [showExercisePicker, setShowExercisePicker] = useState<boolean>(false);
 
     const [allExercises, setAllExercises] = useState<Exercise[]>();
 
@@ -49,6 +50,7 @@ const NewExercise: React.FC = () => {
         //extract only the id and source from each exercise
         exercises.forEach((item: Exercise)=>{ 
             if(item._id){
+                console.log(item.duration)
                 exercisesIds.push(item._id);
                 
             }else{
@@ -64,7 +66,7 @@ const NewExercise: React.FC = () => {
             description, 
             reference, 
             difficulty, 
-            duration: parseInt(duration), 
+            duration: parseInt(duration) || getTotalDuration(), 
             durationUnit: 'min',
             visibility: 'private',
             imageUrl: '',
@@ -74,22 +76,9 @@ const NewExercise: React.FC = () => {
             equipment: equipments, 
         };
         console.log(workoutData);
-        handleSaveWorkout(workoutData);
+        // handleSaveWorkout(workoutData);
         
     }
-
-    const handleGetExercises = async () =>{
-        try{
-            const response = await axios.get<Exercise[]>(`${process.env.REACT_APP_API_URL}/exercise/`);
-            setAllExercises(response.data);
-            console.log(response.data)
-        } catch (error){
-            console.error("Error fetching exercises: ", error)
-        }
-    }
-    useEffect(()=>{
-        handleGetExercises();
-    },[]);
     const addTag = (newItem: Tag) =>{
         setExerciseTags((exerciseTags)=>[...exerciseTags, newItem]);
     }
@@ -116,9 +105,17 @@ const NewExercise: React.FC = () => {
     const handleAddExercise = (exercise: Exercise)=>{
         setExercises((exercises)=>[...exercises, exercise]);
     }
+
+    //get duration based on each exercise duration that will be set as workout duration if none is specified by the user
+    const getTotalDuration = () => exercises.reduce((sum, exercise) => sum + (exercise.duration ?? 0), 0);
+
+
+
     //TODO: Add Preview Workout where the app shows the view of other users
     //TODO: Test that everything works
     //TODO: Add automatic tests
+    //TODO: Make duration, equipment, target muscles populate automatically with what exercises already have
+    //TODO: Fix NAN for equipment unit/value when it is empty
     return ( 
         <div>
             <div className="flex gap-4 px-[20px] items-center">
@@ -145,16 +142,18 @@ const NewExercise: React.FC = () => {
                         </div>
                         <div className="flex flex-col gap-2 w-1/2 h-[250px] p-3">
                             <h3 className="font-bold text-xl">Exercises</h3>
+                            {showExercisePicker ? <ExercisePicker closeModal={()=>setShowExercisePicker(false)} currentExercises={exercises} addExercise={handleAddExercise} /> : null}
+                            <button className="w-[150px] h-[40px] secondary-color rounded" type="button" onClick={()=>setShowExercisePicker(true)}>Add Exercise</button>
                             <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded p-2 pr-[20px]">
-                            {allExercises && allExercises.length > 0 ? allExercises.map((exercise, index) => exercises.some((ex) => ex._id === exercise._id) ? null : (
-                                            <div className="w-full h-[40px] flex-shrink-0 flex items-center gap-4" id={exercise.name} key={index}>
-                                                <h4>{exercise.name}</h4>
-                                                <p className="ml-auto">{exercise.sets} sets</p>
-                                                <button type="button" onClick={() => handleAddExercise(exercise)} className="small-square transparent-bg"> <img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" /></button>
-                                            </div>
+                            {exercises && exercises.length > 0 ? exercises.map((exercise, index) => (
+                                        <div className="w-full h-[40px] flex-shrink-0 flex items-center gap-4" id={exercise.name} key={index}>
+                                            <h4>{exercise.name}</h4>
+                                            <p className="ml-auto">{exercise.sets} sets</p>
+                                            <button type="button" onClick={() => handleAddExercise(exercise)} className="small-square transparent-bg"> <img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" /></button>
+                                        </div>
                                         )
                                     ) : (
-                                        <h3>Loading exercises...</h3>
+                                        <h3>No exercises added</h3>
                                     )
                                 }
                             </div>

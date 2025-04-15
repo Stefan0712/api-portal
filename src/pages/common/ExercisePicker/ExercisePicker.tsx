@@ -4,14 +4,13 @@ import { useState } from 'react';
 import { IconLibrary } from '../../../IconLibrary';
 import { Exercise } from '../../../types/interfaces';
 import axios from 'axios';
-import Exercises from '../../Exercise/Exercises';
 
 interface ExercisePickerProps {
     closeModal: () => void;
     addExercise: (tag: Exercise) => void;
     currentExercises: Exercise[]
 }
-const TagPicker: React.FC<ExercisePickerProps> = ({closeModal, addExercise, currentExercises}) => {
+const ExercisePicker: React.FC<ExercisePickerProps> = ({closeModal, addExercise, currentExercises}) => {
 
 
     const [searchQuery, setSearchQuery] = useState<string>('');
@@ -22,7 +21,6 @@ const TagPicker: React.FC<ExercisePickerProps> = ({closeModal, addExercise, curr
         try{
             const response = await axios.get<Exercise[]>(`${process.env.REACT_APP_API_URL}/exercise/`);
             setItems(response.data);
-            console.log(response.data)
         } catch (error){
             console.error("Error fetching exercises: ", error)
         }
@@ -48,11 +46,12 @@ const TagPicker: React.FC<ExercisePickerProps> = ({closeModal, addExercise, curr
         setItems(filteredItems);
     }
 
-
+    //TODO: Add filters such as "My Exercises/Public Exercises/ Official Exercises", difficulty, target group.
+    //TODO: Make it so that users can search by tags, target muscles, and other properties.
     return ( 
         <div className={styles['tag-picker']}>
             <div className={styles.top}>
-                <h3>My Tags</h3>
+                <h3>Exercises</h3>
                 <button type="button" className="clear-button" onClick={closeModal}><img src={IconLibrary.Close} className="w-[30px] h-[30px]" alt="" /></button>
             </div>
             <div className={styles['search-bar']}>
@@ -74,4 +73,4 @@ const TagPicker: React.FC<ExercisePickerProps> = ({closeModal, addExercise, curr
      );
 }
  
-export default TagPicker;
+export default ExercisePicker;
