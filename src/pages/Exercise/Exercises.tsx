@@ -42,6 +42,7 @@ const Exercises = () => {
                 if (response.ok) {
                     setSelectedItem(null);
                     setShowModal(false);
+                    fetchItems();
                 } else {
                 alert('Error deleting exercise: ' + data.message);
                 }
@@ -128,7 +129,7 @@ const Exercises = () => {
                     
                     <div className="flex-column gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
                         <h3 className="font-bold mb-2">Equipment</h3>
-                        <div className="flex gap-[10px]  overflow-x-hidden overflow-y-auto">
+                        <div className="flex flex-col gap-[10px]  overflow-x-hidden overflow-y-auto">
                             {selectedItem.equipment && selectedItem.equipment.length > 0 ? selectedItem.equipment.map((eq,index)=><div className="primary-color px-[10px] rounded w-full h-[40px] flex gap-3 overflow-hidden items-center" key={'tag-'+index}>
                                 <h3>{eq.name}</h3>
                                 {eq.attributes && eq.attributes.length > 0 ? <p className="ml-auto">{eq.attributes[0].value} {eq.attributes[0].unit}</p> : null}
@@ -138,8 +139,8 @@ const Exercises = () => {
 
                     <div className="flex-column gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[200px] w-full">
                         <h3 className="font-bold mb-2">Instructions</h3>
-                        <div className="flex-column gap-[10px] flex flex-col overflow-x-hidden overflow-y-auto">
-                            {selectedItem.instructions && selectedItem.instructions.length > 0 ? selectedItem.instructions.map((instruction,index)=><div className="primary-color px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
+                        <div className="flex-column gap-[10px] flex flex-col overflow-x-hidden overflow-y-auto h-full">
+                            {selectedItem.instructions && selectedItem.instructions.length > 0 ? selectedItem.instructions.map((instruction,index)=><div className="flex-shrink-0 primary-color px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
                                     <p className="font-bold">{index+1} </p><p className="w-full">{instruction}</p>
                                 </div>):<p  className="primary-color rounded w-full p-[10px]">No instructions</p>}
                         </div>

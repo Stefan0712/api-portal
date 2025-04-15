@@ -19,7 +19,7 @@ export interface Exercise {
     fields: Field[];
     notes: string;
     equipment: Equipment[];
-    muscleGroups: TargetGroup[];
+    muscleGroups: TargetGroups[];
     tags: Tag[];
     instructions: string[];
 }
@@ -65,7 +65,7 @@ export interface Workout {
     duration: number; 
     durationUnit: string;
     equipment: Equipment[];
-    exercises: string[];
+    exercises: string[] | Exercise[];
     createdAt: string; 
     updatedAt?: string; 
     authorId: string;

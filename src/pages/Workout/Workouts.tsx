@@ -35,8 +35,23 @@ const Workouts = () => {
             console.error("Error fetching workout: ", error)
         }
     }
-    const handleDelete = () =>{
-
+    const handleDelete = async () =>{
+        try{
+            if(selectedItem){
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/workout/${selectedItem._id}`, {method: 'DELETE'}) ;
+                const data = await response.json();
+                if (response.ok) {
+                    setSelectedItem(null);
+                    setShowModal(false);
+                    fetchItems();
+                } else {
+                    alert('Error deleting workout: ' + data.message);
+                }
+            }
+            
+        } catch (error) {
+            console.error(`Error deleting workout: `, error);
+        }
     }
     return ( 
         <div className="full-container p-[20px] h-full w-full overflow-hidden flex gap-3">
@@ -47,10 +62,10 @@ const Workouts = () => {
                     {items && items.length > 0 ? items.map((item, index)=> (
                         <div className={`item w-full h-[90px] primary-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getWorkoutData(item._id)}>
                         <h3>{item.name}</h3>
-                        <div className="flex gap-[10px] overflow-hidden w-full">
+                        <div className="flex gap-[10px] overflow-hidden w-full whitespace-nowrap">
                             {item.targetGroups && item.targetGroups.length > 0 ? item.targetGroups.map((group,index)=><p key={'group-'+index}>{group.name}</p>):<p>No groups</p>}
                         </div>
-                        <div className="flex gap-[10px] overflow-hidden w-full">
+                        <div className="flex gap-[10px] overflow-hidden w-full whitespace-nowrap">
                             {item.tags && item.tags.length > 0 ? item.tags.map((tag,index)=><p key={'tag-'+index}>{tag.name}</p>):<p>No tags</p>}
                         </div>
                         
@@ -62,7 +77,11 @@ const Workouts = () => {
             {showModal ? <DeleteModal confirm={handleDelete} cancel={()=>setShowModal(false)} /> : null}
             {selectedItem ? 
                 <div className="p-[15px] flex gap-[10px] flex-wrap">
-                    <h2 className="font-bold mb-2">{selectedItem.name}</h2>
+                    <div className="flex gap-[20px] align-center w-full">
+                        <h2 className="font-bold mb-2">{selectedItem.name}</h2>
+                        <Link to={'/exercise/'} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
+                        <button className="w-[100px] h-[40px] rounded accent-background" onClick={()=>setShowModal(true)}>Delete</button>
+                    </div>
                     <div className="secondary-color p-[10px] rounded w-full h-[90px] flex gap-[10px]">
                         <div className="w-2/3">
                             <h3 className="font-bold">Description</h3>
@@ -89,16 +108,16 @@ const Workouts = () => {
                     </div>
                    
                     
-                    <div className="flex-column gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
+                    <div className="flex-column gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[400px]" style={{ width: 'calc(50% - 5px)' }}>
                         <h3 className="font-bold mb-2">Equipment</h3>
-                        <div className="flex gap-[10px]  overflow-x-hidden overflow-y-auto">
-                            {selectedItem.equipment && selectedItem.equipment.length > 0 ? selectedItem.equipment.map((eq,index)=><div className="primary-color px-[10px] rounded w-full h-[40px] flex gap-3 overflow-hidden items-center" key={'tag-'+index}>
+                        <div className="flex flex-col gap-[10px] h-full overflow-x-hidden overflow-y-auto">
+                            {selectedItem.equipment && selectedItem.equipment.length > 0 ? selectedItem.equipment.map((eq,index)=><div className="primary-color px-[10px] rounded w-full h-[40px] flex gap-3 overflow-hidden items-center flex-shrink-0" key={'tag-'+index}>
                                 <h3>{eq.name}</h3>
                                 {eq.attributes && eq.attributes.length > 0 ? <p className="ml-auto">{eq.attributes[0].value} {eq.attributes[0].unit}</p> : null}
                             </div>):<p>No Equipment</p>}
                         </div>
                     </div>
-                    <div className="flex flex-col gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
+                    <div className="flex flex-col gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[400px]" style={{ width: 'calc(50% - 5px)' }}>
                         <div className="flex gap-[10px] items-center mb-3">
                             <h3 className="font-bold mr-auto">Exercises</h3>
                             <p><b>Duration: </b>{selectedItem.duration || 'Not Set'} minutes</p>

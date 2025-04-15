@@ -83,16 +83,16 @@ const NewExercise: React.FC = () => {
         setExerciseTags((exerciseTags)=>[...exerciseTags, newItem]);
     }
     const addEquipment = (newItem: Equipment) =>{
+        console.log(newItem)
         const alreadyExists = equipments.some(item => item.id === newItem.id);
+        console.log(alreadyExists, equipments)
         if (!alreadyExists) {
             setEquipments(prev => [...prev, newItem]);
         } else {
             console.log("Equipment already added.");
         }
     }
-    const addmuscleGroups = (newItem: ITargetGroups) =>{
-        setMuscleGroups((targetGorups)=>[...targetGorups, newItem]);
-    }
+    
 
     // Handles adding new muscle group
     const handleAddGroup = () =>{
@@ -107,10 +107,24 @@ const NewExercise: React.FC = () => {
             setGroupName(''); // Resets the state holding group name
         }
     }
+    const addmuscleGroups = (newItem: ITargetGroups) =>{
+        console.log(newItem)
+        const alreadyExists = muscleGroups.some(item => item.id === newItem.id);
+        console.log(alreadyExists, muscleGroups)
+        if (!alreadyExists) {
+            setMuscleGroups(prev => [...prev, newItem]);
+        } else {
+            console.log("Muscle Group already added.");
+        }
+
+    }
     const handleAddExercise = (exercise: Exercise)=>{
         setExercises((exercises)=>[...exercises, exercise]);
         if(exercise.equipment && exercise.equipment.length > 0){
             exercise.equipment.forEach(item=>addEquipment(item))
+        }
+        if(exercise.muscleGroups && exercise.muscleGroups.length > 0){
+            exercise.muscleGroups.forEach(item=>addmuscleGroups(item))
         }
     }
     const handleRemoveExercise = (id: string | undefined) =>{
