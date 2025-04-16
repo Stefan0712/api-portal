@@ -95,14 +95,14 @@ const Workouts = () => {
                     </div>
                     <div className="flex flex-col overflow-hidden secondary-color p-[10px] rounded h-[90px]" style={{ width: 'calc(50% - 5px)' }}>
                         <h3 className="font-bold mb-2">Target Muscles</h3>
-                        <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden">
+                        <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden scrollbar-hide">
                             {selectedItem.targetGroups && selectedItem.targetGroups.length > 0 ? selectedItem.targetGroups.map((group,index)=><p  className="primary-color px-[10px] py-[5px] rounded" key={'group-'+index}>{group.name}</p>):<p  className="primary-color px-[10px] rounded">No groups</p>}
                         </div>
                     </div>
                     
                     <div className="flex flex-col overflow-hidden secondary-color p-[10px] rounded h-[90px]" style={{ width: 'calc(50% - 5px)' }}>
                         <h3 className="font-bold mb-2">Tags</h3>
-                        <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden">
+                        <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden scrollbar-hide">
                             {selectedItem.tags && selectedItem.tags.length > 0 ? selectedItem.tags.map((tag,index)=><p className="primary-color px-[10px] py-[5px] rounded" key={'tag-'+index}>{tag.name}</p>):<p  className="primary-color px-[10px] rounded">No tags</p>}
                         </div>
                     </div>
