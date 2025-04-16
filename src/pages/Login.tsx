@@ -27,13 +27,29 @@ const Login = () => {
         }
     }
 
-    const handleLogin = async () =>{
+const handleLogin = async () =>{
         try{
             const loginData = {username, password};
-            console.log(loginData)
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, loginData)
-            console.log("Logged in successfuly!", response);
-            navigate('/profile');
+            const user = response.data.user;
+            if (user?.id && user?.username && user?.role) {
+                localStorage.setItem("userId", user.id);
+                localStorage.setItem("username", user.username);
+                localStorage.setItem("role", user.role);
+              
+                // Double-check if they were saved correctly
+                const savedId = localStorage.getItem("userId");
+                const savedUsername = localStorage.getItem("username");
+                const savedRole = localStorage.getItem("role");
+              
+                if (savedId && savedUsername && savedRole) {
+                  navigate("/profile");
+                } else {
+                  setErrors(prev => [...prev, "Something went wrong while saving your data. Please try again."]);
+                }
+              } else {
+                setErrors(prev => [...prev, "Invalid user data received from server."]);
+              }
         } catch (error){
             console.log("Error logging in: ",error);
             setErrors(prevState=> [...prevState, "Something went wrong! Check console!"])
