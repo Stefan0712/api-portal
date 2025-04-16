@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
 import Exercises from './pages/Exercise/Exercises.tsx';
 import Workouts from './pages/Workout/Workouts.tsx';
 import Guides from './pages/Exercise/Exercises.tsx';
@@ -10,23 +10,17 @@ import NewExercise from './pages/Exercise/NewExercise.tsx';
 import NewWorkout from './pages/Workout/NewWorkout.tsx';
 import EditExercise from './pages/Exercise/EditExercise.tsx';
 import EditWorkout from './pages/Workout/EditWorkout.tsx';
+import { isLoggedIn, logoutUser } from './utils/auth.ts';
+import Nav from './pages/common/Nav.tsx';
 
 
 
 function App() {
+  
   return (
     <Router>
       <div className='App'>
-        <nav className='navigation px-[15px]'>
-          <a className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none  text-xl font-medium">Explore</a>
-          <a className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none text-xl font-medium">Planner</a>
-          <Link to="/exercises" className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none  text-xl font-medium">Exercises</Link>
-          <Link to="/workouts" className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none  text-xl font-medium">Workouts</Link>
-          <Link to="/guides" className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none  text-xl font-medium">Guides</Link>
-          <Link to="/profile" className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none  text-xl font-medium">Profile</Link>
-          <Link to="/login" className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none  text-xl font-medium">Login</Link>
-        </nav>
-        
+        <Nav />
         <div className="main-container text-white">
           <Routes>
             <Route path="/" element={<Exercises />} />
