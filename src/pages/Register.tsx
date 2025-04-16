@@ -84,7 +84,7 @@ const Register = () => {
     return ( 
         <div className="register w-full h-full flex items-center justify-center">
             <div className="secondary-color rounded flex gap-[20px] px-[10px] py-[30px] w-[700px]">
-                <form className="items-center w-1/2 flex flex-col gap-3">
+                <form className="items-center w-1/2 flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
                     <h1 className="font-bold text-center text-2xl">Register</h1>
                     <fieldset className="flex flex-col gap-1 w-full">
                         <label>Username</label>

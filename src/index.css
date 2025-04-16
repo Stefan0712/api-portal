@@ -48,6 +48,9 @@
 .error-text{
     color: red;
 }
+.error-background{
+    background-color: red;
+}
 .correct-text{
     color: green;
 }
