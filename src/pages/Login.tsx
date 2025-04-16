@@ -30,7 +30,7 @@ const Login = () => {
 const handleLogin = async () =>{
         try{
             const loginData = {username, password};
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, loginData)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, loginData,{ withCredentials: true })
             const user = response.data.user;
             if (user?.id && user?.username && user?.role) {
                 localStorage.setItem("userId", user.id);

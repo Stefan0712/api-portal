@@ -75,4 +75,35 @@ export interface Workout {
     visibility: string;
     tags: Tag[];
     reference: string; 
+}
+export interface IUser {
+    _id?: string;
+    name?: string;
+    username: string;
+    password: string;
+    email: string;
+    createdAt: string;
+    friends: string[]; 
+    followers: string[]; 
+    following: string[]; 
+    comments: string[]; 
+    posts: string[]; 
+    likes: string[]; 
+    savedPosts: string[];
+    age: number;
+    height: number;
+    weight: number;
+    bio: string;
+    gender: string;
+    badges: string[];
+    role: string;
+    isPrivate: boolean;
+    favoriteExercises: string[];
+    favoriteWorkouts: string[];
+    savedExercises: string[];
+    savedWorkouts: string[];
+    createdExercises: string[];
+    createdWorkouts: string[];
+    updatedAt: Date;
   }
+  
