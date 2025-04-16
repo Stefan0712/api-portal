@@ -27,33 +27,124 @@ const Profile = () => {
                     Loading data
                 </p>
             </div> : 
-            <div className="w-full h-full primary-color rounded">
-                <p>Name: {userData.name || "Not set"}</p>
-                <p>Username: {userData.username || "Not set"}</p>
-                <p>Email: {userData.email || "Not set"}</p>
-                <p>Created At: {userData.createdAt || "Not set"}</p>
-                <p>Friends: {userData.friends.length || 0}</p>
-                <p>Followers: {userData.followers.length || 0}</p>
-                <p>Following: {userData.following.length || 0}</p>
-                <p>Posts: {userData.posts.length || 0}</p>
-                <p>Saved Posts: {userData.savedPosts.length || 0}</p>
-                <p>Age: {userData.age || "Not set"}</p>
-                <p>Height: {userData.height || "Not set"}</p>
-                <p>Weight: {userData.weight || "Not set"}</p>
-                <p>Bio: {userData.bio || "Not set"}</p>
-                <p>Gender: {userData.gender || "Not set"}</p>
-                <p>Role: {userData.role || "Not set"}</p>
-                <p>Saved Exercises: {userData.savedExercises.length || 0}</p>
-                <p>Saved Workouts: {userData.savedWorkouts.length || 0}</p>
-                <p>Created Exercises: {userData.createdExercises.length || 0}</p>
-                <p>Created Workouts: {userData.createdWorkouts.length || 0}</p>
-                <p>Favorite Exercises: {userData.favoriteExercises.length || 0}</p>
-                <p>Favorite Workouts: {userData.favoriteWorkouts.length || 0}</p>
-                <p>Likes: {userData.likes.length || 0}</p>
-                <p>Comments: {userData.comments.length || 0}</p>
+            <div className="w-full h-full primary-color rounded flex items-center p-[30px]">
+                <div className="flex flex-col gap-[10px]">
+                    <h2>Public Info</h2>
+                    <div className="flex flex-col gap-1">
+                        <p className="text-white opacity-50">Name</p>
+                        <p>{userData.name || "Not set"}</p>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <p className="text-white opacity-50">Bio</p>
+                        <p>{userData.bio || "Not set"}</p>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <p className="text-white opacity-50">Username</p>
+                        <p>{userData.username || "Not set"}</p>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <p className="text-white opacity-50">Created At</p>
+                        <p>{userData.createdAt || "Not set"}</p>
+                    </div>
+                    <div className="flex gap-2">
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Friends</p>
+                            <p>{userData.friends.length || 0}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Followers</p>
+                            <p>{userData.followers.length || 0}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Following</p>
+                            <p>{userData.following.length || 0}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-col gap-3">
+                    <h1>Personal Info</h1>
+                    <div className="flex gap-3">
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Email</p>
+                            <p>{userData.email || "Not set"}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Role</p>
+                            <p>{userData.role || "Not set"}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Age</p>
+                            <p>{userData.age || "Not set"}</p>
+                        </div>  
+                    </div>              
+                    <div className="flex gap-3">
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Height</p>
+                            <p>{userData.height || "Not set"}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Weight</p>
+                            <p>{userData.weight || "Not set"}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Gender</p>
+                            <p>{userData.gender || "Not set"}</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h1>Activity</h1>
+                    <div className="flex gap-[20px]">
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Posts</p>
+                            <p>{userData.posts.length || 0}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Saved Posts</p>
+                            <p>{userData.savedPosts.length || 0}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Likes</p>
+                            <p>{userData.likes.length || 0}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Comments</p>
+                            <p>{userData.comments.length || 0}</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-3">
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Created Workouts</p>
+                            <p>{userData.createdWorkouts.length || 0}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Saved Workouts</p>
+                            <p>{userData.savedWorkouts.length || 0}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Favorite Workouts</p>
+                            <p>{userData.favoriteWorkouts.length || 0}</p>
+                        </div>
+                    </div>
+                    <div className="flex gap-3">
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Saved Exercises</p>
+                            <p>{userData.savedExercises.length || 0}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Created Exercises</p>
+                            <p>{userData.createdExercises.length || 0}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-white opacity-50">Favorite Exercises</p>
+                            <p>{userData.favoriteExercises.length || 0}</p>
+                        </div>
+                </div>
             </div>
-            }
         </div>
+        
+    }
+    </div>
     );
 }
  
