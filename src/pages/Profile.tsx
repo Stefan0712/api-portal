@@ -3,6 +3,7 @@ import axios from "axios";
 import { IUser } from "../types/interfaces";
 import { isLoggedIn } from "../utils/auth";
 import ErrorLoginPage from "./common/LoginErrorPage";
+import { formatDateToDMY, formatDateToPretty } from "../utils/dateFormat";
 
 
 const Profile = () => {
@@ -26,34 +27,33 @@ const Profile = () => {
 
     if(!isUserLoggedIn){
         return (<ErrorLoginPage />);
+    }else if(!userData){
+        return (<div className="w-full h-full primary-color rounded">
+            <p>
+                Loading data
+            </p>
+        </div> );
     }else{
         return ( 
             <div className="profile flex flex-col items-center justify-center p-[40px] w-full h-full">
-                <div className="h-[50px] w-full"><h1>Profile</h1></div>
-                {!userData ? <div className="w-full h-full primary-color rounded">
-                    <p>
-                        Loading data
-                    </p>
-                </div> : 
-                <div className="w-full h-full primary-color rounded flex items-center p-[30px]">
-                    <div className="flex flex-col gap-[10px]">
-                        <h2>Public Info</h2>
-                        <div className="flex flex-col gap-1">
-                            <p className="text-white opacity-50">Name</p>
-                            <p>{userData.name || "Not set"}</p>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <p className="text-white opacity-50">Bio</p>
-                            <p>{userData.bio || "Not set"}</p>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <p className="text-white opacity-50">Username</p>
-                            <p>{userData.username || "Not set"}</p>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                            <p className="text-white opacity-50">Created At</p>
-                            <p>{userData.createdAt || "Not set"}</p>
-                        </div>
+                <div className="primary-color rounded flex items-center p-[30px] gap-[20px]">
+                    <div className="flex flex-col gap-[10px] p-[10px] rounded">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Username</p>
+                                <p>{userData.username || "Not set"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Name</p>
+                                <p>{userData.name || "Not set"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Bio</p>
+                                <p>{userData.bio || "Not set"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Created At</p>
+                                <p>{formatDateToPretty(userData.createdAt) || "Not set"}</p>
+                            </div>
                         <div className="flex gap-2">
                             <div className="flex flex-col gap-1">
                                 <p className="text-white opacity-50">Friends</p>
@@ -68,23 +68,6 @@ const Profile = () => {
                                 <p>{userData.following.length || 0}</p>
                             </div>
                         </div>
-                    </div>
-                    <div className="flex flex-col gap-3">
-                        <h1>Personal Info</h1>
-                        <div className="flex gap-3">
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Email</p>
-                                <p>{userData.email || "Not set"}</p>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Role</p>
-                                <p>{userData.role || "Not set"}</p>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Age</p>
-                                <p>{userData.age || "Not set"}</p>
-                            </div>  
-                        </div>              
                         <div className="flex gap-3">
                             <div className="flex flex-col gap-1">
                                 <p className="text-white opacity-50">Height</p>
@@ -99,17 +82,23 @@ const Profile = () => {
                                 <p>{userData.gender || "Not set"}</p>
                             </div>
                         </div>
+                        <div className="flex gap-3">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Role</p>
+                                <p>{userData.role || "Not set"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Age</p>
+                                <p>{userData.age || "Not set"}</p>
+                            </div>  
+                        </div>    
                     </div>
-                    <div>
+                    <div className="flex flex-col gap-[10px] p-[10px] rounded">
                         <h1>Activity</h1>
                         <div className="flex gap-[20px]">
                             <div className="flex flex-col gap-1">
                                 <p className="text-white opacity-50">Posts</p>
                                 <p>{userData.posts.length || 0}</p>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Saved Posts</p>
-                                <p>{userData.savedPosts.length || 0}</p>
                             </div>
                             <div className="flex flex-col gap-1">
                                 <p className="text-white opacity-50">Likes</p>
@@ -120,39 +109,27 @@ const Profile = () => {
                                 <p>{userData.comments.length || 0}</p>
                             </div>
                         </div>
-                        <div className="flex gap-3">
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Created Workouts</p>
-                                <p>{userData.createdWorkouts.length || 0}</p>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Saved Workouts</p>
-                                <p>{userData.savedWorkouts.length || 0}</p>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Favorite Workouts</p>
-                                <p>{userData.favoriteWorkouts.length || 0}</p>
-                            </div>
+                    </div>
+                    <div>
+                        <div>
+                            <h1>Favorites</h1>
+                            <button>Workouts</button>
+                            <button>Exercises</button>
                         </div>
-                        <div className="flex gap-3">
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Saved Exercises</p>
-                                <p>{userData.savedExercises.length || 0}</p>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Created Exercises</p>
-                                <p>{userData.createdExercises.length || 0}</p>
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <p className="text-white opacity-50">Favorite Exercises</p>
-                                <p>{userData.favoriteExercises.length || 0}</p>
-                            </div>
+                        <div>
+                            <h1>Saved</h1>
+                            <button>Workouts</button>
+                            <button>Exercises</button>
+                        </div>
+                        <div>
+                            <h1>Created</h1>
+                            <button>Workouts</button>
+                            <button>Exercises</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            
-        }
-        </div>
+
         );
     }
 }
