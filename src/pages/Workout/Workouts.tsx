@@ -60,7 +60,7 @@ const Workouts = () => {
         <div className="full-container p-[20px] h-full w-full overflow-hidden flex gap-3">
             <div className="items-container flex flex-col gap-[10px] overflow-y-hidden h-full w-1/5 flex-shrink-0">
                 <h2 className="font-bold text-2xl items-center flex justify-center h-[50px] primary-color">Workouts</h2>
-                { isUserLoggedIn ? <Link to={'/new-workout'} className="w-full h-[40px] rounded primary-color items-center flex justify-center">Add Workout</Link> : null }
+                { isUserLoggedIn ? <Link to={'/exercises/new'} className="w-full h-[40px] rounded primary-color items-center flex justify-center">Add Workout</Link> : null }
                 <div className="h-full flex flex-col gap-3 overflow-x-hidden overflow-y-auto pr-[20px]">
                     {items && items.length > 0 ? items.map((item, index)=> (
                         <div className={`item w-full h-[90px] primary-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getWorkoutData(item._id)}>
