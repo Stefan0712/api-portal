@@ -50,32 +50,36 @@ const NewExercise: React.FC = () => {
     }
 
     const handleSubmit = ()=>{
-        const createdAt = new Date().toISOString(); // Get raw date and time for keeping track of when the exercise was created;
-
-        const exerciseData: Exercise = {
-            createdAt, 
-            authorId: 'system',
-            isCompleted: false, 
-            name,
-            source: 'database', 
-            description, 
-            reference, 
-            difficulty, 
-            sets, 
-            duration: parseInt(duration), 
-            durationUnit: 'min',
-            rest: parseInt(rest),
-            restUnit: 'seconds',
-            visibility: 'private',
-            notes,
-            muscleGroups, 
-            fields, 
-            tags: exerciseTags, 
-            equipment: equipments, 
-            instructions: instructions || []
-        };
-        console.log(exerciseData);
-        handleSaveExercise(exerciseData);
+        if(isUserLoggedIn){
+            const createdAt = new Date().toISOString(); // Get raw date and time for keeping track of when the exercise was created;
+            const exerciseData: Exercise = {
+                createdAt, 
+                authorId: 'system',
+                isCompleted: false, 
+                name,
+                source: 'database', 
+                description, 
+                reference, 
+                difficulty, 
+                sets, 
+                duration: parseInt(duration), 
+                durationUnit: 'min',
+                rest: parseInt(rest),
+                restUnit: 'seconds',
+                visibility: 'private',
+                notes,
+                muscleGroups, 
+                fields, 
+                tags: exerciseTags, 
+                equipment: equipments, 
+                instructions: instructions || []
+            };
+            console.log(exerciseData);
+            handleSaveExercise(exerciseData);
+        }else{
+            console.log("You are not logged in")
+            //TODO: Add a visual error later
+        }
         
     }
 

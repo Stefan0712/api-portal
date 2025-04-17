@@ -46,39 +46,45 @@ const NewWorkout: React.FC = () => {
     }
 
     const handleSubmit = ()=>{
-        const createdAt = new Date().toISOString(); // Get raw date and time for keeping track of when the exercise was created;
-        let exercisesIds: string[] = []; //empty array to store the ids and sources of exercises
+        if(isUserLoggedIn){
 
-        //extract only the id and source from each exercise
-        exercises.forEach((item: Exercise)=>{ 
-            if(item._id){
-                console.log(item.duration)
-                exercisesIds.push(item._id);
-                
-            }else{
-                console.log("Could not push id for: ", item)
-            }
-        });
-        const workoutData: Workout = {
-            createdAt, 
-            authorId: 'system',
-            isCompleted: false, 
-            name,
-            source: 'database', 
-            description, 
-            reference, 
-            difficulty, 
-            duration: parseInt(duration) || getTotalDuration(), 
-            durationUnit: 'min',
-            visibility: 'private',
-            imageUrl: '',
-            targetGroups: muscleGroups, 
-            exercises: exercisesIds, 
-            tags: exerciseTags, 
-            equipment: equipments, 
-        };
-        console.log(workoutData);
-        handleSaveWorkout(workoutData);
+            const createdAt = new Date().toISOString(); // Get raw date and time for keeping track of when the exercise was created;
+            let exercisesIds: string[] = []; //empty array to store the ids and sources of exercises
+    
+            //extract only the id and source from each exercise
+            exercises.forEach((item: Exercise)=>{ 
+                if(item._id){
+                    console.log(item.duration)
+                    exercisesIds.push(item._id);
+                    
+                }else{
+                    console.log("Could not push id for: ", item)
+                }
+            });
+            const workoutData: Workout = {
+                createdAt, 
+                authorId: 'system',
+                isCompleted: false, 
+                name,
+                source: 'database', 
+                description, 
+                reference, 
+                difficulty, 
+                duration: parseInt(duration) || getTotalDuration(), 
+                durationUnit: 'min',
+                visibility: 'private',
+                imageUrl: '',
+                targetGroups: muscleGroups, 
+                exercises: exercisesIds, 
+                tags: exerciseTags, 
+                equipment: equipments, 
+            };
+            console.log(workoutData);
+            handleSaveWorkout(workoutData);
+        }else{
+            console.log("You are not logged in");
+            //TODO: Add an error here later
+        }
         
     }
     const addTag = (newItem: Tag) =>{
