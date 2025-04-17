@@ -36,6 +36,7 @@ const handleLogin = async () =>{
                 localStorage.setItem("userId", user.id);
                 localStorage.setItem("username", user.username);
                 localStorage.setItem("role", user.role);
+                localStorage.setItem("token", response.data.token)
               
                 // Double-check if they were saved correctly
                 const savedId = localStorage.getItem("userId");

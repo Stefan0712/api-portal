@@ -30,6 +30,7 @@ export const logoutUser = async () => {
           method: 'POST',
           credentials: 'include',
         });
+        console.log("Cookie removed")
     } catch (err) {
         console.error('Logout failed', err);
     }
