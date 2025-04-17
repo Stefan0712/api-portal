@@ -12,31 +12,35 @@ import EditExercise from './pages/Exercise/EditExercise.tsx';
 import EditWorkout from './pages/Workout/EditWorkout.tsx';
 import { isLoggedIn, logoutUser } from './utils/auth.ts';
 import Nav from './pages/common/Nav.tsx';
-
+import {MessageProvider} from './context/MessageContext.tsx';
+import MessageToast from './pages/common/MessageToast.tsx';
 
 
 function App() {
   
   return (
     <Router>
-      <div className='App'>
-        <Nav />
-        <div className="main-container text-white">
-          <Routes>
-            <Route path="/" element={<Exercises />} />
-            <Route path="/exercises" element={<Exercises />} />
-            <Route path="/workouts" element={<Workouts />} />
-            <Route path='/exercises/new' element={<NewExercise />} />
-            <Route path='/exercise/:id/edit' element={<EditExercise />} />
-            <Route path='/workouts/new' element={<NewWorkout />} />
-            <Route path='/workout/:id/edit' element={<EditWorkout />} />
-            <Route path="/guides" element={<Guides />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
+      <MessageProvider>
+        <div className='App'>
+          <Nav />
+          <div className="main-container text-white">
+            <MessageToast />
+            <Routes>
+              <Route path="/" element={<Exercises />} />
+              <Route path="/exercises" element={<Exercises />} />
+              <Route path="/workouts" element={<Workouts />} />
+              <Route path='/exercises/new' element={<NewExercise />} />
+              <Route path='/exercise/:id/edit' element={<EditExercise />} />
+              <Route path='/workouts/new' element={<NewWorkout />} />
+              <Route path='/workout/:id/edit' element={<EditWorkout />} />
+              <Route path="/guides" element={<Guides />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </div>
         </div>
-      </div>
+      </MessageProvider>
     </Router>
   );
 }

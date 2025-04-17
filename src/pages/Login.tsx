@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useMessage } from "../context/MessageContext";
 
 const Login = () => {
 
@@ -9,18 +10,17 @@ const Login = () => {
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [errors, setErrors] = useState<string[]>([]);
-
+    const {showMessage} = useMessage();
 
 
 
     const handleSubmit = () =>{
-        setErrors([]);
         if(!username || username.length === 0){
-            setErrors(prevState=> [...prevState, "Username cannot be empty!"])
+            showMessage('Username cannot be empty','error');
+
         }
         if(!password || password.length === 0){
-            setErrors(prevState=> [...prevState, "Password cannot be empty!"])
+            showMessage('Password cannot be empty','error');
         }
         if(password && password.length>0 && username && username.length > 0){
             handleLogin();
@@ -43,16 +43,26 @@ const handleLogin = async () =>{
                 const savedRole = localStorage.getItem("role");
               
                 if (savedId && savedUsername && savedRole) {
-                  navigate("/profile");
+                    showMessage('Logged in successfuly','success');
+                    navigate("/profile");
                 } else {
-                  setErrors(prev => [...prev, "Something went wrong while saving your data. Please try again."]);
+                    showMessage('Something went wrong!','error');
                 }
               } else {
-                setErrors(prev => [...prev, "Invalid user data received from server."]);
+                showMessage('Something went wrong!','error');
               }
         } catch (error){
             console.log("Error logging in: ",error);
-            setErrors(prevState=> [...prevState, "Something went wrong! Check console!"])
+            if (axios.isAxiosError(error)) {
+                if (error.response?.data?.error === "Invalid username or password.") {
+                  showMessage("Incorrect username or password", "error");
+                } else {
+                  showMessage("Something went wrong!", "error");
+                }
+            } else {
+                showMessage("Unexpected error occurred!", "error");
+            }
+            
         }
 
     }
@@ -63,14 +73,13 @@ const handleLogin = async () =>{
         <div className="login w-full h-full flex items-center justify-center">
             <form className="w-[350px] secondary-color rounded flex flex-col gap-3 px-[10px] py-[30px] items-center" onSubmit={(e) => e.preventDefault()}>
                 <h1 className="font-bold text-center text-2xl">Login</h1>
-                {errors && errors.length > 0 ? <div className="w-full p-[10px] flex flex-col gap-2 error-background rounded">{errors.map((item,index)=><p key={index}>{item}</p>)}</div> : null}
                 <fieldset className="flex flex-col gap-1 w-full">
                     <label>Username</label>
-                    <input className="w-full h-[40px] rounded primary-color" type="text" name="username" id="username" onChange={(e)=>setUsername(e.target.value)} value={username} required></input>
+                    <input className="w-full h-[40px] rounded primary-color pl-3" type="text" name="username" id="username" onChange={(e)=>setUsername(e.target.value)} value={username} required></input>
                 </fieldset>
                 <fieldset className="flex flex-col gap-1  w-full">
                     <label>Password</label>
-                    <input className="w-full h-[40px] rounded primary-color" type="password" name="password" id="password" onChange={(e)=>setPassword(e.target.value)} value={password} required></input>
+                    <input className="w-full h-[40px] rounded primary-color pl-3" type="password" name="password" id="password" onChange={(e)=>setPassword(e.target.value)} value={password} required></input>
                 </fieldset>
                 <a href="#">Forgot Password</a>
                 <button className="accent-background w-[150px] h-[40px] rounded" type="button" onClick={handleSubmit}>Login</button>

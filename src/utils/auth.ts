@@ -21,9 +21,17 @@ export const getUserData = (): IUserData | null => {
     
 };
 
-export const logoutUser = () => {
+export const logoutUser = async () => {
     localStorage.removeItem("userId");
     localStorage.removeItem("username");
     localStorage.removeItem("role");
+    try {
+        await fetch('http://localhost:5000/api/logout', {
+          method: 'POST',
+          credentials: 'include',
+        });
+    } catch (err) {
+        console.error('Logout failed', err);
+    }
 };
   
