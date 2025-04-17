@@ -61,7 +61,7 @@ const Workouts = () => {
             <div className="items-container flex flex-col gap-[10px] overflow-y-hidden h-full w-1/5 flex-shrink-0">
                 <h2 className="font-bold text-2xl items-center flex justify-center h-[50px] primary-color">Workouts</h2>
                 { isUserLoggedIn ? <Link to={'/exercises/new'} className="w-full h-[40px] rounded primary-color items-center flex justify-center">Add Workout</Link> : null }
-                <div className="h-full flex flex-col gap-3 overflow-x-hidden overflow-y-auto pr-[20px]">
+                <div className="h-full flex flex-col gap-3 overflow-x-hidden overflow-y-auto scrollbar-hide">
                     {items && items.length > 0 ? items.map((item, index)=> (
                         <div className={`item w-full h-[90px] primary-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getWorkoutData(item._id)}>
                         <h3>{item.name}</h3>
@@ -133,7 +133,7 @@ const Workouts = () => {
                                 </div>):<p  className="primary-color rounded w-full h-[40px] flex gap-[10px]">No exercises</p>}
                         </div>
                     </div>
-                </div> : <h2 className="font-bold p-[20px]">Select a workout</h2>}
+                </div> : <div className="flex items-center justify-center w-full h-full"><h1 className="text-2xl font-bold">Select a workout</h1></div>}
             </div>
         </div>
      );
