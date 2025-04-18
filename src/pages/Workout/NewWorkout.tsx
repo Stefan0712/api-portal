@@ -9,8 +9,9 @@ import Equipments from "../Exercise/Equipments.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ExercisePicker from "../common/ExercisePicker/ExercisePicker.tsx";
-import { isLoggedIn } from "../../utils/auth.ts";
+import { getUserData, isLoggedIn } from "../../utils/auth.ts";
 import ErrorLoginPage from "../common/LoginErrorPage.tsx";
+import { useMessage } from "../../context/MessageContext.tsx";
 
 
 
@@ -18,6 +19,10 @@ const NewWorkout: React.FC = () => {
 
     const navigate = useNavigate();
     const isUserLoggedIn = isLoggedIn();
+    const userData = getUserData();
+    const { showMessage } = useMessage();
+
+
     const [showGroups, setShowGroups] = useState<boolean>(false);
     const [showExercisePicker, setShowExercisePicker] = useState<boolean>(false);
 
@@ -38,7 +43,7 @@ const NewWorkout: React.FC = () => {
     const handleSaveWorkout = async (data: Workout) =>{
         try{
             const response = axios.post(`${process.env.REACT_APP_API_URL}/workout`, data);
-            console.log("Workout saved!", response);
+            showMessage("Workout saved successfully","success");
             navigate('/workouts');
         } catch (error){
             console.log("Error saving workout: ",error)
@@ -46,7 +51,7 @@ const NewWorkout: React.FC = () => {
     }
 
     const handleSubmit = ()=>{
-        if(isUserLoggedIn){
+        if(isUserLoggedIn && userData){
 
             const createdAt = new Date().toISOString(); // Get raw date and time for keeping track of when the exercise was created;
             let exercisesIds: string[] = []; //empty array to store the ids and sources of exercises
@@ -58,12 +63,12 @@ const NewWorkout: React.FC = () => {
                     exercisesIds.push(item._id);
                     
                 }else{
-                    console.log("Could not push id for: ", item)
+                    showMessage(`Failed to push the item with id ${item._id}`,"error");
                 }
             });
             const workoutData: Workout = {
                 createdAt, 
-                authorId: 'system',
+                authorId: userData.id,
                 isCompleted: false, 
                 name,
                 source: 'database', 
@@ -82,8 +87,8 @@ const NewWorkout: React.FC = () => {
             console.log(workoutData);
             handleSaveWorkout(workoutData);
         }else{
-            console.log("You are not logged in");
-            //TODO: Add an error here later
+            showMessage("You are not logged in","error");
+            
         }
         
     }
