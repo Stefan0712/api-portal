@@ -3,7 +3,7 @@ import axios from "axios";
 import { IUser } from "../types/interfaces";
 import { isLoggedIn } from "../utils/auth";
 import ErrorLoginPage from "./common/LoginErrorPage";
-import { formatDateToDMY, formatDateToPretty } from "../utils/dateFormat";
+import { formatDateToPretty } from "../utils/dateFormat";
 
 
 const Profile = () => {
@@ -14,7 +14,7 @@ const Profile = () => {
 
     const getData = async () =>{
         try{
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/private`, {withCredentials: true});
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/private`, {headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}});
             console.log(response.data.user);
             setUserData(response.data.user);
         }catch(error){
@@ -33,9 +33,27 @@ const Profile = () => {
                 Loading data
             </p>
         </div> );
-    }else{
+    }else if(!userData){return (<h1>Loading Data...</h1>)}else{
         return ( 
             <div className="profile flex flex-col items-center justify-center p-[40px] w-full h-full">
+                <div className="primary-color rounded flex items-center p-[30px] gap-[20px]">
+                    <div className="flex flex-col gap-[10px] p-[10px] rounded">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Username</p>
+                                <p>{userData.username || "Not set"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Name</p>
+                                <p>{userData.name || "Not set"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Bio</p>
+                                <p>{userData.bio || "Not set"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Created At</p>
+                                <p>{formatDateToPretty(userData.createdAt) || "Not set"}</p>
+                            </div>
                 <div className="primary-color rounded flex items-center p-[30px] gap-[20px]">
                     <div className="flex flex-col gap-[10px] p-[10px] rounded">
                             <div className="flex flex-col gap-1">
@@ -68,6 +86,8 @@ const Profile = () => {
                                 <p>{userData.following.length || 0}</p>
                             </div>
                         </div>
+                            </div>
+                        </div>
                         <div className="flex gap-3">
                             <div className="flex flex-col gap-1">
                                 <p className="text-white opacity-50">Height</p>
@@ -92,7 +112,20 @@ const Profile = () => {
                                 <p>{userData.age || "Not set"}</p>
                             </div>  
                         </div>    
+                            </div>
+                        </div>
+                        <div className="flex gap-3">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Role</p>
+                                <p>{userData.role || "Not set"}</p>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <p className="text-white opacity-50">Age</p>
+                                <p>{userData.age || "Not set"}</p>
+                            </div>  
+                        </div>    
                     </div>
+                    <div className="flex flex-col gap-[10px] p-[10px] rounded">
                     <div className="flex flex-col gap-[10px] p-[10px] rounded">
                         <h1>Activity</h1>
                         <div className="flex gap-[20px]">
@@ -111,24 +144,27 @@ const Profile = () => {
                         </div>
                     </div>
                     <div>
+                        <h1>Dashboard</h1>
                         <div>
                             <h1>Favorites</h1>
-                            <button>Workouts</button>
-                            <button>Exercises</button>
+                            <button>Workouts ({userData.favoriteWorkouts.length})</button>
+                            <button>Exercises ({userData.favoriteExercises.length})</button>
                         </div>
                         <div>
                             <h1>Saved</h1>
-                            <button>Workouts</button>
-                            <button>Exercises</button>
+                            <button>Workouts ({userData.savedWorkouts.length})</button>
+                            <button>Exercises ({userData.savedExercises.length})</button>
                         </div>
                         <div>
                             <h1>Created</h1>
-                            <button>Workouts</button>
-                            <button>Exercises</button>
+                            <button>Workouts ({userData.createdWorkouts.length})</button>
+                            <button>Exercises ({userData.createdExercises.length})</button>
                         </div>
                     </div>
                 </div>
             </div>
+            
+
 
         );
     }

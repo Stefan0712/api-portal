@@ -10,10 +10,10 @@ import NewExercise from './pages/Exercise/NewExercise.tsx';
 import NewWorkout from './pages/Workout/NewWorkout.tsx';
 import EditExercise from './pages/Exercise/EditExercise.tsx';
 import EditWorkout from './pages/Workout/EditWorkout.tsx';
-import { isLoggedIn, logoutUser } from './utils/auth.ts';
 import Nav from './pages/common/Nav.tsx';
 import {MessageProvider} from './context/MessageContext.tsx';
 import MessageToast from './pages/common/MessageToast.tsx';
+import Dashboard from './pages/Dashboard/Dashboard.tsx';
 
 
 function App() {
@@ -37,6 +37,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
           </div>
         </div>

@@ -12,6 +12,7 @@ const Nav = () => {
 
     return ( 
         <nav className='navigation px-[15px]'>
+            <Link to="/dashboard" className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none  text-xl font-medium">Dashboard</Link>
             <a className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none  text-xl font-medium">Explore</a>
             <a className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none text-xl font-medium">Planner</a>
             <Link to="/exercises" className="h-full text-white px-[15px] bg-transparent inline-flex items-center justify-center border-none  text-xl font-medium">Exercises</Link>
