@@ -90,13 +90,15 @@ const Exercises = () => {
                     <div className="flex gap-[20px] align-center w-full">
                         <h2 className="font-bold mb-2">{selectedItem.name}</h2>
                         {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
-                            {userData.id === selectedItem.authorId || userData.role==='admin' ? (
-                                <div>
-                                    <Link to={`/exercise/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
-                                    <button className="w-[100px] h-[40px] rounded accent-background" onClick={()=>setShowModal(true)}>Delete</button>
-                                </div>) : <button className="flex gap-1"><img className="h-[20px] w-[20px]" src={IconLibrary.Add} alt="" />Save</button>}
-                                <button className="flex gap-1"><img className="h-[20px] w-[20px]" src={IconLibrary.StarEmpty} alt="" />Add to favorite</button>
-                                </div> 
+                                <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.Add} alt="" />Save</button>
+                                <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.StarEmpty} alt="" />Add to favorite</button>
+                                {userData.id === selectedItem.authorId || userData.role==='admin' ? (
+                                    <div className="flex gap-3">
+                                        <Link to={`/exercise/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
+                                        <button className="w-[100px] h-[40px] rounded accent-background" onClick={()=>setShowModal(true)}>Delete</button>
+                                    </div>) 
+                                : null}
+                            </div> 
                         : null}
                     </div>
                     <div className="secondary-color p-[10px] rounded w-full h-[90px] flex">
