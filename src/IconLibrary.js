@@ -64,6 +64,9 @@ import Menu from './assets/menu.svg';
 import Hide from './assets/hide.svg';
 import EnableFullscreen from './assets/enableFullscreen.svg';
 import DisableFullscreen from './assets/disableFullscreen.svg';
+import StarFilled from './assets/star-filled.svg';
+import StarEmpty from './assets/start-empty.svg';
+
 
 
 export const IconLibrary = {
@@ -129,4 +132,6 @@ export const IconLibrary = {
     Hide,
     EnableFullscreen,
     DisableFullscreen,
+    StarFilled,
+    StarEmpty
 }
