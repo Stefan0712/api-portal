@@ -9,14 +9,17 @@ import TargetGroups from "./TargetGroups.tsx";
 import Equipments from "./Equipments.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { isLoggedIn } from "../../utils/auth.ts";
+import { getUserData, isLoggedIn } from "../../utils/auth.ts";
 import ErrorLoginPage from "../common/LoginErrorPage.tsx";
+import { useMessage } from "../../context/MessageContext.tsx";
 
 
 
 const NewExercise: React.FC = () => {
 
     const navigate = useNavigate();
+    const { showMessage } = useMessage();
+    const userData = getUserData();
 
     const [showGroups, setShowGroups] = useState<boolean>(false);
 
@@ -42,19 +45,20 @@ const NewExercise: React.FC = () => {
     const handleSaveExercise = async (data: Exercise) =>{
         try{
             const response = axios.post(`${process.env.REACT_APP_API_URL}/exercise`, data);
-            console.log("Exercise saved!", response);
+            showMessage("Exercise saved successfully", "success");
             navigate('/exercises');
         } catch (error){
-            console.log("Error saving exercise: ",error)
+            console.log("Error saving exercise: ",error);
+            showMessage("Error saving exercise", "error");
         }
     }
 
     const handleSubmit = ()=>{
-        if(isUserLoggedIn){
+        if(isUserLoggedIn && userData){
             const createdAt = new Date().toISOString(); // Get raw date and time for keeping track of when the exercise was created;
             const exerciseData: Exercise = {
                 createdAt, 
-                authorId: 'system',
+                authorId: userData.id,
                 isCompleted: false, 
                 name,
                 source: 'database', 
@@ -77,8 +81,7 @@ const NewExercise: React.FC = () => {
             console.log(exerciseData);
             handleSaveExercise(exerciseData);
         }else{
-            console.log("You are not logged in")
-            //TODO: Add a visual error later
+            showMessage("You are not logged in!", "error");
         }
         
     }
