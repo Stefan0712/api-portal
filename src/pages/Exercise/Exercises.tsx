@@ -6,19 +6,27 @@ import DeleteModal from "./DeleteModal";
 import { getUserData, isLoggedIn } from "../../utils/auth";
 import { IconLibrary } from "../../IconLibrary";
 import { formatDateToPretty } from "../../utils/dateFormat";
+import { useMessage } from "../../context/MessageContext";
 
 
 
 const Exercises = () => {
+
+    const {showMessage} = useMessage();
+
     const [items, setItems] = useState<Exercise[]>([]);
     const [selectedItem, setSelectedItem] = useState<Exercise | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [usersExercises, setUsersExercises] = useState<{favorites: string[], saved: string[], created: string[]} | null>(null)
 
     const isUserLoggedIn = isLoggedIn();
     const userData = getUserData();
 
     useEffect(()=>{
         fetchItems();
+        if(userData && isUserLoggedIn){
+            fetchUsersExercises();
+        }
     },[]);
 
     const fetchItems = async () =>{
@@ -31,26 +39,33 @@ const Exercises = () => {
         }
     }
     const getExerciseData = async (id: string) =>{
+        fetchUsersExercises();
         try{
-            const response = await axios.get<Exercise>(`${process.env.REACT_APP_API_URL}/exercise/${id}`);
+            const response = await axios.get<Exercise>(`${process.env.REACT_APP_API_URL}/exercise/view/${id}`, {withCredentials: true});
             setSelectedItem(response.data);
             console.log(response.data)
         } catch (error) {
             console.error("Error fetching exercises: ", error)
         }
     }
-
+    const fetchUsersExercises = async () =>{
+        try{
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/exercise/my-exercises`,{withCredentials: true});
+            setUsersExercises(response.data.exercises);
+            console.log(response.data.exercises)
+        } catch (error) {
+            console.error("Error getting user's exercises: ", error)
+        }
+    }
     const handleDeleteExercise = async () =>{
         try{
             if(selectedItem){
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/exercise/${selectedItem._id}`, {method: 'DELETE'}) ;
-                const data = await response.json();
-                if (response.ok) {
+                const response = await axios.delete(`${process.env.REACT_APP_API_URL}/exercise/${selectedItem._id}`, {withCredentials: true}) ;
+                const data = await response.data;
+                if(data){
                     setSelectedItem(null);
                     setShowModal(false);
                     fetchItems();
-                } else {
-                alert('Error deleting exercise: ' + data.message);
                 }
             }
             
@@ -59,10 +74,47 @@ const Exercises = () => {
         }
         
     }
-    //TODO: Convert raw Created at date to a formated version
-    //TODO: Replace hardcoded author name with one found by id from the database
+    const addToFavorites = async (exerciseId: string) =>{
+        try{
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise/${exerciseId}/favorite`,{}, {withCredentials: true});
+            console.log(response.data)
+            if(response.status === 200){
+                showMessage("Exercise added to favorites", "success")
+            }else if(response.status === 500){
+                showMessage("Failed to add exercise to favorites. Server error.", "error")
+            }
+        } catch (error){
+            showMessage("Error fetching exercises", "error");
+            console.error(error)
+        }
+    };
+    const removeFromFavorites = async (exerciseId: string) =>{
+        try{
+            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/exercise/${exerciseId}/favorite`, {withCredentials: true});
+            console.log(response.data)
+            if(response.status === 200){
+                showMessage("Exercise removed from favorites", "success")
+            }else if(response.status === 500){
+                showMessage("Failed to remove exercise from favorites. Server error.", "error")
+            }
+        } catch (error){
+            showMessage("Error fetching exercises", "error");
+            console.error(error);
+        }
+    };
+    const handleToggleFavorite = () =>{
+        if(usersExercises && selectedItem && selectedItem._id){
+            if(usersExercises.favorites.includes(selectedItem._id)){
+                console.log("Removed from favorites");
+                removeFromFavorites(selectedItem._id);
+            }else if(selectedItem ){
+                console.log("Added to favorites");
+                addToFavorites(selectedItem._id);
+            };
+            fetchUsersExercises();
+        }
+    }
     //TODO: Show the entire description of field on hover
-    //TODO: Make sure equipment work as expected
     //TODO: Add colors to tags
     return ( 
         <div className="full-container p-[20px] h-full w-full overflow-hidden flex gap-3">
@@ -92,7 +144,7 @@ const Exercises = () => {
                         <h2 className="font-bold mb-2 text-2xl">{selectedItem.name}</h2>
                         {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
                                 <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.Add} alt="" />Save</button>
-                                <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.StarEmpty} alt="" />Add to favorite</button>
+                                <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" />Add to favorite</button>
                                 {userData.id === selectedItem.authorId || userData.role==='admin' ? (
                                     <div className="flex gap-3">
                                         <Link to={`/exercise/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
