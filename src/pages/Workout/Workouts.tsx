@@ -3,7 +3,9 @@ import axios from "axios";
 import { Workout } from "../../types/interfaces";
 import { Link } from "react-router-dom";
 import DeleteModal from "../Exercise/DeleteModal";
-import { isLoggedIn } from "../../utils/auth";
+import { getUserData, isLoggedIn } from "../../utils/auth";
+import { IconLibrary } from "../../IconLibrary";
+import { formatDateToPretty } from "../../utils/dateFormat";
 
 
 
@@ -13,7 +15,7 @@ const Workouts = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
 
     const isUserLoggedIn = isLoggedIn();
-
+    const userData = getUserData();
 
     useEffect(()=>{
         fetchItems();
@@ -60,7 +62,7 @@ const Workouts = () => {
         <div className="full-container p-[20px] h-full w-full overflow-hidden flex gap-3">
             <div className="items-container flex flex-col gap-[10px] overflow-y-hidden h-full w-1/5 flex-shrink-0">
                 <h2 className="font-bold text-2xl items-center flex justify-center h-[50px] primary-color">Workouts</h2>
-                { isUserLoggedIn ? <Link to={'/exercises/new'} className="w-full h-[40px] rounded primary-color items-center flex justify-center">Add Workout</Link> : null }
+                { isUserLoggedIn ? <Link to={'/workouts/new'} className="w-full h-[40px] rounded primary-color items-center flex justify-center">Add Workout</Link> : null }
                 <div className="h-full flex flex-col gap-3 overflow-x-hidden overflow-y-auto scrollbar-hide">
                     {items && items.length > 0 ? items.map((item, index)=> (
                         <div className={`item w-full h-[90px] primary-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getWorkoutData(item._id)}>
@@ -81,9 +83,18 @@ const Workouts = () => {
             {selectedItem ? 
                 <div className="p-[15px] flex gap-[10px] flex-wrap">
                     <div className="flex gap-[20px] align-center w-full">
-                        <h2 className="font-bold mb-2">{selectedItem.name}</h2>
-                        <Link to={`/workout/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
-                        <button className="w-[100px] h-[40px] rounded accent-background" onClick={()=>setShowModal(true)}>Delete</button>
+                        <h2 className="font-bold mb-2 text-2xl">{selectedItem.name}</h2>
+                        {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
+                                <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.Add} alt="" />Save</button>
+                                <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.StarEmpty} alt="" />Add to favorite</button>
+                                {userData.id === selectedItem.authorId || userData.role==='admin' ? (
+                                    <div className="flex gap-3">
+                                        <Link to={`/exercise/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
+                                        <button className="w-[100px] h-[40px] rounded accent-background" onClick={()=>setShowModal(true)}>Delete</button>
+                                    </div>) 
+                                : null}
+                            </div> 
+                        : null}
                     </div>
                     <div className="secondary-color p-[10px] rounded w-full h-[90px] flex gap-[10px]">
                         <div className="w-2/3">
@@ -92,7 +103,7 @@ const Workouts = () => {
                         </div>
                         <div className="w-1/3">
                             <p><b>Author:</b> Stefan</p>
-                            <p><b>Created at:</b> {selectedItem.createdAt || 'Not Set'}</p>
+                            <p><b>Created at:</b> {formatDateToPretty(selectedItem.createdAt) || 'Not Set'}</p>
                             <p><b>Difficulty:</b> {selectedItem.difficulty || 'Not Set'}</p>
                         </div>
                     </div>

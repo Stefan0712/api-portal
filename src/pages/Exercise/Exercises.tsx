@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import DeleteModal from "./DeleteModal";
 import { getUserData, isLoggedIn } from "../../utils/auth";
 import { IconLibrary } from "../../IconLibrary";
+import { formatDateToPretty } from "../../utils/dateFormat";
 
 
 
@@ -88,7 +89,7 @@ const Exercises = () => {
                 {selectedItem ? 
                 <div className="p-[15px] flex gap-[10px] flex-wrap">
                     <div className="flex gap-[20px] align-center w-full">
-                        <h2 className="font-bold mb-2">{selectedItem.name}</h2>
+                        <h2 className="font-bold mb-2 text-2xl">{selectedItem.name}</h2>
                         {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
                                 <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.Add} alt="" />Save</button>
                                 <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.StarEmpty} alt="" />Add to favorite</button>
@@ -108,7 +109,7 @@ const Exercises = () => {
                         </div>
                         <div className="w-1/3">
                             <p><b>Author:</b> Stefan</p>
-                            <p><b>Created at:</b> {selectedItem.createdAt || 'Not Set'}</p>
+                            <p><b>Created at:</b> {formatDateToPretty(selectedItem.createdAt) || 'Not Set'}</p>
                             <p><b>Difficulty:</b> {selectedItem.difficulty || 'Not Set'}</p>
                         </div>
                     </div>
