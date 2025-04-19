@@ -6,7 +6,7 @@ import Tags from "../Exercise/Tags.tsx";
 import TargetGroups from "../Exercise/TargetGroups.tsx";
 import Equipments from "../Exercise/Equipments.tsx";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../../axios";
 import ExercisePicker from "../common/ExercisePicker/ExercisePicker.tsx";
 
 const EditWorkout: React.FC = () => {

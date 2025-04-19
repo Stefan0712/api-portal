@@ -3,7 +3,7 @@ import styles from '../TagPicker/TagPicker.module.css';
 import { useState } from 'react';
 import { IconLibrary } from '../../../IconLibrary';
 import { Exercise } from '../../../types/interfaces';
-import axios from 'axios';
+import axios from "../../../axios";
 
 interface ExercisePickerProps {
     closeModal: () => void;

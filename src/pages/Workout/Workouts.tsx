@@ -1,5 +1,5 @@
 import react, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../axios";
 import { Workout } from "../../types/interfaces";
 import { Link } from "react-router-dom";
 import DeleteModal from "../Exercise/DeleteModal";

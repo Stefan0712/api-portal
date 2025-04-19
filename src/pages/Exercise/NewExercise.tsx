@@ -8,7 +8,7 @@ import Tags from "./Tags.tsx";
 import TargetGroups from "./TargetGroups.tsx";
 import Equipments from "./Equipments.tsx";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../axios";
 import { getUserData, isLoggedIn } from "../../utils/auth.ts";
 import ErrorLoginPage from "../common/LoginErrorPage.tsx";
 import { useMessage } from "../../context/MessageContext.tsx";

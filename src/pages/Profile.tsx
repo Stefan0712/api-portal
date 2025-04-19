@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axios";
 import { IUser } from "../types/interfaces";
 import { isLoggedIn } from "../utils/auth";
 import ErrorLoginPage from "./common/LoginErrorPage";

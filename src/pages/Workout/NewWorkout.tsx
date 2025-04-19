@@ -7,7 +7,7 @@ import Tags from "../Exercise/Tags.tsx";
 import TargetGroups from "../Exercise/TargetGroups.tsx";
 import Equipments from "../Exercise/Equipments.tsx";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../axios";
 import ExercisePicker from "../common/ExercisePicker/ExercisePicker.tsx";
 import { getUserData, isLoggedIn } from "../../utils/auth.ts";
 import ErrorLoginPage from "../common/LoginErrorPage.tsx";

@@ -1,5 +1,5 @@
 import react, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../axios";
 import { Exercise } from "../../types/interfaces";
 import { Link } from "react-router-dom";
 import DeleteModal from "./DeleteModal";
@@ -114,6 +114,46 @@ const Exercises = () => {
             fetchUsersExercises();
         }
     }
+    const addToLibrary = async (exerciseId: string) =>{
+        try{
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise/${exerciseId}/saved`,{}, {withCredentials: true});
+            console.log(response.data)
+            if(response.status === 200){
+                showMessage("Exercise successfully saved", "success")
+            }else if(response.status === 500){
+                showMessage("Failed to add exercise to saved exercises. Server error.", "error")
+            }
+        } catch (error){
+            showMessage("Error fetching exercises", "error");
+            console.error(error)
+        }
+    };
+    const removeFromLibrary = async (exerciseId: string) =>{
+        try{
+            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/exercise/${exerciseId}/saved`, {withCredentials: true});
+            console.log(response.data)
+            if(response.status === 200){
+                showMessage("Exercise successfully removed", "success")
+            }else if(response.status === 500){
+                showMessage("Failed to remove exercise from saved exercises. Server error.", "error")
+            }
+        } catch (error){
+            showMessage("Error fetching exercises", "error");
+            console.error(error);
+        }
+    };
+    const handleToggleSave = () =>{
+        if(usersExercises && selectedItem && selectedItem._id){
+            if(usersExercises.saved.includes(selectedItem._id)){
+                console.log("Removed from saved exercises");
+                removeFromLibrary(selectedItem._id);
+            }else if(selectedItem ){
+                console.log("Added to saved exercises");
+                addToLibrary(selectedItem._id);
+            };
+            fetchUsersExercises();
+        }
+    }
     //TODO: Show the entire description of field on hover
     //TODO: Add colors to tags
     return ( 
@@ -122,7 +162,7 @@ const Exercises = () => {
                 <h2 className="font-bold text-2xl items-center flex justify-center h-[50px] primary-color">Exercises</h2>
                 {isUserLoggedIn ? <Link to={'/exercises/new'} className="w-full h-[40px] rounded primary-color items-center flex justify-center">Add Exercise</Link> : null}
                 <div className="h-full flex flex-col gap-3 overflow-x-hidden overflow-y-auto scrollbar-hide">
-                    {items && items.length > 0 ? items.map((item, index)=> (
+                    {items && items.length && Array.isArray(items) ? items?.map((item, index)=> (
                         <div className={`item w-full h-[90px] primary-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getExerciseData(item._id)}>
                             <h3 className="font-bold">{item.name}</h3>
                             <div className="flex gap-[10px] overflow-hidden w-full whitespace-nowrap">
@@ -143,7 +183,7 @@ const Exercises = () => {
                     <div className="flex gap-[20px] align-center w-full">
                         <h2 className="font-bold mb-2 text-2xl">{selectedItem.name}</h2>
                         {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
-                                <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.Add} alt="" />Save</button>
+                                <button className="flex gap-1 items-center" onClick={handleToggleSave}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Add : IconLibrary.Add} alt="" />Save</button>
                                 <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" />Add to favorite</button>
                                 {userData.id === selectedItem.authorId || userData.role==='admin' ? (
                                     <div className="flex gap-3">
