@@ -183,8 +183,8 @@ const Exercises = () => {
                     <div className="flex gap-[20px] align-center w-full">
                         <h2 className="font-bold mb-2 text-2xl">{selectedItem.name}</h2>
                         {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
-                                <button className="flex gap-1 items-center" onClick={handleToggleSave}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Add : IconLibrary.Add} alt="" />Save</button>
-                                <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" />Add to favorite</button>
+                                <button className="flex gap-1 items-center" onClick={handleToggleSave}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Add : IconLibrary.Add} alt="" /></button>
+                                <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" /></button>
                                 {userData.id === selectedItem.authorId || userData.role==='admin' ? (
                                     <div className="flex gap-3">
                                         <Link to={`/exercise/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>

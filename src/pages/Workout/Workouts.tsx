@@ -6,13 +6,18 @@ import DeleteModal from "../Exercise/DeleteModal";
 import { getUserData, isLoggedIn } from "../../utils/auth";
 import { IconLibrary } from "../../IconLibrary";
 import { formatDateToPretty } from "../../utils/dateFormat";
+import { useMessage } from "../../context/MessageContext";
 
 
 
 const Workouts = () => {
+
+    const { showMessage } = useMessage();
     const [items, setItems] = useState<Workout[]>([])
     const [selectedItem, setSelectedItem] = useState<Workout | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
+
+    const [userWorkouts, setUserWorkouts] = useState<{favorites: string[], saved: string[], created: string[]} | null>(null);
 
     const isUserLoggedIn = isLoggedIn();
     const userData = getUserData();
@@ -21,7 +26,6 @@ const Workouts = () => {
         fetchItems();
     },[]);
 
-    console.log(process.env.REACT_APP_API_URL)
     const fetchItems = async () =>{
         try{
             const response = await axios.get<Workout[]>(`${process.env.REACT_APP_API_URL}/workout/`);
@@ -40,6 +44,15 @@ const Workouts = () => {
             console.error("Error fetching workout: ", error)
         }
     }
+    const fetchUsersWokouts = async () =>{
+        try{
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/workout/my-workouts`,{withCredentials: true});
+            setUserWorkouts(response.data.workouts);
+            console.log(response.data.workouts)
+        } catch (error) {
+            console.error("Error getting user's workouts: ", error)
+        }
+    }
     const handleDelete = async () =>{
         try{
             if(selectedItem){
@@ -56,6 +69,84 @@ const Workouts = () => {
             
         } catch (error) {
             console.error(`Error deleting workout: `, error);
+        }
+    }
+    const addToFavorites = async (workoutId: string) =>{
+        try{
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/workout/${workoutId}/favorite`,{}, {withCredentials: true});
+            console.log(response.data)
+            if(response.status === 200){
+                showMessage("Workout added to favorites", "success")
+            }else if(response.status === 500){
+                showMessage("Failed to add workout to favorites. Server error.", "error")
+            }
+        } catch (error){
+            showMessage("Error fetching workouts", "error");
+            console.error(error)
+        }
+    };
+    const removeFromFavorites = async (workoutid: string) =>{
+        try{
+            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/workout/${workoutId}/favorite`, {withCredentials: true});
+            console.log(response.data)
+            if(response.status === 200){
+                showMessage("Workout removed from favorites", "success")
+            }else if(response.status === 500){
+                showMessage("Failed to remove workout from favorites. Server error.", "error")
+            }
+        } catch (error){
+            showMessage("Error fetching workouts", "error");
+            console.error(error);
+        }
+    };
+    const handleToggleFavorite = () =>{
+        if(userWorkouts && selectedItem && selectedItem._id){
+            if(userWorkouts.favorites.includes(selectedItem._id)){
+                console.log("Removed from favorites");
+                removeFromFavorites(selectedItem._id);
+            }else if(selectedItem ){
+                console.log("Added to favorites");
+                addToFavorites(selectedItem._id);
+            };
+            fetchUsersWokouts();
+        }
+    }
+    const addToLibrary = async (workoutId: string) =>{
+        try{
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/workout/${workoutId}/saved`,{}, {withCredentials: true});
+            if(response.status === 200){
+                showMessage("Workout successfully saved", "success")
+            }else if(response.status === 500){
+                showMessage("Failed to add workout to saved workouts. Server error.", "error")
+            }
+        } catch (error){
+            showMessage("Error fetching workouts", "error");
+            console.error(error)
+        }
+    };
+    const removeFromLibrary = async (workoutId: string) =>{
+        try{
+            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/workout/${workoutId}/saved`, {withCredentials: true});
+            if(response.status === 200){
+                showMessage("Workout successfully removed", "success")
+            }else if(response.status === 500){
+                showMessage("Failed to remove workout from saved workouts. Server error.", "error")
+            }
+        } catch (error){
+            showMessage("Error fetching workouts", "error");
+            console.error(error);
+        }
+    };
+    const handleToggleSave = () =>{
+        if(userWorkouts && selectedItem && selectedItem._id){
+            if(userWorkouts.saved.includes(selectedItem._id)){
+                console.log("Removed from saved workouts");
+                removeFromLibrary(selectedItem._id);
+            }else if(selectedItem ){
+                console.log("Added to saved workouts");
+                addToLibrary(selectedItem._id);
+            };
+            fetchUsersWokouts();
         }
     }
     return ( 
@@ -85,8 +176,8 @@ const Workouts = () => {
                     <div className="flex gap-[20px] align-center w-full">
                         <h2 className="font-bold mb-2 text-2xl">{selectedItem.name}</h2>
                         {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
-                                <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.Add} alt="" />Save</button>
-                                <button className="flex gap-1 items-center"><img className="h-[20px] w-[20px]" src={IconLibrary.StarEmpty} alt="" />Add to favorite</button>
+                            <button className="flex gap-1 items-center" onClick={handleToggleSave}><img className="h-[20px] w-[20px]" src={userWorkouts && userWorkouts.favorites?.length > 0 ? userWorkouts?.favorites.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Add : IconLibrary.Add} alt="" /></button>
+                            <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={userWorkouts && userWorkouts.favorites?.length > 0 ? userWorkouts?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" /></button>
                                 {userData.id === selectedItem.authorId || userData.role==='admin' ? (
                                     <div className="flex gap-3">
                                         <Link to={`/exercise/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
