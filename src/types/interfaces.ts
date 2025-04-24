@@ -33,6 +33,12 @@ export interface Equipment {
     id: string;
     name: string;
     attributes?: EquipmentAttributes[];
+    description?: string;
+    tags?: Tag[];
+    muscleGroups?: TargetGroups[];
+    createdAt: string;
+    url?: string;
+    urlName?: string;
 }
   
 export interface EquipmentAttributes {
