@@ -48,7 +48,7 @@ const Workouts = () => {
     const fetchUsersWokouts = async () =>{
         try{
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/workout/my-workouts`,{withCredentials: true});
-            setUserWorkouts({saved: response.data.saved, favorites: response.data.favorite, created: response.data.created});
+            setUserWorkouts({saved: response.data.saved, favorites: response.data.favorites, created: response.data.created});
             console.log(response.data);
         } catch (error) {
             console.error("Error getting user's workouts: ", error)
@@ -78,6 +78,15 @@ const Workouts = () => {
         try{
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/workout/save/${selectedItem._id}`,{}, {withCredentials: true});
             if(response.status === 200){
+                setUserWorkouts(prev => {
+                    if (!prev) return prev;
+                    const isSaved = prev.saved.includes(selectedItem._id);
+
+                    return {
+                        ...prev, 
+                        saved: isSaved ? prev.saved.filter(id => id !== selectedItem._id) : [...prev.saved, selectedItem._id]
+                    } 
+                });
                 showMessage(response.data.message, "success");
                 
             }else if(response.status === 500){
@@ -92,6 +101,16 @@ const Workouts = () => {
         try{
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/workout/favorite/${selectedItem._id}`,{}, {withCredentials: true});
             if(response.status === 200){
+                setUserWorkouts(prev => {
+                    if (!prev) return prev;
+                    console.log(prev)
+                    const isFavorited = prev.favorites.includes(selectedItem._id);
+
+                    return {
+                        ...prev, 
+                        favorites: isFavorited ? prev.favorites.filter(id => id !== selectedItem._id) : [...prev.favorites, selectedItem._id]
+                    } 
+                });
                 showMessage(response.data.message, "success");
             }else if(response.status === 500){
                 showMessage("Failed to add workout to favorite workouts. Server error.", "error")
