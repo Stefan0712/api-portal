@@ -74,52 +74,21 @@ const Exercises = () => {
         }
         
     }
-    const addToFavorites = async (exerciseId: string) =>{
+    const handleSaveExercise = async () =>{
         try{
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise/${exerciseId}/favorite`,{}, {withCredentials: true});
-            console.log(response.data)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise/save/${selectedItem._id}`,{}, {withCredentials: true});
             if(response.status === 200){
-                showMessage("Exercise added to favorites", "success")
-            }else if(response.status === 500){
-                showMessage("Failed to add exercise to favorites. Server error.", "error")
-            }
-        } catch (error){
-            showMessage("Error fetching exercises", "error");
-            console.error(error)
-        }
-    };
-    const removeFromFavorites = async (exerciseId: string) =>{
-        try{
-            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/exercise/${exerciseId}/favorite`, {withCredentials: true});
-            console.log(response.data)
-            if(response.status === 200){
-                showMessage("Exercise removed from favorites", "success")
-            }else if(response.status === 500){
-                showMessage("Failed to remove exercise from favorites. Server error.", "error")
-            }
-        } catch (error){
-            showMessage("Error fetching exercises", "error");
-            console.error(error);
-        }
-    };
-    const handleToggleFavorite = () =>{
-        if(usersExercises && selectedItem && selectedItem._id){
-            if(usersExercises.favorites.includes(selectedItem._id)){
-                console.log("Removed from favorites");
-                removeFromFavorites(selectedItem._id);
-            }else if(selectedItem ){
-                console.log("Added to favorites");
-                addToFavorites(selectedItem._id);
-            };
-            fetchUsersExercises();
-        }
-    }
-    const addToLibrary = async (exerciseId: string) =>{
-        try{
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise/${exerciseId}/saved`,{}, {withCredentials: true});
-            console.log(response.data)
-            if(response.status === 200){
-                showMessage("Exercise successfully saved", "success")
+                setUsersExercises(prev => {
+                    if (!prev) return prev;
+                    const isSaved = prev.saved.includes(selectedItem._id);
+
+                    return {
+                        ...prev, 
+                        saved: isSaved ? prev.saved.filter(id => id !== selectedItem._id) : [...prev.saved, selectedItem._id]
+                    } 
+                });
+                showMessage(response.data.message, "success");
+                
             }else if(response.status === 500){
                 showMessage("Failed to add exercise to saved exercises. Server error.", "error")
             }
@@ -128,32 +97,28 @@ const Exercises = () => {
             console.error(error)
         }
     };
-    const removeFromLibrary = async (exerciseId: string) =>{
+    const handleToggleFavorite = async () =>{
         try{
-            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/exercise/${exerciseId}/saved`, {withCredentials: true});
-            console.log(response.data)
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise/favorite/${selectedItem._id}`,{}, {withCredentials: true});
             if(response.status === 200){
-                showMessage("Exercise successfully removed", "success")
+                setUsersExercises(prev => {
+                    if (!prev) return prev;
+                    const isFavorited = prev.favorites.includes(selectedItem._id);
+
+                    return {
+                        ...prev, 
+                        favorites: isFavorited ? prev.favorites.filter(id => id !== selectedItem._id) : [...prev.favorites, selectedItem._id]
+                    } 
+                });
+                showMessage(response.data.message, "success");
             }else if(response.status === 500){
-                showMessage("Failed to remove exercise from saved exercises. Server error.", "error")
+                showMessage("Failed to add exercise to favorite exercises. Server error.", "error")
             }
         } catch (error){
             showMessage("Error fetching exercises", "error");
-            console.error(error);
+            console.error(error)
         }
     };
-    const handleToggleSave = () =>{
-        if(usersExercises && selectedItem && selectedItem._id){
-            if(usersExercises.saved.includes(selectedItem._id)){
-                console.log("Removed from saved exercises");
-                removeFromLibrary(selectedItem._id);
-            }else if(selectedItem ){
-                console.log("Added to saved exercises");
-                addToLibrary(selectedItem._id);
-            };
-            fetchUsersExercises();
-        }
-    }
     //TODO: Show the entire description of field on hover
     //TODO: Add colors to tags
     return ( 
@@ -183,7 +148,7 @@ const Exercises = () => {
                     <div className="flex gap-[20px] align-center w-full">
                         <h2 className="font-bold mb-2 text-2xl">{selectedItem.name}</h2>
                         {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
-                                <button className="flex gap-1 items-center" onClick={handleToggleSave}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Add : IconLibrary.Add} alt="" /></button>
+                                <button className="flex gap-1 items-center" onClick={handleSaveExercise}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.saved?.length > 0 ? usersExercises?.saved.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Add : IconLibrary.Add} alt="" /></button>
                                 <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" /></button>
                                 {userData.id === selectedItem.authorId || userData.role==='admin' ? (
                                     <div className="flex gap-3">
