@@ -17,21 +17,16 @@ const Dashboard = () => {
                 <h1 className="w-full text-center text-2xl font-bold">Dashboard</h1>
                 <button className="h-[40px] rounded text-start pl-[10px]">Overview</button>
                 <div className={`transition-all duration-300 w-full flex flex-col overflow-hidden ${isWorkoutsShown ? "h-[160px]" : "h-[30px]"}`}>
-                    <h2 className="h-[30px] flex-shrink-0" onClick={()=>setIsWorkoutsShown(prevState=>!prevState)}>Workouts</h2>
-                    <button className="h-[40px] rounded text-start pl-[10px]">Created Workouts</button>
-                    <button className="h-[40px] rounded text-start pl-[10px]">Saved Workouts</button>
-                    <button className="h-[40px] rounded text-start pl-[10px]">Favorite Workouts</button>
-                </div>
-                <div className={`transition-all duration-300 flex flex-col overflow-hidden ${isExercisesShown ? "h-[160px]" : "h-[30px]"}`}>
-                    <h2 className="h-[30px] w-full flex-shrink-0" onClick={()=>setIsWorkoutsShown(prevState=>!prevState)}>Exercises</h2>
-                    <button className="h-[40px] rounded text-start pl-[10px]">Created Exercises</button>
-                    <button className="h-[40px] rounded text-start pl-[10px]">Saved Exercises</button>
-                    <button className="h-[40px] rounded text-start pl-[10px]">Favorite Exercises</button>
+                    <h2 className="h-[30px] flex-shrink-0" onClick={()=>setIsWorkoutsShown(prevState=>!prevState)}>My Items</h2>
+                    <button className="h-[40px] rounded text-start pl-[10px]">Exercises</button>
+                    <button className="h-[40px] rounded text-start pl-[10px]">Workouts</button>
+                    <button className="h-[40px] rounded text-start pl-[10px]">Guides</button>
+                    <button className="h-[40px] rounded text-start pl-[10px]">Equipment</button>
                 </div>
                 <div className={`transition-all duration-300 flex flex-col overflow-hidden ${isSocialShown ? "h-[160px]" : "h-[30px]"}`}>
                     <h2 className="h-[30px] flex-shrink-0" onClick={()=>setIsWorkoutsShown(prevState=>!prevState)}>Social</h2>
-                    <button className="h-[40px] rounded text-start pl-[10px]">My posts</button>
-                    <button className="h-[40px] rounded text-start pl-[10px]">Saved Posts</button>
+                    <button className="h-[40px] rounded text-start pl-[10px]">Public Profile</button>
+                    <button className="h-[40px] rounded text-start pl-[10px]">Posts</button>
                     <button className="h-[40px] rounded text-start pl-[10px]">Activity</button>
                 </div>
                 <div className={`transition-all duration-300 flex flex-col overflow-hidden ${isPersonalShown ? "h-[160px]" : "h-[30px]"}`}>
