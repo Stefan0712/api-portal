@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { IconLibrary } from "../../IconLibrary";
-import { TargetGroup, Tag, Equipment, Field, Exercise } from "../../types/interfaces.ts";
+import { TargetGroups as ITargetGroups, Tag, Equipment, Field, Exercise } from "../../types/interfaces.ts";
 import {v4 as uuidv4} from 'uuid';
 import Fields from "./Fields.tsx";
 import Tags from "./Tags.tsx";
@@ -37,7 +37,7 @@ const NewExercise: React.FC = () => {
     const [fields, setFields] = useState<Field[]>([]);
     const [rest, setRest] = useState<string>('');
     const [notes, setNotes] = useState<string>('');
-    const [muscleGroups, setMuscleGroups] = useState<TargetGroup[]>([]); // State that holds the array containing all Target Groups
+    const [muscleGroups, setMuscleGroups] = useState<ITargetGroups[]>([]); // State that holds the array containing all Target Groups
     const [groupName, setGroupName] = useState<string>(''); // State to hold the value of Target Group input
     const [instructions, setInstructions] = useState<string[]>([]); // State to hold the array of all instructions
     const [instruction, setInstruction] = useState<string>(''); // State to hold current value of instruction input
@@ -96,7 +96,7 @@ const NewExercise: React.FC = () => {
     const addEquipment = (newItem: Equipment) =>{
         setEquipments((equipments)=>[...equipments, newItem]);
     }
-    const addmuscleGroups = (newItem: TargetGroup) =>{
+    const addmuscleGroups = (newItem: ITargetGroups) =>{
         setMuscleGroups((targetGorups)=>[...targetGorups, newItem]);
     }
 
@@ -104,7 +104,7 @@ const NewExercise: React.FC = () => {
     const handleAddGroup = () =>{
         if(groupName.length > 0 && groupName.length < 15){ // Checks if the name is between 0 and 15 not including them
             // If the length is good, create a new target group with an id used on the frontend, an author, and the name of the group
-            const groupData: TargetGroup = {
+            const groupData: ITargetGroups = {
                 id: uuidv4(),
                 author: 'system',
                 name: groupName

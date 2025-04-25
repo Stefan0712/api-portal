@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { EquipmentAttributes, Tag, TargetGroups as ITargetGroups } from "../../../types/interfaces";
+import { EquipmentAttributes, Tag, TargetGroups as ITargetGroups, Equipment } from "../../../types/interfaces";
 import { useMessage } from "../../../context/MessageContext";
 import Tags from "../../Exercise/Tags";
 import TargetGroups from "../../Exercise/TargetGroups";
 import { IconLibrary } from "../../../IconLibrary";
+import axios from "axios";
 
 
 
@@ -55,8 +56,10 @@ const NewEquipment: React.FC<Props> = ({closeNewEquipment}) => {
         if(!tags || tags.length === 0 ) showMessage("Please add at least one tag", "error");
 
         if(name && tags && name.length > 3 && name.length < 15 && tags.length > 0){
+            const createDate = new Date();
             const equipmentData = {
-                savedAt: new Date(),
+                createdAt: createDate.toString(),
+                authorId: userId,
                 name,
                 description,
                 url,
@@ -66,7 +69,7 @@ const NewEquipment: React.FC<Props> = ({closeNewEquipment}) => {
                 muscleGroups
             }
             console.log(equipmentData)
-            showMessage("Equipment successfully created", "success");
+            saveEquipment(equipmentData);
             // setName('');
             // setDescription('');
             // setUrl('');
@@ -76,7 +79,16 @@ const NewEquipment: React.FC<Props> = ({closeNewEquipment}) => {
             // setMuscleGroups([]);
         }
     }
-
+    const saveEquipment = async (data: Equipment) =>{
+        try{
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/equipment/create`,{data}, {withCredentials: true});
+            console.log(response.data);
+            showMessage("Equipment created successfully", "success")
+        }catch(error){
+            showMessage("There has been an error creating the equipment", "error")
+            console.log("There has been an error creating the equipment",error)
+        }
+    }
     const handleAddTag = (tag: Tag) =>{
         setTags(prev=>[...prev, tag])
     }
