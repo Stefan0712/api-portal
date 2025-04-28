@@ -71,17 +71,17 @@ const EditEquipment: React.FC<Props> = ({equipment, closeEditEquipment}) => {
             }
             console.log(equipmentData)
             saveEquipment(equipmentData);
-           closeEditEquipment();
+            closeEditEquipment();
         }
     }
     const saveEquipment = async (data: Equipment) =>{
         try{
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/equipment/create`,{data}, {withCredentials: true});
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/equipment/${equipment._id}`,{data}, {withCredentials: true});
             console.log(response.data);
-            showMessage("Equipment created successfully", "success")
+            showMessage("Equipment updated successfully", "success")
         }catch(error){
-            showMessage("There has been an error creating the equipment", "error")
-            console.log("There has been an error creating the equipment",error)
+            showMessage("There has been an error updating the equipment", error)
+            console.log("There has been an error updating the equipment",error)
         }
     }
     const handleAddTag = (tag: Tag) =>{
