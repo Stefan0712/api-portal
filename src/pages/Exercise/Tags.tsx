@@ -44,7 +44,7 @@ const Tags: React.FC<CreateTagProps> = ({addTag, author, allTags}) => {
         display: 'grid', 
         gridTemplateColumns: '50px 50px 1fr 50px', 
         gap: '5px',
-        backgroundColor: '#111214'
+        
     }
 
 
@@ -74,7 +74,7 @@ const Tags: React.FC<CreateTagProps> = ({addTag, author, allTags}) => {
         }
     }
     return ( 
-        <div style={createTagStyles} className="background-color">
+        <div style={createTagStyles}>
             {showTags ? <TagPicker closeModal={()=>setShowTags(false)} currentTags={allTags} addTag={addTag} /> : null}
             {showColorPicker ? <ColorPicker closeModal={()=>setShowColorPicker(false)} getColor={setColor} currentColor={color}/> : null}
             <button type="button" onClick={()=>setShowTags(true)}><img className="w-[30px] h-[30px]" src={IconLibrary.Search} alt=""/></button>
