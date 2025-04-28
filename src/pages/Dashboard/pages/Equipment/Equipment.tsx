@@ -12,7 +12,8 @@ const Equipment = () => {
     const userId = localStorage.getItem("userId");
     const {showMessage} = useMessage();
 
-    const [showCreateEquipment, setShowCreateEquipment] = useState(false); // State for showing/hiding the NewExercise form
+    const [showCreateEquipment, setShowCreateEquipment] = useState(false); // State for showing/hiding the NewEquipment form
+    const [showEdit, setShowEdit] = useState<IEquipment | null>(null); // State for showing/hiding the EditEquipment form
     const [filteredItems, setFilteredItems] = useState<IEquipment[]>([]);
 
     const [selectedEquipment, setSelectedEquipment] = useState<IEquipment | null>(null);
@@ -37,7 +38,16 @@ const Equipment = () => {
     useEffect(()=>{
         getEquipment('user');
     },[])
-   
+    const handleDelete = (id: string) =>{
+        showMessage("Equipment was deleted", "success");
+    }
+    const handleEdit = (equipment: IEquipment) =>{
+        if(equipment){
+            setShowEdit(equipment);
+        }else{
+            showMessage("There was an error with edit equipment", "error");
+        }
+    }
     if(!userId){
         return (<ErrorLoginPage />)
     }else{
@@ -62,7 +72,7 @@ const Equipment = () => {
                         )): null}
                     </div>
                 </div>
-                <ViewEquipment equipment={selectedEquipment} />
+                <ViewEquipment equipment={selectedEquipment} handleDelete={handleDelete} handleEdit={handleEdit} />
             </div>
         );
     }

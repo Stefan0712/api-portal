@@ -30,6 +30,7 @@ export interface TargetGroups {
 }
   
 export interface Equipment {
+    _id?: string;
     authorId: string;
     name: string;
     attributes?: EquipmentAttributes[];
