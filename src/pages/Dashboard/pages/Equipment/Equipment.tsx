@@ -39,8 +39,18 @@ const Equipment = () => {
     useEffect(()=>{
         getEquipment('user');
     },[])
-    const handleDelete = (id: string) =>{
-        showMessage("Equipment was deleted", "success");
+    const handleDelete = async (id: string) =>{
+        try{
+            const response = await axios.delete(`${process.env.REACT_APP_API_URL}/equipment/${id}`, {withCredentials: true})
+            if(response.status === 200){
+                setSelectedEquipment(null);
+                refreshEquipment();
+                showMessage("Equipment deleted successfully", "success")
+            }
+        } catch (error) {
+            showMessage("There was an error deleting an equipment", "error");
+            console.error(`Error deleting exercise: `, error);
+        }
     }
     const handleEdit = (equipment: IEquipment) =>{
         if(equipment){
