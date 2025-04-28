@@ -1,5 +1,5 @@
 import { IconLibrary } from "../../../../IconLibrary";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMessage } from "../../../../context/MessageContext";
 import NewEquipment from "./NewEquipment";
 import ErrorLoginPage from "../../../common/LoginErrorPage";
@@ -34,29 +34,35 @@ const Equipment = () => {
             console.error(error);
         }
     }
-    
+    useEffect(()=>{
+        getEquipment('user');
+    },[])
    
     if(!userId){
         return (<ErrorLoginPage />)
     }else{
         return ( 
-            <div>
-                <h1 className="w-full h-[60px] text-2xl font-bold p-[15px]">Equipment</h1>
-                <div className="flex gap-3 items-center px-[15px]">
-                    <button className="h-[50px] background-color px-[15px] rounded" onClick={()=>getEquipment("user")}>My Equipment</button>
-                    <button className="h-[50px] background-color px-[15px] rounded" onClick={()=>getEquipment("default")}>Default Equipment</button>
-                    <button className="h-[50px] background-color px-[15px] rounded" onClick={()=>getEquipment("public")}>Explore</button>
-                    <button className="ml-auto" onClick={()=>setShowCreateEquipment(true)}><img src={IconLibrary.Add} className="h-[40px] w-[40px]" /></button>
+            <div className="w-full h-full grid grid-cols-[1fr_500px]">
+                <div className="w-full h-full">
+                    <h1 className="w-full h-[60px] text-2xl font-bold p-[15px]">Equipment</h1>
+                    <div className="flex gap-3 items-center px-[15px]">
+                        <button className="h-[50px] background-color px-[15px] rounded" onClick={()=>getEquipment("user")}>My Equipment</button>
+                        <button className="h-[50px] background-color px-[15px] rounded" onClick={()=>getEquipment("default")}>Default Equipment</button>
+                        <button className="h-[50px] background-color px-[15px] rounded" onClick={()=>getEquipment("public")}>Explore</button>
+                        <button className="ml-auto" onClick={()=>setShowCreateEquipment(true)}><img src={IconLibrary.Add} className="h-[40px] w-[40px]" /></button>
+                    </div>
+                    {showCreateEquipment ? <NewEquipment closeNewEquipment={()=>setShowCreateEquipment(false)} />: null}
+                    <div className="flex flex-col p-[15px] gap-2">
+                        {filteredItems && filteredItems.length > 0 ? filteredItems.map((item, index)=>(
+                            <div key={"equipment-"+index} onClick={()=>setSelectedEquipment(item)} className="w-full h-[40px] flex items-center gap-4 primary-color rounded px-3 cursor-pointer">
+                                <p className="font-bold">{item.name}</p>
+                                <p>{item.description || 'Description not set'}</p>
+                                <div className="flex ml-auto items-center gap-2">{item.muscleGroups  && item.muscleGroups?.length > 0 ? item.muscleGroups?.map((muscle,index)=><p key={'muscle-'+index}>{muscle.name}</p>) : null}</div>
+                            </div>
+                        )): null}
+                    </div>
                 </div>
-                {showCreateEquipment ? <NewEquipment closeNewEquipment={()=>setShowCreateEquipment(false)} />: null}
-                {selectedEquipment ? <ViewEquipment equipment={selectedEquipment} close={()=>setSelectedEquipment(null)} /> : null}
-                <div>
-                    {filteredItems && filteredItems.length > 0 ? filteredItems.map((item, index)=>(
-                        <div key={"equipment-"+index} onClick={()=>setSelectedEquipment(item)}>
-                            {item.name}
-                        </div>
-                    )): null}
-                </div>
+                <ViewEquipment equipment={selectedEquipment} />
             </div>
         );
     }
