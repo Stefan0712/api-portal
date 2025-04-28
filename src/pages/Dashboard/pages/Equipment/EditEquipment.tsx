@@ -13,9 +13,10 @@ import axios from "axios";
 interface Props {
     closeEditEquipment: ()=>void;
     equipment: Equipment;
+    refreshEquipment: (id: string) =>void;
 }
 
-const EditEquipment: React.FC<Props> = ({equipment, closeEditEquipment}) => {
+const EditEquipment: React.FC<Props> = ({equipment, closeEditEquipment, refreshEquipment}) => {
 
     const { showMessage } = useMessage();
     const userId = localStorage.getItem("userId");
@@ -78,9 +79,12 @@ const EditEquipment: React.FC<Props> = ({equipment, closeEditEquipment}) => {
         try{
             const response = await axios.put(`${process.env.REACT_APP_API_URL}/equipment/${equipment._id}`,{data}, {withCredentials: true});
             console.log(response.data);
-            showMessage("Equipment updated successfully", "success")
+            showMessage("Equipment updated successfully", "success");
+            if(equipment._id){
+                refreshEquipment(equipment._id);
+            }
         }catch(error){
-            showMessage("There has been an error updating the equipment", error)
+            showMessage("There has been an error updating the equipment","error")
             console.log("There has been an error updating the equipment",error)
         }
     }
@@ -130,7 +134,7 @@ const EditEquipment: React.FC<Props> = ({equipment, closeEditEquipment}) => {
                     {muscleGroups?.length > 0 ? muscleGroups.map((item, index)=><div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0" key={item.name+index} ><div></div><p>{item.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setMuscleGroups((muscleGroups)=>[...muscleGroups.filter(it=>it.id!==item.id)]) }/></div>) : <p className="px-2 py-1 font-bold">No Target Muscles</p>}
                 </div>
             </div>
-            <button className="w-full h-[50px] rounded accent-background mt-auto col-start-1 col-end-3 row-start-3 row-end-4" onClick={handleSaveEquipment}>Create Equipment</button>
+            <button className="w-full h-[50px] rounded accent-background mt-auto col-start-1 col-end-3 row-start-3 row-end-4" onClick={handleSaveEquipment}>Edit Equipment</button>
         </div>  
     );
 }

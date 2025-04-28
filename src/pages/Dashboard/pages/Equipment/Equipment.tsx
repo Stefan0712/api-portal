@@ -6,6 +6,7 @@ import ErrorLoginPage from "../../../common/LoginErrorPage";
 import { Equipment as IEquipment } from "../../../../types/interfaces";
 import axios from "axios";
 import ViewEquipment from "./ViewEquipment";
+import EditEquipment from "./EditEquipment";
 
 const Equipment = () => {
 
@@ -15,7 +16,7 @@ const Equipment = () => {
     const [showCreateEquipment, setShowCreateEquipment] = useState(false); // State for showing/hiding the NewEquipment form
     const [showEdit, setShowEdit] = useState<IEquipment | null>(null); // State for showing/hiding the EditEquipment form
     const [filteredItems, setFilteredItems] = useState<IEquipment[]>([]);
-
+    const [selectedIdAfterRefresh, setSelectedIdAfterRefresh] = useState<string | null>(null);
     const [selectedEquipment, setSelectedEquipment] = useState<IEquipment | null>(null);
 
 
@@ -48,6 +49,21 @@ const Equipment = () => {
             showMessage("There was an error with edit equipment", "error");
         }
     }
+    const refreshEquipment = async (selected?: string) =>{
+        await getEquipment('user');
+        if (selected) {
+            setSelectedIdAfterRefresh(selected); 
+        }
+    }
+    useEffect(() => {
+        if (selectedIdAfterRefresh && filteredItems && filteredItems.length > 0) {
+          const found = filteredItems.find(item => item._id === selectedIdAfterRefresh);
+          if (found) {
+            setSelectedEquipment(found);
+          }
+          setSelectedIdAfterRefresh(null);
+        }
+      }, [filteredItems, selectedIdAfterRefresh]);
     if(!userId){
         return (<ErrorLoginPage />)
     }else{
@@ -62,6 +78,7 @@ const Equipment = () => {
                         <button className="ml-auto" onClick={()=>setShowCreateEquipment(true)}><img src={IconLibrary.Add} className="h-[40px] w-[40px]" /></button>
                     </div>
                     {showCreateEquipment ? <NewEquipment closeNewEquipment={()=>setShowCreateEquipment(false)} />: null}
+                    {showEdit ? <EditEquipment refreshEquipment={refreshEquipment} equipment={showEdit} closeEditEquipment={()=>setShowEdit(null)} />: null}
                     <div className="flex flex-col p-[15px] gap-2">
                         {filteredItems && filteredItems.length > 0 ? filteredItems.map((item, index)=>(
                             <div key={"equipment-"+index} onClick={()=>setSelectedEquipment(item)} className="w-full h-[40px] flex items-center gap-4 primary-color rounded px-3 cursor-pointer">
