@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { EquipmentAttributes, Tag, TargetGroups as ITargetGroups, Equipment } from "../../../types/interfaces";
-import { useMessage } from "../../../context/MessageContext";
-import Tags from "../../Exercise/Tags";
-import TargetGroups from "../../Exercise/TargetGroups";
-import { IconLibrary } from "../../../IconLibrary";
+import { EquipmentAttributes, Tag, TargetGroups as ITargetGroups, Equipment } from "../../../../types/interfaces";
+import { useMessage } from "../../../../context/MessageContext";
+import Tags from "../../../Exercise/Tags";
+import TargetGroups from "../../../Exercise/TargetGroups";
+import { IconLibrary } from "../../../../IconLibrary";
 import axios from "axios";
 
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Equipment from "./pages/Equipment";
+import Equipment from "./pages/Equipment/Equipment";
 
 
 const Dashboard = () => {
