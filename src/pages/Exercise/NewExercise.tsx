@@ -88,16 +88,33 @@ const NewExercise: React.FC = () => {
 
 
     const addField = (field: Field)=>{
-        setFields((fields)=>[...fields, field]);
+        if(fields.length < 5){
+            setFields((prev)=>[...prev, field]);
+        }else{
+            showMessage("You can add a maximum of 5 fields", "error")
+        }
     }
     const addTag = (newItem: Tag) =>{
-        setExerciseTags((exerciseTags)=>[...exerciseTags, newItem]);
+        if(exerciseTags.length < 10){
+            setExerciseTags((prev)=>[...prev, newItem]);
+        }else{
+            showMessage("You can add a maximum of 10 tags", "error")
+        }
     }
     const addEquipment = (newItem: Equipment) =>{
-        setEquipments((equipments)=>[...equipments, newItem]);
+        
+        if(equipments.length < 5){
+            setEquipments((prev)=>[...prev, newItem]);
+        }else{
+            showMessage("You can add a maximum of 5 equipment", "error")
+        }
     }
     const addmuscleGroups = (newItem: ITargetGroups) =>{
-        setMuscleGroups((targetGorups)=>[...targetGorups, newItem]);
+        if(muscleGroups.length < 5){
+            setMuscleGroups((prev)=>[...prev, newItem]);
+        }else{
+            showMessage("You can add a maximum of 5 target muscles", "error")
+        }
     }
 
     // Handles adding new muscle group
