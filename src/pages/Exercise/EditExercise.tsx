@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { IconLibrary } from "../../IconLibrary";
-import { TargetGroups as TargetGroup, Tag, Equipment, Field, Exercise } from "../../types/interfaces.ts";
+import { TargetGroups as ITargetGroup, Tag, Equipment, Field, Exercise } from "../../types/interfaces.ts";
 import {v4 as uuidv4} from 'uuid';
 import Fields from "./Fields.tsx";
 import Tags from "./Tags.tsx";
@@ -9,6 +9,7 @@ import TargetGroups from "./TargetGroups.tsx";
 import Equipments from "./Equipments.tsx";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "../../axios";
+import { useMessage } from "../../context/MessageContext.tsx";
 
 
 
@@ -16,6 +17,7 @@ const EditExercise: React.FC = () => {
 
     const navigate = useNavigate();
     const {id} = useParams();
+    const { showMessage } = useMessage();
     
 
     const [showGroups, setShowGroups] = useState<boolean>(false);
@@ -34,7 +36,7 @@ const EditExercise: React.FC = () => {
     const [fields, setFields] = useState<Field[]>([]);
     const [rest, setRest] = useState<string>('');
     const [notes, setNotes] = useState<string>('');
-    const [muscleGroups, setMuscleGroups] = useState<TargetGroup[]>([]); // State that holds the array containing all Target Groups
+    const [muscleGroups, setMuscleGroups] = useState<ITargetGroup[]>([]); // State that holds the array containing all Target Groups
     const [groupName, setGroupName] = useState<string>(''); // State to hold the value of Target Group input
     const [instructions, setInstructions] = useState<string[]>([]); // State to hold the array of all instructions
     const [instruction, setInstruction] = useState<string>(''); // State to hold current value of instruction input
@@ -114,23 +116,40 @@ const EditExercise: React.FC = () => {
 
 
     const addField = (field: Field)=>{
-        setFields((fields)=>[...fields, field]);
-    }
-    const addTag = (newItem: Tag) =>{
-        setExerciseTags((exerciseTags)=>[...exerciseTags, newItem]);
-    }
-    const addEquipment = (newItem: Equipment) =>{
-        setEquipments((equipments)=>[...equipments, newItem]);
-    }
-    const addmuscleGroups = (newItem: TargetGroup) =>{
-        setMuscleGroups((targetGorups)=>[...targetGorups, newItem]);
-    }
+            if(fields.length < 5){
+                setFields((prev)=>[...prev, field]);
+            }else{
+                showMessage("You can add a maximum of 5 fields", "error")
+            }
+        }
+        const addTag = (newItem: Tag) =>{
+            if(exerciseTags.length < 10){
+                setExerciseTags((prev)=>[...prev, newItem]);
+            }else{
+                showMessage("You can add a maximum of 10 tags", "error")
+            }
+        }
+        const addEquipment = (newItem: Equipment) =>{
+            
+            if(equipments.length < 5){
+                setEquipments((prev)=>[...prev, newItem]);
+            }else{
+                showMessage("You can add a maximum of 5 equipment", "error")
+            }
+        }
+        const addmuscleGroups = (newItem: ITargetGroup) =>{
+            if(muscleGroups.length < 5){
+                setMuscleGroups((prev)=>[...prev, newItem]);
+            }else{
+                showMessage("You can add a maximum of 5 target muscles", "error")
+            }
+        }
 
     // Handles adding new muscle group
     const handleAddGroup = () =>{
         if(groupName.length > 0 && groupName.length < 15){ // Checks if the name is between 0 and 15 not including them
             // If the length is good, create a new target group with an id used on the frontend, an author, and the name of the group
-            const groupData: TargetGroup = {
+            const groupData: ITargetGroup = {
                 id: uuidv4(),
                 author: 'system',
                 name: groupName
