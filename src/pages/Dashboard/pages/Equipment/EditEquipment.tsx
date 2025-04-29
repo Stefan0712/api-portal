@@ -134,7 +134,7 @@ const EditEquipment: React.FC<Props> = ({equipment, closeEditEquipment, refreshE
                     {muscleGroups?.length > 0 ? muscleGroups.map((item, index)=><div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0" key={item.name+index} ><div></div><p>{item.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setMuscleGroups((muscleGroups)=>[...muscleGroups.filter(it=>it.id!==item.id)]) }/></div>) : <p className="px-2 py-1 font-bold">No Target Muscles</p>}
                 </div>
             </div>
-            <button className="w-full h-[50px] rounded accent-background mt-auto col-start-1 col-end-3 row-start-3 row-end-4" onClick={handleSaveEquipment}>Edit Equipment</button>
+            <button className="w-full h-[50px] rounded accent-background mt-auto col-start-1 col-end-3 row-start-3 row-end-4" onClick={handleSaveEquipment}>Save</button>
         </div>  
     );
 }

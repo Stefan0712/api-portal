@@ -40,6 +40,7 @@ export interface Equipment {
     createdAt: string;
     url?: string;
     urlName?: string;
+    isSaved?: boolean;
 }
   
 export interface EquipmentAttributes {

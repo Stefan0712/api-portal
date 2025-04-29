@@ -53,9 +53,8 @@ const NewEquipment: React.FC<Props> = ({closeNewEquipment}) => {
     const handleSaveEquipment = () =>{
         if(!name || name.length === 0 ) showMessage("Equipment name cannot be empty", "error");
         if(name && name.length < 3 && name.length > 15 ) showMessage("Equipment name should beb etween 3 and 15 characters", "error");
-        if(!tags || tags.length === 0 ) showMessage("Please add at least one tag", "error");
 
-        if(name && tags && name.length > 3 && name.length < 15 && tags.length > 0){
+        if(name && name.length > 2 && name.length < 15 ){
             const createDate = new Date();
             const equipmentData = {
                 createdAt: createDate.toString(),
@@ -70,13 +69,13 @@ const NewEquipment: React.FC<Props> = ({closeNewEquipment}) => {
             }
             console.log(equipmentData)
             saveEquipment(equipmentData);
-            // setName('');
-            // setDescription('');
-            // setUrl('');
-            // setUrlName('');
-            // setTags([]);
-            // setAttributes([]);
-            // setMuscleGroups([]);
+            setName('');
+            setDescription('');
+            setUrl('');
+            setUrlName('');
+            setTags([]);
+            setAttributes([]);
+            setMuscleGroups([]);
         }
     }
     const saveEquipment = async (data: Equipment) =>{

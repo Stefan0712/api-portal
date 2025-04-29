@@ -1,16 +1,34 @@
+import axios from "axios";
+import { useMessage } from "../../../../context/MessageContext";
 import { Equipment } from "../../../../types/interfaces";
 import { formatDateToPretty } from "../../../../utils/dateFormat";
+import { useState } from "react";
 
 interface ViewEquipmentProps {
     equipment: Equipment | null;
     handleEdit: (equipment: Equipment) =>void;
     handleDelete: (id: string) => void;
+    refresh: ()=>void;
 }
 //TODO: Add a link to the author's profile
-const ViewEquipment: React.FC<ViewEquipmentProps> = ({equipment, handleEdit, handleDelete}) => {
+const ViewEquipment: React.FC<ViewEquipmentProps> = ({equipment, handleEdit, handleDelete, refresh}) => {
 
+    const {showMessage} = useMessage();
 
-
+    const userId = localStorage.getItem('userId')
+    const handleSaveEquipment = async (id: string) =>{
+        try{
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/equipment/toggle-save/${id}`,{}, {withCredentials: true});
+            if(response.status === 200){
+                showMessage(response.data.message, "success");
+                refresh();
+            }
+        }catch(error){
+            showMessage("There has been an error saving this equipment", "error");
+            console.error(error)
+        }
+    }
+    
     return ( 
         <div className="w-full h-full primary-color p-4">
             {!equipment ? <h1>Select an equipment to view</h1> : <div className="flex flex-col gap-2 h-full w-full">
@@ -21,17 +39,21 @@ const ViewEquipment: React.FC<ViewEquipmentProps> = ({equipment, handleEdit, han
                 <h3 className="font-bold text-white text-opacity-75">Reference (URL)</h3>
                 {equipment.url ? <a className="pl-[10px]" href={equipment.url} target="_blank">{equipment.urlName || equipment.url}</a> : <p className="pl-[10px]">No references provided</p>}
                 <h3 className="font-bold text-white text-opacity-75">Target Muscles</h3>
-                <div className="flex pl-[10px] items-center gap-2">
+                <div className="flex pl-[10px] items-center gap-2 flex-wrap">
                     {equipment.muscleGroups?.map((item, index)=><p key={"muscle-"+index}>{item.name}</p>)}
                 </div>
                 <h3 className="font-bold text-white text-opacity-75">Tags</h3>
-                <div className="flex pl-[10px] items-center gap-2">
+                <div className="flex pl-[10px] items-center gap-2 flex-wrap">
                     {equipment.tags?.map((item, index)=><div key={"tag-"+index} className="flex gap-2 items-center"><div className="w-[10px] h-[10px] rounded" style={{backgroundColor: item.color || 'white'}}></div><p>{item.name}</p></div>)}
                 </div>
-                <div className="mt-auto mb-[20px] w-full flex items-center gap-3 justify-center">
-                    <button onClick={()=>handleEdit(equipment)} className="secondary-color w-[150px] h-[40px] rounded">Edit</button>
-                    <button onClick={()=>handleDelete(equipment._id)} className="bg-red-500 w-[150px] h-[40px] rounded">Delete</button>
-                </div>
+                {userId && userId === equipment.authorId?._id ? 
+                    <div className="mt-auto mb-[20px] w-full flex items-center gap-3 justify-center">
+                        <button onClick={()=>handleEdit(equipment)} className="secondary-color w-[150px] h-[40px] rounded">Edit</button>
+                        <button onClick={()=>handleDelete(equipment._id)} className="bg-red-500 w-[150px] h-[40px] rounded">Delete</button>
+                    </div> : <div className="mt-auto mb-[20px] w-full flex items-center gap-3 justify-center">
+                        <button className="bg-red-500 w-[150px] h-[40px] rounded" onClick={()=> handleSaveEquipment(equipment._id)}>{equipment.isSaved ? 'Remove from library' : 'Save to library'}</button>
+                    </div>
+                }
             </div>}
         </div>
     );

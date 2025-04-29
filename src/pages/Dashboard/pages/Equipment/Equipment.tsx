@@ -26,11 +26,14 @@ const Equipment = () => {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/equipment/${type === "user" ? "my-equipment" : type==="default" ? "default" : type === "public" ? "all" : "all"}`, {withCredentials: true});
             if(response){
                 if(type === "user"){
-                    setFilteredItems([...response.data.created, ...response.data.saved]); // Since there are two arrays of equipments, merge them into one
+                    setFilteredItems([
+                        ...response.data.created,
+                        ...response.data.saved.map(item => ({ ...item, isSaved: true }))
+                      ]); // Since there are two arrays of equipments, merge them into one
                 }else{
                     setFilteredItems(response.data); // The other two type should return only one array
                 }
-                console.log(response.data)
+                console.log(filteredItems)
             }
         }catch(error){
             console.error(error);
@@ -38,7 +41,8 @@ const Equipment = () => {
     }
     useEffect(()=>{
         getEquipment('user');
-    },[])
+    },[]);
+
     const handleDelete = async (id: string) =>{
         try{
             const response = await axios.delete(`${process.env.REACT_APP_API_URL}/equipment/${id}`, {withCredentials: true})
@@ -64,6 +68,7 @@ const Equipment = () => {
         if (selected) {
             setSelectedIdAfterRefresh(selected); 
         }
+        setSelectedEquipment(null)
     }
     useEffect(() => {
         if (selectedIdAfterRefresh && filteredItems && filteredItems.length > 0) {
@@ -74,6 +79,10 @@ const Equipment = () => {
           setSelectedIdAfterRefresh(null);
         }
       }, [filteredItems, selectedIdAfterRefresh]);
+
+
+
+      
     if(!userId){
         return (<ErrorLoginPage />)
     }else{
@@ -93,13 +102,13 @@ const Equipment = () => {
                         {filteredItems && filteredItems.length > 0 ? filteredItems.map((item, index)=>(
                             <div key={"equipment-"+index} onClick={()=>setSelectedEquipment(item)} className="w-full h-[40px] flex items-center gap-4 primary-color rounded px-3 cursor-pointer">
                                 <p className="font-bold">{item.name}</p>
-                                <p>{item.description || 'Description not set'}</p>
-                                <div className="flex ml-auto items-center gap-2">{item.muscleGroups  && item.muscleGroups?.length > 0 ? item.muscleGroups?.map((muscle,index)=><p key={'muscle-'+index}>{muscle.name}</p>) : null}</div>
+                                <p>{item.description}</p>
+                                <div className="flex ml-auto items-center gap-2">{item.muscleGroups  && item.muscleGroups?.length > 0 ? item.muscleGroups?.map((muscle,index)=><p key={'muscle-'+index}>{muscle.name}</p>).slice(0,3) : null}</div>
                             </div>
                         )): null}
                     </div>
                 </div>
-                <ViewEquipment equipment={selectedEquipment} handleDelete={handleDelete} handleEdit={handleEdit} />
+                <ViewEquipment equipment={selectedEquipment} handleDelete={handleDelete} handleEdit={handleEdit} refresh={refreshEquipment} />
             </div>
         );
     }
