@@ -8,12 +8,17 @@ import TargetGroups from "../Exercise/TargetGroups.tsx";
 import Equipments from "../Exercise/Equipments.tsx";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../axios";
-import ExercisePicker from "../common/ExercisePicker/ExercisePicker.tsx";
 import { getUserData, isLoggedIn } from "../../utils/auth.ts";
 import ErrorLoginPage from "../common/LoginErrorPage.tsx";
 import { useMessage } from "../../context/MessageContext.tsx";
+import ExerciseList from "./ExerciseList.tsx";
 
 
+interface IPhase {
+    position: number;
+    name: string;
+    exercises: Exercise[];
+}
 
 const NewWorkout: React.FC = () => {
 
@@ -39,6 +44,10 @@ const NewWorkout: React.FC = () => {
     const [exercises, setExercises] = useState<Exercise[]>([]);
     const [muscleGroups, setMuscleGroups] = useState<ITargetGroups[]>([]); // State that holds the array containing all Target Groups
     const [groupName, setGroupName] = useState<string>(''); // State to hold the value of Target Group input
+
+
+    const [phases, setPhases] = useState<IPhase[]>([{position: 1, name: 'Warm-up', exercises: []}, {position: 2, name: 'Workout', exercises: []}, {position: 3, name: 'Cooldown', exercises: []}]);
+
 
     const handleSaveWorkout = async (data: Workout) =>{
         try{
@@ -183,6 +192,60 @@ const NewWorkout: React.FC = () => {
                                 </fieldset>
                             </div>
                             <div className="flex flex-col gap-2 w-1/2 h-[250px] p-3">
+                                <h3 className="font-bold text-xl">Tags</h3>
+                                <Tags addTag={addTag} author={"system"} allTags={exerciseTags} />
+                                
+                                <div className="flex flex-wrap gap-2 h-[150px] overflow-x-hidden overflow-y-auto  rounded p-2 pr-[20px]">
+                                    {exerciseTags?.length > 0 ? exerciseTags.map((item)=><div key={item.name+item.color} className="h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0"><div className="h-[15px] w-[15px] rounded" style={{backgroundColor: item.color}}></div><p>{item.name}</p><img className=" w-[20px] h-[20px]" src={IconLibrary.No} onClick={()=>setExerciseTags((exerciseTags)=>[...exerciseTags.filter(it=>it.id!==item.id)]) }/></div>) : <p className="px-2 py-1 font-bold">No Tags</p>}
+                                </div>
+                            </div>
+                            {/* <div className="flex flex-col gap-2 w-1/2 h-[250px] p-3">
+                                <h3 className="font-bold text-xl">Target Muscles</h3>
+                                <div className="flex gap-2">
+                                    <button type="button" onClick={()=>setShowGroups(true)}><img className="w-[30px] h-[30px]" src={IconLibrary.Search} alt=""/></button>
+                                    <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type='text' name="groupName" onChange={(e)=>setGroupName(e.target.value)} value={groupName} placeholder="Muscle Name" />
+                                    <button type="button" onClick={handleAddGroup}><img className="w-[40px] h-[40px]"  src={IconLibrary.Add} alt="" /></button>
+                                </div>  
+                                {showGroups ? <TargetGroups closeModal={()=>setShowGroups(false)} currentItems={muscleGroups} addItem={addmuscleGroups} /> : null}
+                                <div className="flex flex-wrap gap-2 h-[150px] overflow-x-hidden overflow-y-auto  rounded p-2 pr-[20px]">
+                                    {muscleGroups?.length > 0 ? muscleGroups.map((item, index)=><div className="h-[40px] flex gap-2 secondary-color px-[10px] items-center rounded flex-shrink-0" key={item.name+index} ><div></div><p>{item.name}</p><img className=" w-[20px] h-[20px]" src={IconLibrary.No} onClick={()=>setMuscleGroups((muscleGroups)=>[...muscleGroups.filter(it=>it.id!==item.id)]) }/></div>) : <p className="px-2 py-1 font-bold">No Target Muscles</p>}
+                                </div>
+                            </div> 
+                            <div className="flex flex-col gap-2 w-1/2 h-[250px] p-3">
+                                <h3 className="font-bold text-xl">Equipment</h3>
+                                <Equipments addEquipment={addEquipment} allItems={equipments} />
+                                <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded mt-2 p-2 pr-[20px]">
+                                    {equipments?.length > 0 ? equipments.map((item,index)=><div key={item.name+index} className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0">
+                                        <p>{item.name}</p>
+                                        <div>{item.attributes && item.attributes.length > 0 ? item.attributes.map((item, index)=>(<p key={'attribute-'+index}>{item.value} {item.unit}</p>)): null}</div>
+                                        <img className="w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setEquipments((equipments)=>[...equipments.filter(it=>it.id!==item.id)]) }/>
+                                    </div>) : <p className="px-2 py-1 font-bold">No Equipment</p>}
+                                </div>
+                            </div> */}
+                            <div className="flex flex-col w-full h-[400px]">
+                                <h3 className="font-bold text-xl h-[50px]">Exercises</h3>
+                                <div className="grid grid-cols-[300px_1fr] gap-2 w-full overflow-hidden h-[350px]">
+                                    <ExerciseList currentExercises={exercises} addExercise={handleAddExercise} />
+                                    <div className="flex items-center gap-2 h-full overflow-x-auto overflow-y-hidden rounded">
+                                        {phases && phases.length > 0 ? phases.map((phase, index)=> <div className="primary-color w-[300px] flex-shrink-0 h-full p-1 flex flex-col gap-2" key={"Phase-"+index}>
+                                        <h2 className="font-bold border-b border-white border-opacity-20 pb-1">{phase.name}</h2>
+                                            {phase && phase.exercises.length > 0 ? exercises.map((exercise, index) => (
+                                                    <div className="w-full h-[40px] flex-shrink-0 flex items-center gap-4" id={exercise.name} key={index}>
+                                                        <h4>{exercise.name}</h4>
+                                                        <p className="ml-auto">{exercise.sets} sets</p>
+                                                        <button type="button" onClick={() => handleRemoveExercise(exercise._id)} className="small-square transparent-bg"> <img src={IconLibrary.Close} className="w-[30px] h-[30px]" alt="" /></button>
+                                                    </div>
+                                                    )
+                                                ) : (
+                                                    <h3>No exercises added</h3>
+                                                )
+                                            }
+                                        </div>) : <p>No phase created</p>}
+                                        <button type="button" onClick={()=>setPhases((phases)=>[...phases,{position: phases.length, name: "New Phase", exercises: []}])} className="flex-shrink-0 primary-color w-[100px] h-full p-1 flex flex-col items-center justify-center gap-2" key={"Phase-add"}><img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" /></button>
+                                    </div>
+                                </div>
+                            </div>
+                            {/* <div className="flex flex-col gap-2 w-full h-[300px] p-3">
                                 <h3 className="font-bold text-xl">Exercises</h3>
                                 {showExercisePicker ? <ExercisePicker closeModal={()=>setShowExercisePicker(false)} currentExercises={exercises} addExercise={handleAddExercise} /> : null}
                                 <button className="w-[150px] h-[40px] secondary-color rounded" type="button" onClick={()=>setShowExercisePicker(true)}>Add Exercise</button>
@@ -199,39 +262,7 @@ const NewWorkout: React.FC = () => {
                                         )
                                     }
                                 </div>
-                            </div>
-                            <div className="flex flex-col gap-2 w-1/2 h-[250px] p-3">
-                                <h3 className="font-bold text-xl">Tags</h3>
-                                <Tags addTag={addTag} author={"system"} allTags={exerciseTags} />
-                                
-                                <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded p-2 pr-[20px]">
-                                    {exerciseTags?.length > 0 ? exerciseTags.map((item)=><div key={item.name+item.color} className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0"><div className="h-[15px] w-[15px] rounded" style={{backgroundColor: item.color}}></div><p>{item.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setExerciseTags((exerciseTags)=>[...exerciseTags.filter(it=>it.id!==item.id)]) }/></div>) : <p className="px-2 py-1 font-bold">No Tags</p>}
-                                </div>
-                            </div>
-                            <div className="flex flex-col gap-2 w-1/2 h-[250px] p-3">
-                                <h3 className="font-bold text-xl">Target Muscles</h3>
-                                <div className="flex gap-2">
-                                    <button type="button" onClick={()=>setShowGroups(true)}><img className="w-[30px] h-[30px]" src={IconLibrary.Search} alt=""/></button>
-                                    <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type='text' name="groupName" onChange={(e)=>setGroupName(e.target.value)} value={groupName} placeholder="Muscle Name" />
-                                    <button type="button" onClick={handleAddGroup}><img className="w-[40px] h-[40px]"  src={IconLibrary.Add} alt="" /></button>
-                                </div>  
-                                {showGroups ? <TargetGroups closeModal={()=>setShowGroups(false)} currentItems={muscleGroups} addItem={addmuscleGroups} /> : null}
-                                <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded p-2 pr-[20px]">
-                                    {muscleGroups?.length > 0 ? muscleGroups.map((item, index)=><div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0" key={item.name+index} ><div></div><p>{item.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setMuscleGroups((muscleGroups)=>[...muscleGroups.filter(it=>it.id!==item.id)]) }/></div>) : <p className="px-2 py-1 font-bold">No Target Muscles</p>}
-                                </div>
-                            </div> 
-                            <div className="flex flex-col gap-2 w-1/2 h-[250px] p-3">
-                                <h3 className="font-bold text-xl">Equipment</h3>
-                                <Equipments addEquipment={addEquipment} allItems={equipments} />
-                                <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded mt-2 p-2 pr-[20px]">
-                                    {equipments?.length > 0 ? equipments.map((item,index)=><div key={item.name+index} className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0">
-                                        <p>{item.name}</p>
-                                        <div>{item.attributes && item.attributes.length > 0 ? item.attributes.map((item, index)=>(<p key={'attribute-'+index}>{item.value} {item.unit}</p>)): null}</div>
-                                        <img className="w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setEquipments((equipments)=>[...equipments.filter(it=>it.id!==item.id)]) }/>
-                                    </div>) : <p className="px-2 py-1 font-bold">No Equipment</p>}
-                                </div>
-                            </div>
-
+                            </div> */}
                     </form>
             </div>
         );
