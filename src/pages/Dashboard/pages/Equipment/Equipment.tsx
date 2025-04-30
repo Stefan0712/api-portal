@@ -7,11 +7,13 @@ import { Equipment as IEquipment } from "../../../../types/interfaces";
 import axios from "axios";
 import ViewEquipment from "./ViewEquipment";
 import EditEquipment from "./EditEquipment";
+import { isLoggedIn } from "../../../../utils/auth";
 
 const Equipment = () => {
 
     const userId = localStorage.getItem("userId");
     const {showMessage} = useMessage();
+    const isUserLoggedIn = isLoggedIn();
 
     const [showCreateEquipment, setShowCreateEquipment] = useState(false); // State for showing/hiding the NewEquipment form
     const [showEdit, setShowEdit] = useState<IEquipment | null>(null); // State for showing/hiding the EditEquipment form
@@ -87,28 +89,38 @@ const Equipment = () => {
         return (<ErrorLoginPage />)
     }else{
         return ( 
-            <div className="w-full h-full grid grid-cols-[1fr_500px]">
-                <div className="w-full h-full">
-                    <h1 className="w-full h-[60px] text-2xl font-bold p-[15px]">Equipment</h1>
+            <div className="w-full h-full flex flex-col p-[10px]">
+                <div className="w-full h-full flex flex-col gap-2">
+                <div className="w-full h-[50px] flex items-center justify-between"><h1 className="text-2xl font-bold">Exercises</h1>{isUserLoggedIn ? <button className="ml-auto" onClick={()=>setShowCreateEquipment(true)}><img src={IconLibrary.Add} className="h-[40px] w-[40px]" /></button> : null}</div>
                     <div className="flex gap-3 items-center px-[15px]">
-                        <button className="h-[50px] background-color px-[15px] rounded" onClick={()=>getEquipment("user")}>My Equipment</button>
-                        <button className="h-[50px] background-color px-[15px] rounded" onClick={()=>getEquipment("default")}>Default Equipment</button>
-                        <button className="h-[50px] background-color px-[15px] rounded" onClick={()=>getEquipment("public")}>Explore</button>
-                        <button className="ml-auto" onClick={()=>setShowCreateEquipment(true)}><img src={IconLibrary.Add} className="h-[40px] w-[40px]" /></button>
+                        <div className="h-[40px] w-[250px] menu-color rounded text-white text-opacity-50 flex items-center pl-[10px]">Search...</div>
                     </div>
                     {showCreateEquipment ? <NewEquipment closeNewEquipment={()=>setShowCreateEquipment(false)} />: null}
                     {showEdit ? <EditEquipment refreshEquipment={refreshEquipment} equipment={showEdit} closeEditEquipment={()=>setShowEdit(null)} />: null}
-                    <div className="flex flex-col p-[15px] gap-2">
-                        {filteredItems && filteredItems.length > 0 ? filteredItems.map((item, index)=>(
-                            <div key={"equipment-"+index} onClick={()=>setSelectedEquipment(item)} className="w-full h-[40px] flex items-center gap-4 primary-color rounded px-3 cursor-pointer">
-                                <p className="font-bold">{item.name}</p>
-                                <p>{item.description}</p>
-                                <div className="flex ml-auto items-center gap-2">{item.muscleGroups  && item.muscleGroups?.length > 0 ? item.muscleGroups?.map((muscle,index)=><p key={'muscle-'+index}>{muscle.name}</p>).slice(0,3) : null}</div>
+                    <div className="flex gap-3 items-center px-[15px]">
+                        <button className="h-[40px] background-color px-[15px] rounded" onClick={()=>getEquipment("user")}>My Equipment</button>
+                        <button className="h-[40px] background-color px-[15px] rounded" onClick={()=>getEquipment("default")}>Default Equipment</button>
+                        <button className="h-[40px] background-color px-[15px] rounded" onClick={()=>getEquipment("public")}>Explore</button>
+                        <button className="ml-auto"><img src={IconLibrary.Filter} className="w-[30px] h-[30px]" alt='filters' /></button>
+                    </div>
+                    <div className="grid grid-cols-[1fr_300px] w-full flex-1 primary-color p-2">
+                        <div className="flex flex-col p-[15px] gap-2">
+                            <div key={"equipment-table-header"} className="w-full h-[40px] grid grid-cols-[1fr_1fr_1fr] items-center gap-4 border-b border-white border-opacity-20 px-3 cursor-pointer">
+                                <p className="font-bold">Name</p>
+                                <p>Description</p>
+                                <div className="flex items-center gap-2">Target Muscles</div>
                             </div>
-                        )): null}
+                            {filteredItems && filteredItems.length > 0 ? filteredItems.map((item, index)=>(
+                                <div key={"equipment-"+index} onClick={()=>setSelectedEquipment(item)} className="w-full h-[40px] grid grid-cols-[1fr_1fr_1fr] items-center gap-4 content-color rounded px-3 cursor-pointer">
+                                    <p className="font-bold">{item.name}</p>
+                                    <p>{item.description || 'No description set'}</p>
+                                    <div className="flex items-center gap-2">{item.muscleGroups  && item.muscleGroups?.length > 0 ? item.muscleGroups?.map((muscle,index)=><p key={'muscle-'+index}>{muscle.name}</p>).slice(0,3) : null}</div>
+                                </div>
+                            )): null}
+                        </div>
+                        <ViewEquipment equipment={selectedEquipment} handleDelete={handleDelete} handleEdit={handleEdit} refresh={refreshEquipment} />
                     </div>
                 </div>
-                <ViewEquipment equipment={selectedEquipment} handleDelete={handleDelete} handleEdit={handleEdit} refresh={refreshEquipment} />
             </div>
         );
     }

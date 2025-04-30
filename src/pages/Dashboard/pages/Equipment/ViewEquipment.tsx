@@ -3,6 +3,7 @@ import { useMessage } from "../../../../context/MessageContext";
 import { Equipment } from "../../../../types/interfaces";
 import { formatDateToPretty } from "../../../../utils/dateFormat";
 import { useState } from "react";
+import { IconLibrary } from "../../../../IconLibrary";
 
 interface ViewEquipmentProps {
     equipment: Equipment | null;
@@ -30,7 +31,7 @@ const ViewEquipment: React.FC<ViewEquipmentProps> = ({equipment, handleEdit, han
     }
     
     return ( 
-        <div className="w-full h-full primary-color p-4">
+        <div className="w-full h-full content-color p-4">
             {!equipment ? <h1>Select an equipment to view</h1> : <div className="flex flex-col gap-2 h-full w-full">
                 <h2 className="full font-bold text-2xl">{equipment.name}</h2>
                 <p className="text-white text-opacity-50 pl-[10px]">Created by {equipment?.authorId?.username} on {formatDateToPretty(equipment?.createdAt)}</p>
@@ -50,8 +51,8 @@ const ViewEquipment: React.FC<ViewEquipmentProps> = ({equipment, handleEdit, han
                     <div className="mt-auto mb-[20px] w-full flex items-center gap-3 justify-center">
                         <button onClick={()=>handleEdit(equipment)} className="secondary-color w-[150px] h-[40px] rounded">Edit</button>
                         <button onClick={()=>handleDelete(equipment._id)} className="bg-red-500 w-[150px] h-[40px] rounded">Delete</button>
-                    </div> : <div className="mt-auto mb-[20px] w-full flex items-center gap-3 justify-center">
-                        <button className="bg-red-500 w-[150px] h-[40px] rounded" onClick={()=> handleSaveEquipment(equipment._id)}>{equipment.isSaved ? 'Remove from library' : 'Save to library'}</button>
+                    </div> : <div className="mt-auto w-full flex items-center gap-3 justify-center">
+                        <button className=" w-[40px] h-[40px] rounded" onClick={()=> handleSaveEquipment(equipment._id)}><img src={equipment.isSaved ? IconLibrary.Delete : IconLibrary.Save} className="h-[30px] w-[30px]" alt="" /></button>
                     </div>
                 }
             </div>}
