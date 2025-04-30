@@ -122,7 +122,7 @@ const Workouts = () => {
     };
     return ( 
         <div className="p-[10px] h-screen w-full overflow-hidden flex flex-col gap-3">
-            <div className="w-full h-[50px] flex items-center justify-between"><h1 className="text-2xl font-bold">Exercises</h1>{isUserLoggedIn ? <Link to={'/exercises/new'}><img className="w-[30px] h-[30px]" src={IconLibrary.Add} alt="create exercise" /></Link> : null}</div>
+            <div className="w-full h-[50px] flex items-center justify-between"><h1 className="text-2xl font-bold">Workouts</h1>{isUserLoggedIn ? <Link to={'/workouts/new'}><img className="w-[30px] h-[30px]" src={IconLibrary.Add} alt="create exercise" /></Link> : null}</div>
             <div className="w-full flex-1 overflow-hidden grid grid-cols-[350px_1fr] gap-[10px] primary-color border border-white border-opacity-5 rounded p-2">
                 <div className="flex flex-col gap-[10px] overflow-hidden flex-1 flex-shrink-0">
                     <div className="flex-1 flex flex-col gap-2 overflow-hidden">
