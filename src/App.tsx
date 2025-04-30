@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Exercises from './pages/Exercise/Exercises.tsx';
 import Workouts from './pages/Workout/Workouts.tsx';
 import Guides from './pages/Exercise/Exercises.tsx';
@@ -13,7 +13,7 @@ import EditWorkout from './pages/Workout/EditWorkout.tsx';
 import Nav from './pages/common/Nav.tsx';
 import {MessageProvider} from './context/MessageContext.tsx';
 import MessageToast from './pages/common/MessageToast.tsx';
-import Dashboard from './pages/Dashboard/Dashboard.tsx';
+import Equipment from './pages/Dashboard/pages/Equipment/Equipment.tsx';
 
 
 function App() {
@@ -21,9 +21,9 @@ function App() {
   return (
     <Router>
       <MessageProvider>
-        <div className='App'>
+        <div className='App grid grid-cols-[250px_1fr]'>
           <Nav />
-          <div className="main-container text-white">
+          <div className="main-container text-white content-color w-full h-full">
             <MessageToast />
             <Routes>
               <Route path="/" element={<Exercises />} />
@@ -37,7 +37,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/equipment" element={<Equipment />} />
             </Routes>
           </div>
         </div>
