@@ -54,3 +54,7 @@
 .content-color{
     background-color: #161616;
 }
+.selected-nav-button{
+    color: white;
+    opacity: 1;
+}
