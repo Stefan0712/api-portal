@@ -91,7 +91,7 @@ const Equipment = () => {
         return ( 
             <div className="w-full h-full flex flex-col p-[10px]">
                 <div className="w-full h-full flex flex-col gap-2">
-                <div className="w-full h-[50px] flex items-center justify-between"><h1 className="text-2xl font-bold">Exercises</h1>{isUserLoggedIn ? <button className="ml-auto" onClick={()=>setShowCreateEquipment(true)}><img src={IconLibrary.Add} className="h-[40px] w-[40px]" /></button> : null}</div>
+                <div className="w-full h-[50px] flex items-center justify-between"><h1 className="text-2xl font-bold">Equipment</h1>{isUserLoggedIn ? <button className="ml-auto" onClick={()=>setShowCreateEquipment(true)}><img src={IconLibrary.Add} className="h-[40px] w-[40px]" /></button> : null}</div>
                     <div className="flex gap-3 items-center px-[15px]">
                         <div className="h-[40px] w-[250px] menu-color rounded text-white text-opacity-50 flex items-center pl-[10px]">Search...</div>
                     </div>
