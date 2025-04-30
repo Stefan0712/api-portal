@@ -122,7 +122,7 @@ const Exercises = () => {
     return ( 
         <div className="p-[10px] h-screen w-full overflow-hidden flex flex-col gap-3">
             <div className="w-full h-[50px] flex items-center justify-between"><h1 className="text-2xl font-bold">Exercises</h1>{isUserLoggedIn ? <Link to={'/exercises/new'}><img className="w-[30px] h-[30px]" src={IconLibrary.Add} alt="create exercise" /></Link> : null}</div>
-            <div className="w-full flex-1 overflow-hidden grid grid-cols-[350px_1fr] primary-color border border-white border-opacity-5 rounded p-2">
+            <div className="w-full flex-1 overflow-hidden grid grid-cols-[350px_1fr] gap-[10px] primary-color border border-white border-opacity-5 rounded p-2">
                 <div className="flex flex-col gap-[10px] overflow-hidden flex-1 flex-shrink-0">
                     <div className="flex-1 flex flex-col gap-2 overflow-hidden">
                         <div className="h-[100px] w-full flex flex-wrap gap-2 px-[5px]">
@@ -150,7 +150,7 @@ const Exercises = () => {
                         </div>
                     </div>
                 </div>
-                <div className="item-content primary-color">
+                <div className="item-content content-color rounded">
                     {showModal ? <DeleteModal confirm={handleDeleteExercise} cancel={()=>setShowModal(false)} /> : null}
                     {selectedItem ? 
                     <div className="px-[15px] flex gap-[10px] flex-wrap">
@@ -168,7 +168,7 @@ const Exercises = () => {
                                 </div> 
                             : null}
                         </div>
-                        <div className="secondary-color p-[10px] rounded w-full h-[90px] flex">
+                        <div className="primary-color p-[10px] rounded w-full h-[90px] flex">
                             <div className="w-2/3">
                                 <h3 className="font-bold">Description</h3>
                                 <p>{selectedItem.description || 'No description'}</p>
@@ -179,20 +179,20 @@ const Exercises = () => {
                                 <p><b>Difficulty:</b> {selectedItem.difficulty || 'Not Set'}</p>
                             </div>
                         </div>
-                        <div className="flex-column gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[75px]" style={{ width: 'calc(50% - 5px)' }}>
+                        <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[75px]" style={{ width: 'calc(50% - 5px)' }}>
                             <h3 className="font-bold mb-2">Target Muscles</h3>
                             <div className="flex gap-[10px] overflow-x-hidden overflow-y-auto">
                                 {selectedItem.muscleGroups && selectedItem.muscleGroups.length > 0 ? selectedItem.muscleGroups.map((group,index)=><p  className="primary-color px-[10px] rounded" key={'group-'+index}>{group.name}</p>):<p  className="primary-color px-[10px] rounded">No groups</p>}
                             </div>
                         </div>
                         
-                        <div className="flex-column gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[75px]" style={{ width: 'calc(50% - 5px)' }}>
+                        <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[75px]" style={{ width: 'calc(50% - 5px)' }}>
                             <h3 className="font-bold mb-2">Tags</h3>
                             <div className="flex gap-[10px] overflow-x-hidden overflow-y-auto">
                                 {selectedItem.tags && selectedItem.tags.length > 0 ? selectedItem.tags.map((tag,index)=><p className="primary-color px-[10px] rounded" key={'tag-'+index}>{tag.name}</p>):<p  className="primary-color px-[10px] rounded">No tags</p>}
                             </div>
                         </div>
-                        <div className="flex-column gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
+                        <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
                             <h3 className="font-bold mb-2">Fields</h3>
                             <div className="flex gap-[10px] items-center mb-3">
                                 <p><b>Duration: </b>{selectedItem.duration || 'Not Set'} {selectedItem.durationUnit || ''}</p>
@@ -208,7 +208,7 @@ const Exercises = () => {
                             </div>
                         </div>
                         
-                        <div className="flex-column gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
+                        <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
                             <h3 className="font-bold mb-2">Equipment</h3>
                             <div className="flex flex-col gap-[10px]  overflow-x-hidden overflow-y-auto">
                                 {selectedItem.equipment && selectedItem.equipment.length > 0 ? selectedItem.equipment.map((eq,index)=><div className="primary-color px-[10px] rounded w-full h-[40px] flex gap-3 overflow-hidden items-center" key={'tag-'+index}>
@@ -218,12 +218,12 @@ const Exercises = () => {
                             </div>
                         </div>
 
-                        <div className="flex-column gap-[10px] overflow-hidden secondary-color p-[10px] rounded h-[200px] w-full">
+                        <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[200px] w-full">
                             <h3 className="font-bold mb-2">Instructions</h3>
                             <div className="flex-column gap-[10px] flex flex-col overflow-x-hidden overflow-y-auto h-full">
-                                {selectedItem.instructions && selectedItem.instructions.length > 0 ? selectedItem.instructions.map((instruction,index)=><div className="flex-shrink-0 primary-color px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
+                                {selectedItem.instructions && selectedItem.instructions.length > 0 ? selectedItem.instructions.map((instruction,index)=><div className="flex-shrink-0 secondary-color px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
                                         <p className="font-bold">{index+1} </p><p className="w-full">{instruction}</p>
-                                    </div>):<p  className="primary-color rounded w-full p-[10px]">No instructions</p>}
+                                    </div>):<p  className="secondary-color rounded w-full p-[10px]">No instructions</p>}
                             </div>
                         </div>
 
