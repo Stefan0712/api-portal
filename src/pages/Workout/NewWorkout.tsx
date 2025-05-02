@@ -151,9 +151,13 @@ const NewWorkout: React.FC = () => {
             exercise.muscleGroups.forEach(item=>addmuscleGroups(item))
         }
     }
-    const handleRemoveExercise = (id: string | undefined) =>{
-        if(id){
-            setExercises(prevExercises=>[...prevExercises.filter(item=>item._id!=id)])
+    const handleRemoveExercise = (id: string, phaseId: string) =>{
+        if(id && phaseId){
+            setPhases(prevPhases =>
+                prevPhases.map(phase =>
+                  phase.id === phaseId ? { ...phase, exercises: [...phase.exercises.filter(item=>item._id!==id)] } : phase
+                )
+            );
         }
     }
     //get duration based on each exercise duration that will be set as workout duration if none is specified by the user
@@ -313,7 +317,7 @@ const NewWorkout: React.FC = () => {
                                                                 <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="w-full h-[40px] flex-shrink-0 flex items-center gap-4">
                                                                 <h4>{exercise.name}</h4>
                                                                 <p className="ml-auto">{exercise.sets} sets</p>
-                                                                <button type="button" onClick={() => handleRemoveExercise(exercise._id)} className="small-square transparent-bg">
+                                                                <button type="button" onClick={() => handleRemoveExercise(exercise._id, phase.id)} className="small-square transparent-bg">
                                                                     <img src={IconLibrary.Close} className="w-[30px] h-[30px]" alt="" />
                                                                 </button>
                                                                 </div>
