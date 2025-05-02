@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Exercises from './pages/Exercise/Exercises.tsx';
 import Workouts from './pages/Workout/Workouts.tsx';
 import Guides from './pages/Exercise/Exercises.tsx';
