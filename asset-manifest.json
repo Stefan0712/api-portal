@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/api-portal/static/css/main.47ae8f0b.css",
-    "main.js": "/api-portal/static/js/main.e7acd749.js",
+    "main.css": "/api-portal/static/css/main.a1a67b12.css",
+    "main.js": "/api-portal/static/js/main.2b6fd2aa.js",
     "static/js/453.fe9e54d8.chunk.js": "/api-portal/static/js/453.fe9e54d8.chunk.js",
     "static/media/settings.svg": "/api-portal/static/media/settings.dfcebfd4cd0e3bf55fe731758a563602.svg",
     "static/media/muscle.svg": "/api-portal/static/media/muscle.2e4dde1846aa7d14dfb5f1ecac32e4dc.svg",
@@ -74,12 +74,12 @@
     "static/media/clipboard.svg": "/api-portal/static/media/clipboard.53cc1850890226ef59696d900a462e70.svg",
     "static/media/previous.svg": "/api-portal/static/media/previous.8aefe30ba0188b831ef98d9d1956a5cc.svg",
     "static/media/next.svg": "/api-portal/static/media/next.d4cbd790f65d0bfe5bb99503a158fcbf.svg",
-    "main.47ae8f0b.css.map": "/api-portal/static/css/main.47ae8f0b.css.map",
-    "main.e7acd749.js.map": "/api-portal/static/js/main.e7acd749.js.map",
+    "main.a1a67b12.css.map": "/api-portal/static/css/main.a1a67b12.css.map",
+    "main.2b6fd2aa.js.map": "/api-portal/static/js/main.2b6fd2aa.js.map",
     "453.fe9e54d8.chunk.js.map": "/api-portal/static/js/453.fe9e54d8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.47ae8f0b.css",
-    "static/js/main.e7acd749.js"
+    "static/css/main.a1a67b12.css",
+    "static/js/main.2b6fd2aa.js"
   ]
 }
