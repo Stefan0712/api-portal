@@ -16,7 +16,7 @@ interface EquipmentAttributes {
     unit?: string;
 }
 interface CreateEquipmentProps {
-    addEquipment: (equipment: Equipment) => void;
+    addEquipment: () => void;
     allItems: Equipment[];
 }
   

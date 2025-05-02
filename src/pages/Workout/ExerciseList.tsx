@@ -8,7 +8,7 @@ import { Droppable, Draggable } from '@hello-pangea/dnd';
 interface ExercisePickerProps {
     addExercise: (tag: Exercise) => void;
     currentExercises: Exercise[];
-    exercises: Exercise[];
+    exercises: Exercise[] | undefined;
     setExercises: (exercises: Exercise[]) => void;
 }
 const ExerciseList: React.FC<ExercisePickerProps> = ({addExercise, currentExercises, exercises, setExercises}) => {
@@ -54,8 +54,8 @@ const ExerciseList: React.FC<ExercisePickerProps> = ({addExercise, currentExerci
             <input className="pl-2 h-[40px] rounded secondary-color flex-shrink-0" type="text" minLength={0} maxLength={100} onChange={(e) => handleSeach(e.target.value)} value={searchQuery} placeholder='Search existing exercises...'/>
             <Droppable droppableId="pool">
                 {(provided) => (
-                    <div ref={provided.innerRef} {...provided.droppableProps} className="flex flex-col gap-2 flex-1 overflow-y-auto overflow-x-hidden px-2">
-                        {exercises?.length > 0 ? (
+                    <div ref={provided.innerRef} {...provided.droppableProps} className="flex flex-col gap-2 flex-1 overflow-y-auto overflow-x-hidden px-2 scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-white scrollbar-track-transparent">
+                        {exercises && exercises?.length > 0 ? (
                             exercises.map((item, index) =>
                                 checkIfAdded(item) ? null : (
                                     <Draggable draggableId={item._id} index={index} key={item._id} >
