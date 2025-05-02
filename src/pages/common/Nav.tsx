@@ -14,7 +14,7 @@ const Nav = () => {
     }
     
     return ( 
-        <nav className='navigation px-[15px] menu-color text-white text-opacity-60 flex flex-col py-[20px] overflow-hidden h-full'>
+        <nav className='navigation w-[250px] flex-shrink-0 px-[15px] menu-color text-white text-opacity-60 flex flex-col py-[20px] overflow-hidden h-full'>
             <h1 className="text-xl font-bold mb-[30px]">EasyFit</h1>
             <div className="flex flex-col overflow-x-hidden overflow-y-auto">
                 <Link to="/" className={`flex gap-2 items-center w-full h-[30px] transition-transform duration-200 hover:translate-x-1 ${location.pathname === '/' ? 'selected-nav-button' : ''}`}><img className="w-[15px] h-[15px]" src={IconLibrary.Home} alt="home button" />Home</Link>

@@ -21,9 +21,9 @@ function App() {
   return (
     <Router>
       <MessageProvider>
-        <div className='App grid grid-cols-[250px_1fr] w-screen h-screen'>
+        <div className='App flex w-full h-screen'>
           <Nav />
-          <div className="main-container text-white content-color w-full h-full">
+          <div className="text-white content-color w-full h-full overflow-hidden">
             <MessageToast />
             <Routes>
               <Route path="/" element={<Exercises />} />

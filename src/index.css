@@ -11,12 +11,7 @@
     height: 100vh;
     overflow: hidden;
 }
-.full-container{
-    height: calc(100vh - 75px);
-    width: 100vw;
-    overflow: hidden;
-    padding-bottom: 50px;
-}
+
 .primary-color{
     background-color: #1a1a1a;
 }

@@ -216,7 +216,7 @@ const NewWorkout: React.FC = () => {
     }else{
         return ( 
             <div>
-                <div className="flex gap-4 px-[20px] items-center py-[10px]">
+                <div className="flex gap-4 px-[20px] items-center py-[10px] w-full">
                     <Link to={'/workouts'}><img className="w-[25px] h-[25px]" src={IconLibrary.BackArrow} alt=""></img></Link>
                     <h2 className="font-bold text-2xl">Create Workout</h2>
                     <button className="w-[100px] h-[40px] rounded accent-background text-white ml-auto" type="button" onClick={handleSubmit}>Save</button>
@@ -286,20 +286,22 @@ const NewWorkout: React.FC = () => {
                                     </div>}
                                 </div>
                             </div>
-                            <div className="flex flex-col w-full h-[400px] p-[10px]">
-                                <h3 className="font-bold text-xl h-[50px]" onClick={()=>console.log(phases)}>Exercises</h3>
+                            <h3 className="font-bold text-xl w-full pl-[15px] h-[50px]" onClick={()=>console.log(phases)}>Exercises</h3>
+                            <div className="flex gap-2 w-full h-[400px] p-[10px] overflow-x-hidden">
                                 <DragDropContext onDragEnd={handleDragEnd}>
-                                    <div className="grid grid-cols-[300px_1fr] gap-2 w-full overflow-hidden h-[350px]">
                                     <ExerciseList currentExercises={exercises} addExercise={handleAddExercise} exercises={allExercises} setExercises={(items)=>setAllExercises(items)} />
-                                    <div className="flex items-center gap-2 h-full overflow-x-auto overflow-y-hidden rounded">
+                                    <button type="button" onClick={() => setPhases((phases) => [...phases, {id: uuidv4(), position: phases.length, name: 'New Phase', exercises: [] }])} className="flex-shrink-0 primary-color w-[100px] h-full p-1 flex flex-col items-center justify-center gap-2" key={"Phase-add"}>
+                                        <img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" />
+                                    </button>
+                                    <div className="flex gap-2 h-full overflow-x-auto overflow-y-hidden scrollbar-thin">
                                         {phases && phases.length > 0 ? (phases.map((phase, phaseIndex) => (
                                             <div className="primary-color w-[300px] flex-shrink-0 h-full p-1 flex flex-col gap-2">
                                                  {phaseToEdit !== phase.id ? 
-                                                    <div className="top w-full flex justify-between border-b border-white border-opacity-20 pb-1">
-                                                        <h2 className="font-bold">{phase.name}</h2><button type="button" onClick={()=>(setPhaseToEdit(phase.id), setPhaseName(phase.name))}><img src={IconLibrary.Edit} className="w-[15px] h-[15px]" alt="" /> </button>
+                                                    <div className="top w-full h-[40px] flex justify-between items-center border-b border-white border-opacity-20 pb-1">
+                                                        <h2 className="font-bold text-xl">{phase.name}</h2><button type="button" onClick={()=>(setPhaseToEdit(phase.id), setPhaseName(phase.name))}><img src={IconLibrary.Edit} className="w-[20px] h-[20px]" alt="" /> </button>
                                                     </div> : 
-                                                    <div className="top w-full flex justify-between border-b border-white border-opacity-20 pb-1">
-                                                        <input className="text-white pl-[5px] bg-white bg-opacity-30 border-b border-white border-opacity-30" type="text" name="phaseName" id="phaseName" value={phaseName} onChange={(e)=>setPhaseName(e.target.value)} placeholder={phase.name}></input> <button type="button" onClick={()=>handleUpdatePhase(phase.id)}><img src={IconLibrary.Save} className="w-[15px] h-[15px]" alt="" /> </button>
+                                                    <div className="top w-full h-[40px] flex justify-between items-center border-b border-white border-opacity-20 pb-1">
+                                                        <input className="text-white pl-[5px] bg-white bg-opacity-30 border-b border-white border-opacity-30" type="text" name="phaseName" id="phaseName" value={phaseName} onChange={(e)=>setPhaseName(e.target.value)} placeholder={phase.name}></input> <button type="button" onClick={()=>handleUpdatePhase(phase.id)}><img src={IconLibrary.Save} className="w-[20px] h-[20px]" alt="" /> </button>
                                                     </div>
                                                 }
                                                 <Droppable droppableId={`phase-${phaseIndex}`}>
@@ -324,10 +326,7 @@ const NewWorkout: React.FC = () => {
                                                 </Droppable>
                                             </div>
                                         )) ) : ( <p>No phase created</p> )}
-                                        <button type="button" onClick={() => setPhases((phases) => [...phases, {id: uuidv4(), position: phases.length, name: 'New Phase', exercises: [] }])} className="flex-shrink-0 primary-color w-[100px] h-full p-1 flex flex-col items-center justify-center gap-2" key={"Phase-add"}>
-                                        <img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" />
-                                        </button>
-                                    </div>
+                                        
                                     </div>
                                 </DragDropContext>
                             </div>
