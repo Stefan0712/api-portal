@@ -92,6 +92,7 @@ const NewWorkout: React.FC = () => {
                 imageUrl: '',
                 targetGroups: muscleGroups, 
                 exercises: exercisesIds, 
+                phases,
                 tags: exerciseTags, 
                 equipment: equipments, 
             };

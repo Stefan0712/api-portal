@@ -64,6 +64,12 @@ export interface Field {
     description?: string,
     isCompleted: boolean
 }
+export interface Phase {
+    id: string;
+    position: number;
+    name: string;
+    exercises: Exercise[];
+}
 export interface Workout {
     _id?: string;
     name: string;
@@ -82,7 +88,8 @@ export interface Workout {
     isCompleted: boolean;
     visibility: string;
     tags: Tag[];
-    reference: string; 
+    reference: string;
+    phases: Phase[];
 }
 export interface IUser {
     _id?: string;
