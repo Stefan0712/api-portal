@@ -178,19 +178,19 @@ const Workouts = () => {
                             <div className="w-1/3">
                                 <p><b>Author:</b> Stefan</p>
                                 <p><b>Created at:</b> {formatDateToPretty(selectedItem.createdAt) || 'Not Set'}</p>
-                                <p><b>Difficulty:</b> {selectedItem.difficulty || 'Not Set'}</p>
+                                <p><b>Difficulty:</b> {selectedItem.difficulty.charAt(0).toUpperCase() + selectedItem.difficulty.slice(1) || 'Not Set'}</p>
                             </div>
                         </div>
                         <div className="flex flex-col overflow-hidden primary-color p-[10px] rounded h-[90px]" style={{ width: 'calc(50% - 5px)' }}>
                             <h3 className="font-bold mb-2">Target Muscles</h3>
-                            <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden scrollbar-hide">
-                                {selectedItem.targetGroups && selectedItem.targetGroups.length > 0 ? selectedItem.targetGroups.map((group,index)=><p  className="primary-color px-[10px] py-[5px] rounded" key={'group-'+index}>{group.name}</p>):<p  className="primary-color px-[10px] rounded">No groups</p>}
+                            <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb scrollbar-thumb-rounded scrollbar-thumb-white scrollbar-track-transparent">
+                                {selectedItem.targetGroups && selectedItem.targetGroups.length > 0 ? selectedItem.targetGroups.map((group,index)=><p  className="primary-color px-[10px] py-[5px] rounded flex-shrink-0" key={'group-'+index}>{group.name}</p>):<p  className="primary-color px-[10px] rounded">No groups</p>}
                             </div>
                         </div>
                         
                         <div className="flex flex-col overflow-hidden primary-color p-[10px] rounded h-[90px]" style={{ width: 'calc(50% - 5px)' }}>
                             <h3 className="font-bold mb-2">Tags</h3>
-                            <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden scrollbar-hide">
+                            <div className="flex gap-[10px] overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb scrollbar-thumb-rounded scrollbar-thumb-white scrollbar-track-transparent">
                                 {selectedItem.tags && selectedItem.tags.length > 0 ? selectedItem.tags.map((tag,index)=><p className="primary-color px-[10px] py-[5px] rounded" key={'tag-'+index}>{tag.name}</p>):<p  className="primary-color px-[10px] rounded">No tags</p>}
                             </div>
                         </div>
@@ -210,7 +210,7 @@ const Workouts = () => {
                                 <h3 className="font-bold mr-auto">Exercises</h3>
                                 <p>{selectedItem.phases.reduce((total, phase) => total + phase.exercises.length, 0) || 0}</p>
                             </div>
-                            <div className="flex flex-col gap-[10px] overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+                            <div className="flex flex-col gap-[10px] overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb scrollbar-thumb-rounded scrollbar-thumb-white scrollbar-track-transparent">
                                 {selectedItem.phases && selectedItem.phases.length > 0 ? selectedItem.phases.map((phase,index)=><div className="flex flex-col gap-1" key={'phase-'+index}>
                                     <h3>{phase.name || "Unnamed phase"}</h3>
                                     {phase.exercises && phase.exercises.length > 0 ? phase.exercises.map((exercise,index)=><div className="secondary-color flex-shrink-0 px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>

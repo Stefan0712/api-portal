@@ -293,7 +293,7 @@ const NewWorkout: React.FC = () => {
                                     <button type="button" onClick={() => setPhases((phases) => [...phases, {id: uuidv4(), order: phases.length, name: 'New Phase', exercises: [] }])} className="flex-shrink-0 primary-color w-[100px] h-full p-1 flex flex-col items-center justify-center gap-2" key={"Phase-add"}>
                                         <img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" />
                                     </button>
-                                    <div className="flex gap-2 h-full overflow-x-auto overflow-y-hidden scrollbar-thin">
+                                    <div className="flex gap-2 h-full overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-thumb scrollbar-thumb-rounded scrollbar-thumb-white scrollbar-track-transparent">
                                         {phases && phases.length > 0 ? (phases.map((phase, phaseIndex) => (
                                             <div className="primary-color w-[300px] flex-shrink-0 h-full p-1 flex flex-col gap-2">
                                                  {phaseToEdit !== phase.id ? 
