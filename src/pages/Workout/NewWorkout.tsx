@@ -103,7 +103,7 @@ const NewWorkout: React.FC = () => {
     }
     const addEquipment = (newItem: Equipment) =>{
         console.log(newItem)
-        const alreadyExists = equipments.some(item => item.id === newItem.id);
+        const alreadyExists = equipments.some(item => item.id === newItem.id || item.name === newItem.name);
         console.log(alreadyExists, equipments)
         if (!alreadyExists) {
             setEquipments(prev => [...prev, newItem]);
