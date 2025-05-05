@@ -6,12 +6,11 @@ import axios from "../../axios";
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 
 interface ExercisePickerProps {
-    addExercise: (tag: Exercise) => void;
     currentExercises: Exercise[];
     exercises: Exercise[] | undefined;
     setExercises: (exercises: Exercise[]) => void;
 }
-const ExerciseList: React.FC<ExercisePickerProps> = ({addExercise, currentExercises, exercises, setExercises}) => {
+const ExerciseList: React.FC<ExercisePickerProps> = ({currentExercises, exercises, setExercises}) => {
 
 
     const [searchQuery, setSearchQuery] = useState<string>('');

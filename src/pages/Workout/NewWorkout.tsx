@@ -59,7 +59,7 @@ const NewWorkout: React.FC = () => {
                 navigate('/workouts');
             }
         } catch (error){
-            console.log("Error saving workout: ",error);
+            showMessage("There was an error creating a new workout", "error");
             console.error(error)
         }
     }
@@ -90,7 +90,6 @@ const NewWorkout: React.FC = () => {
                 tags: exerciseTags, 
                 equipment: equipments, 
             };
-            console.log(workoutData);
             handleSaveWorkout(workoutData);
         }else{
             showMessage("You are not logged in","error");
@@ -102,13 +101,11 @@ const NewWorkout: React.FC = () => {
         setExerciseTags((exerciseTags)=>[...exerciseTags, newItem]);
     }
     const addEquipment = (newItem: Equipment) =>{
-        console.log(newItem)
         const alreadyExists = equipments.some(item => item.id === newItem.id || item.name === newItem.name);
-        console.log(alreadyExists, equipments)
         if (!alreadyExists) {
             setEquipments(prev => [...prev, newItem]);
         } else {
-            console.log("Equipment already added.");
+            showMessage("Equipment already added.", "error");
         }
     }
     
@@ -277,10 +274,10 @@ const NewWorkout: React.FC = () => {
                                     </div>}
                                 </div>
                             </div>
-                            <div className="font-bold text-xl w-full pl-[15px] h-[50px]" onClick={()=>console.log(phases)}>Exercises</div>
+                            <div className="font-bold text-xl w-full pl-[15px] h-[50px]">Exercises</div>
                             <div className="flex gap-2 w-full h-[400px] p-[10px] overflow-x-hidden">
                                 <DragDropContext onDragEnd={handleDragEnd}>
-                                    <ExerciseList currentExercises={exercises} addExercise={console.log('This will be removed')} exercises={allExercises} setExercises={(items)=>setAllExercises(items)} />
+                                    <ExerciseList currentExercises={exercises} exercises={allExercises} setExercises={(items)=>setAllExercises(items)} />
                                     <button type="button" onClick={() => setPhases((phases) => [...phases, {id: uuidv4(), order: phases.length, name: 'New Phase', exercises: [] }])} className="flex-shrink-0 primary-color w-[100px] h-full p-1 flex flex-col items-center justify-center gap-2" key={"Phase-add"}>
                                         <img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" />
                                     </button>
