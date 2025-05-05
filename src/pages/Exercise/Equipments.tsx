@@ -51,7 +51,7 @@ const Equipments: React.FC<CreateEquipmentProps> = ({addEquipment, allItems}) =>
             const equipmentData: Equipment = {
                 id: uuidv4(),
                 name,
-                attributes: [{name: unit, unit, value: typeof value === 'string' ? parseInt(value) : value}]
+                attributes: [{name: unit, unit, value: value === '' ? 0 : typeof value === 'string' ? parseInt(value) : value }]
             };
             addEquipment(equipmentData);
             setName('');

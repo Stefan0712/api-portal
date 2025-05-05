@@ -206,11 +206,6 @@ const NewWorkout: React.FC = () => {
         }
       }
     
-    //TODO: Add Preview Workout where the app shows the view of other users
-    //TODO: Test that everything works
-    //TODO: Add automatic tests
-    //TODO: Make duration, equipment, target muscles populate automatically with what exercises already have
-    //TODO: Fix NAN for equipment unit/value when it is empty
     if(!isUserLoggedIn){
         return (<ErrorLoginPage />);
     }else{
@@ -269,7 +264,7 @@ const NewWorkout: React.FC = () => {
                                         <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto rounded mt-2 p-2 pr-[20px]">
                                             {equipments?.length > 0 ? equipments.map((item,index)=><div key={item.name+index} className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0">
                                                 <p>{item.name}</p>
-                                                <div>{item.attributes && item.attributes.length > 0 ? item.attributes.map((item, index)=>(<p key={'attribute-'+index}>{item.value} {item.unit}</p>)): null}</div>
+                                                <div>{item.attributes && item.attributes.length > 0 ? item.attributes.map((item, index)=>(<p key={'attribute-'+index}>{item.value || null} {item.unit || null}</p>)): null}</div>
                                                 <img className="w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setEquipments((equipments)=>[...equipments.filter(it=>it.id!==item.id)]) }/>
                                             </div>) : <p className="px-2 py-1 font-bold">No Equipment</p>}
                                         </div>
