@@ -18,9 +18,9 @@ const Exercises = () => {
     const [selectedItem, setSelectedItem] = useState<Exercise | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [usersExercises, setUsersExercises] = useState<{favorites: string[], saved: string[], created: string[]} | null>(null)
-
     const isUserLoggedIn = isLoggedIn();
     const userData = getUserData();
+    const [source, setSource] = useState('user');
 
     useEffect(()=>{
         fetchItems();
@@ -29,10 +29,22 @@ const Exercises = () => {
         }
     },[]);
 
-    const fetchItems = async () =>{
+    const fetchItems = async (type: string = 'user') =>{
         try{
-            const response = await axios.get<Exercise[]>(`${process.env.REACT_APP_API_URL}/exercise/`);
-            setItems(response.data);
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/exercise/${type === 'user' ? 'my-exercises' : ''}`, {withCredentials: true});
+            if(type === 'user'){
+
+                const initialFavorites = response.data?.favorites || [];
+                const initialCreated = response.data?.created || [];
+                const initialSaved = response.data?.saved || [];
+
+                const initialArray = [...initialFavorites, ...initialCreated , ...initialSaved ];
+                const uniqueArray = Array.from(new Map(initialArray.map(obj => [obj._id, obj])).values());
+                setItems(uniqueArray);
+                console.log(uniqueArray)
+            }else{
+                setItems(response.data);
+            }
             console.log(response.data)
         } catch (error){
             console.error("Error fetching exercises: ", error)
@@ -42,8 +54,17 @@ const Exercises = () => {
         fetchUsersExercises();
         try{
             const response = await axios.get<Exercise>(`${process.env.REACT_APP_API_URL}/exercise/view/${id}`, {withCredentials: true});
-            setSelectedItem(response.data);
-            console.log(response.data)
+            if(response.status === 200){
+                const data = {
+                    ...response.data,
+                    isFavorite: usersExercises?.favorites?.some(item => item._id === response.data._id) || false,
+                    isSaved: usersExercises?.saved?.some(item => item._id === response.data._id) || false,
+                    isCreated: usersExercises?.created?.some(item => item._id === response.data._id) || false,
+                  };
+                  
+                setSelectedItem(data);
+                console.log(data)
+            }
         } catch (error) {
             console.error("Error fetching exercises: ", error)
         }
@@ -51,8 +72,8 @@ const Exercises = () => {
     const fetchUsersExercises = async () =>{
         try{
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/exercise/my-exercises`,{withCredentials: true});
-            setUsersExercises(response.data.exercises);
-            console.log(response.data.exercises)
+            setUsersExercises(response.data);
+            console.log(response.data)
         } catch (error) {
             console.error("Error getting user's exercises: ", error)
         }
@@ -65,7 +86,7 @@ const Exercises = () => {
                 if(data){
                     setSelectedItem(null);
                     setShowModal(false);
-                    fetchItems();
+                    fetchItems('user');
                 }
             }
             
@@ -126,7 +147,7 @@ const Exercises = () => {
                 <div className="flex flex-col gap-[10px] overflow-hidden flex-1 flex-shrink-0">
                     <div className="flex-1 flex flex-col gap-2 overflow-hidden">
                         <div className="h-[100px] w-full flex flex-wrap gap-2 px-[5px]">
-                            <div className="w-full flex items-center gap-2"><button className="secondary-color w-1/2 h-[40px] px-[15px] rounded">My Workouts</button><button className="w-1/2 h-[40px] px-[15px] rounded">Explore Workouts</button></div>
+                            <div className="w-full flex items-center gap-2"><button className={`${source === 'user' ? 'secondary-color' : ''} w-1/2 h-[40px] px-[15px] rounded`} onClick={()=>(fetchItems('user'), setSource('user'), setSelectedItem(null))}>My Exercises</button><button className={`${source === 'all' ? 'secondary-color' : ''} w-1/2 h-[40px] px-[15px] rounded`} onClick={()=>(fetchItems('all'), setSource('all'), setSelectedItem(null))}>Explore Exercises</button></div>
                             <select className="secondary-color h-[40px] w-full px-[15px] rounded">
                                 <option>All</option>
                                 <option>Created</option>
@@ -157,10 +178,10 @@ const Exercises = () => {
                         <div className="flex gap-[20px] h-[50px] align-center w-full">
                             <h2 className="font-bold flex items-center text-2xl">{selectedItem.name}</h2>
                             {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
-                                    <button className="flex gap-1 items-center" onClick={handleSaveExercise}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.saved?.length > 0 ? usersExercises?.saved.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Save : IconLibrary.Save} alt="" /></button>
-                                    <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={usersExercises && usersExercises.favorites?.length > 0 ? usersExercises?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" /></button>
+                                    {selectedItem.isCreated ? null : <button className="flex gap-1 items-center" onClick={handleSaveExercise}><img className="h-[20px] w-[20px]" src={selectedItem.isSaved ? IconLibrary.Checkmark : IconLibrary.Save } alt="" /></button>}
+                                    <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={selectedItem.isFavorite ? IconLibrary.StarFilled : IconLibrary.StarEmpty} alt="" /></button>
                                     {userData.id === selectedItem.authorId || userData.role==='admin' ? (
-                                        <div className="flex gap-3">
+                                        <div className="flex gap-3 items-center">
                                             <Link to={`/exercise/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
                                             <button className="w-[100px] h-[40px] rounded accent-background" onClick={()=>setShowModal(true)}>Delete</button>
                                         </div>) 
@@ -182,36 +203,36 @@ const Exercises = () => {
                         <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[75px]" style={{ width: 'calc(50% - 5px)' }}>
                             <h3 className="font-bold mb-2">Target Muscles</h3>
                             <div className="flex gap-[10px] overflow-x-hidden overflow-y-auto">
-                                {selectedItem.muscleGroups && selectedItem.muscleGroups.length > 0 ? selectedItem.muscleGroups.map((group,index)=><p  className="primary-color px-[10px] rounded" key={'group-'+index}>{group.name}</p>):<p  className="primary-color px-[10px] rounded">No groups</p>}
+                                {selectedItem.muscleGroups && selectedItem.muscleGroups.length > 0 ? selectedItem.muscleGroups.map((group,index)=><p  className="menu-color px-[10px] rounded" key={'group-'+index}>{group.name}</p>):<p  className="primary-color px-[10px] rounded">No groups</p>}
                             </div>
                         </div>
                         
                         <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[75px]" style={{ width: 'calc(50% - 5px)' }}>
                             <h3 className="font-bold mb-2">Tags</h3>
                             <div className="flex gap-[10px] overflow-x-hidden overflow-y-auto">
-                                {selectedItem.tags && selectedItem.tags.length > 0 ? selectedItem.tags.map((tag,index)=><p className="primary-color px-[10px] rounded" key={'tag-'+index}>{tag.name}</p>):<p  className="primary-color px-[10px] rounded">No tags</p>}
+                                {selectedItem.tags && selectedItem.tags.length > 0 ? selectedItem.tags.map((tag,index)=><p className="menu-color px-[10px] rounded" key={'tag-'+index}>{tag.name}</p>):<p  className="primary-color px-[10px] rounded">No tags</p>}
                             </div>
                         </div>
-                        <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
-                            <h3 className="font-bold mb-2">Fields</h3>
+                        <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[250px]" style={{ width: 'calc(50% - 5px)' }}>
+                            <h3 className="font-bold mb-2 h-[30px]">Fields</h3>
                             <div className="flex gap-[10px] items-center mb-3">
                                 <p><b>Duration: </b>{selectedItem.duration || 'Not Set'} {selectedItem.durationUnit || ''}</p>
                                 <p><b>Rest: </b>{selectedItem.rest || 'Not Set'} {selectedItem.restUnit || ''}</p>
                                 <p><b>Sets: </b>{selectedItem.sets || 'Not Set'} sets</p>
                             </div>
-                            <div className="flex-column gap-[10px] overflow-x-hidden overflow-y-auto">
-                                {selectedItem.fields && selectedItem.fields.length > 0 ? selectedItem.fields.map((field,index)=><div className="primary-color px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
+                            <div className="flex-column gap-[10px] overflow-x-hidden h-[220px] pb-[15px] overflow-y-auto scrollbar-thin scrollbar-thumb scrollbar-thumb-rounded scrollbar-thumb-white scrollbar-track-transparent gap-1 flex flex-col">
+                                {selectedItem.fields && selectedItem.fields.length > 0 ? selectedItem.fields.map((field,index)=><div className="menu-color px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
                                         <h3 className="w-1/4">{field.name}</h3>
                                         <p className="w-1/2 overflow-hidden truncate">{field.description}</p>
                                         <p className="w-1/4 text-end">{field.target} {field.unit}</p>
-                                    </div>):<p  className="primary-color rounded w-full h-[40px] gap-[10px] items-center flex pl-3">No fields</p>}
+                                    </div>):<p  className="menu-color rounded w-full h-[40px] gap-[10px] items-center flex pl-3">No fields</p>}
                             </div>
                         </div>
                         
-                        <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[200px]" style={{ width: 'calc(50% - 5px)' }}>
-                            <h3 className="font-bold mb-2">Equipment</h3>
-                            <div className="flex flex-col gap-[10px]  overflow-x-hidden overflow-y-auto">
-                                {selectedItem.equipment && selectedItem.equipment.length > 0 ? selectedItem.equipment.map((eq,index)=><div className="primary-color px-[10px] rounded w-full h-[40px] flex gap-3 overflow-hidden items-center" key={'tag-'+index}>
+                        <div className="flex-column gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[250px]" style={{ width: 'calc(50% - 5px)' }}>
+                            <h3 className="font-bold mb-2 h-[30px]">Equipment</h3>
+                            <div className="flex flex-col gap-[10px] h-[220px] pb-[15px] overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb scrollbar-thumb-rounded scrollbar-thumb-white scrollbar-track-transparent">
+                                {selectedItem.equipment && selectedItem.equipment.length > 0 ? selectedItem.equipment.map((eq,index)=><div className="flex-shrink-0 menu-color px-[10px] rounded w-full h-[40px] flex gap-3 overflow-hidden items-center" key={'tag-'+index}>
                                     <h3>{eq.name}</h3>
                                     {eq.attributes && eq.attributes.length > 0 ? <p className="ml-auto">{eq.attributes[0].value} {eq.attributes[0].unit}</p> : null}
                                 </div>):<p>No Equipment</p>}
