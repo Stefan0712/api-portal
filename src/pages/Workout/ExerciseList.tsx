@@ -50,7 +50,7 @@ const ExerciseList: React.FC<ExercisePickerProps> = ({addExercise, currentExerci
     //TODO: Add filters such as "My Exercises/Public Exercises/ Official Exercises", difficulty, target group.
     //TODO: Make it so that users can search by tags, target muscles, and other properties.
     return (
-        <div className='flex flex-col flex-1 gap-2 h-full w-[300px] min-w-[300px] primary-color p-2 flex-shrink-0'>
+        <div className='flex flex-col flex-1 gap-2 h-full w-[300px] min-w-[300px] max-w-[300px] primary-color p-2 flex-shrink-0'>
             <input className="pl-2 h-[40px] rounded secondary-color flex-shrink-0" type="text" minLength={0} maxLength={100} onChange={(e) => handleSeach(e.target.value)} value={searchQuery} placeholder='Search existing exercises...'/>
             <Droppable droppableId="pool">
                 {(provided) => (
@@ -61,7 +61,7 @@ const ExerciseList: React.FC<ExercisePickerProps> = ({addExercise, currentExerci
                                     <Draggable draggableId={item.tempId || item._id} index={index} key={item._id} >
                                         {(provided) => (
                                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="w-full h-[40px] flex-shrink-0 flex items-center gap-4">
-                                                <h4>{item.name}</h4>
+                                                <h4 className='overflow-hidden truncate'>{item.name}</h4>
                                                 <p className="ml-auto">{item.sets} sets</p>
                                             </div>
                                         )}

@@ -286,7 +286,7 @@ const NewWorkout: React.FC = () => {
                                     </div>}
                                 </div>
                             </div>
-                            <h3 className="font-bold text-xl w-full pl-[15px] h-[50px]" onClick={()=>console.log(phases)}>Exercises</h3>
+                            <div className="font-bold text-xl w-full pl-[15px] h-[50px]" onClick={()=>console.log(phases)}>Exercises</div>
                             <div className="flex gap-2 w-full h-[400px] p-[10px] overflow-x-hidden">
                                 <DragDropContext onDragEnd={handleDragEnd}>
                                     <ExerciseList currentExercises={exercises} addExercise={handleAddExercise} exercises={allExercises} setExercises={(items)=>setAllExercises(items)} />
@@ -297,11 +297,15 @@ const NewWorkout: React.FC = () => {
                                         {phases && phases.length > 0 ? (phases.map((phase, phaseIndex) => (
                                             <div className="primary-color w-[300px] flex-shrink-0 h-full p-1 flex flex-col gap-2">
                                                  {phaseToEdit !== phase.id ? 
-                                                    <div className="top w-full h-[40px] flex justify-between items-center border-b border-white border-opacity-20 pb-1">
-                                                        <h2 className="font-bold text-xl">{phase.name}</h2><button type="button" onClick={()=>(setPhaseToEdit(phase.id), setPhaseName(phase.name))}><img src={IconLibrary.Edit} className="w-[20px] h-[20px]" alt="" /> </button>
+                                                    <div className="top w-full h-[40px] flex gap-2 items-center border-b border-white border-opacity-20 pb-1">
+                                                        <h2 className="font-bold text-xl">{phase.name}</h2>
+                                                        <button type="button" onClick={()=>(setPhaseToEdit(phase.id), setPhaseName(phase.name))}><img src={IconLibrary.Edit} className="w-[20px] h-[20px]" alt="" /> </button>
+                                                        <button className="ml-auto" type="button" onClick={()=>setPhases(prev=>[...prev.filter(item=>item.id!==phase.id)])}><img src={IconLibrary.Close} className="w-[20px] h-[20px]" alt="" /> </button>
+
                                                     </div> : 
-                                                    <div className="top w-full h-[40px] flex justify-between items-center border-b border-white border-opacity-20 pb-1">
-                                                        <input className="text-white pl-[5px] bg-white bg-opacity-30 border-b border-white border-opacity-30" type="text" name="phaseName" id="phaseName" value={phaseName} onChange={(e)=>setPhaseName(e.target.value)} placeholder={phase.name}></input> <button type="button" onClick={()=>handleUpdatePhase(phase.id)}><img src={IconLibrary.Save} className="w-[20px] h-[20px]" alt="" /> </button>
+                                                    <div className="top w-full h-[40px] flex gap-2 items-center border-b border-white border-opacity-20 pb-1">
+                                                        <input className="text-white pl-[5px] bg-white bg-opacity-30 border-b border-white border-opacity-30" type="text" name="phaseName" id="phaseName" value={phaseName} onChange={(e)=>setPhaseName(e.target.value)} placeholder={phase.name}></input> 
+                                                        <button type="button" onClick={()=>handleUpdatePhase(phase.id)}><img src={IconLibrary.Save} className="w-[20px] h-[20px]" alt="" /> </button>
                                                     </div>
                                                 }
                                                 <Droppable droppableId={`phase-${phaseIndex}`}>
@@ -325,7 +329,7 @@ const NewWorkout: React.FC = () => {
                                                     )}
                                                 </Droppable>
                                             </div>
-                                        )) ) : ( <p>No phase created</p> )}
+                                        )) ) : ( <p className="primary-color w-[300px] flex-shrink-0 h-full flex items-center justify-center">No phase created</p> )}
                                         
                                     </div>
                                 </DragDropContext>
