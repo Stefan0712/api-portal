@@ -59,15 +59,14 @@ const Workouts = () => {
     const handleDelete = async () =>{
         try{
             if(selectedItem){
-                const response = await fetch(`${process.env.REACT_APP_API_URL}/workout/${selectedItem._id}`, {method: 'DELETE'}) ;
-                const data = await response.json();
-                if (response.ok) {
+                const response = await axios.delete(`${process.env.REACT_APP_API_URL}/workout/${selectedItem._id}`, {withCredentials: true}) ;
+                
+                if (response.status === 200) {
                     setSelectedItem(null);
                     setShowModal(false);
                     fetchItems();
-                } else {
-                    alert('Error deleting workout: ' + data.message);
-                }
+                    showMessage('Workout deleted successfully!', "success")
+                } 
             }
             
         } catch (error) {
@@ -163,7 +162,7 @@ const Workouts = () => {
                                 <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={userWorkouts && userWorkouts.favorites?.length > 0 ? userWorkouts?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" /></button>
                                     {userData.id === selectedItem.authorId || userData.role==='admin' ? (
                                         <div className="flex gap-3 items-center">
-                                            <Link to={`/exercise/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
+                                            <Link to={`/workout/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
                                             <button className="w-[100px] h-[40px] rounded accent-background" onClick={()=>setShowModal(true)}>Delete</button>
                                         </div>) 
                                     : null}
