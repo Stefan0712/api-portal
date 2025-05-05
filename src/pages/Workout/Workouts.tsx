@@ -139,7 +139,7 @@ const Workouts = () => {
                         <div className="h-full flex-1 flex flex-col gap-2 overflow-y-auto overflow-x-hidden scrollbar-hide">
                             {items && items.length && Array.isArray(items) ? items?.map((item, index)=> (
                                  <div className={`item w-full h-[90px] flex-shrink-0 menu-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getWorkoutData(item._id)}>
-                                 <h3 className="font-bold text-lg">{item.name}</h3>
+                                 <h3 className="font-bold text-lg h-[25px] overflow-hidden truncate">{item.name}</h3>
                                  <div className="flex gap-[10px] text-white text-opacity-50 overflow-hidden w-full whitespace-nowrap">
                                      {item.targetGroups && item.targetGroups.length > 0 ? item.targetGroups.map((group,index)=><p key={'group-'+index}>{group.name}</p>):<p>No groups</p>}
                                  </div>
@@ -162,7 +162,7 @@ const Workouts = () => {
                                 <button className="flex gap-1 items-center" onClick={handleSaveWorkout}><img className="h-[20px] w-[20px]" src={userWorkouts && userWorkouts.saved?.length > 0 ? userWorkouts?.saved.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Add : IconLibrary.Add} alt="" /></button>
                                 <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={userWorkouts && userWorkouts.favorites?.length > 0 ? userWorkouts?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" /></button>
                                     {userData.id === selectedItem.authorId || userData.role==='admin' ? (
-                                        <div className="flex gap-3">
+                                        <div className="flex gap-3 items-center">
                                             <Link to={`/exercise/${selectedItem._id}/edit`} className="w-[100px] h-[40px] rounded items-center flex justify-center ml-auto">Edit</Link>
                                             <button className="w-[100px] h-[40px] rounded accent-background" onClick={()=>setShowModal(true)}>Delete</button>
                                         </div>) 
@@ -208,11 +208,11 @@ const Workouts = () => {
                         <div className="flex flex-col gap-[10px] overflow-hidden primary-color p-[10px] rounded h-[400px]" style={{ width: 'calc(50% - 5px)' }}>
                             <div className="flex gap-[10px] items-center mb-3">
                                 <h3 className="font-bold mr-auto">Exercises</h3>
-                                <p><b>Duration: </b>{selectedItem.duration || 'Not Set'} minutes</p>
-                                <p><b>Exercises: </b>{selectedItem.exercises?.length || 'Not Set'}</p>
+                                <p>{selectedItem.phases.reduce((total, phase) => total + phase.exercises.length, 0) || 0}</p>
                             </div>
                             <div className="flex flex-col gap-[10px] overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-500 scrollbar-track-gray-200">
-                                {selectedItem.phases && selectedItem.phases.length > 0 ? selectedItem.phases.map((phase,index)=><div>
+                                {selectedItem.phases && selectedItem.phases.length > 0 ? selectedItem.phases.map((phase,index)=><div className="flex flex-col gap-1" key={'phase-'+index}>
+                                    <h3>{phase.name || "Unnamed phase"}</h3>
                                     {phase.exercises && phase.exercises.length > 0 ? phase.exercises.map((exercise,index)=><div className="secondary-color flex-shrink-0 px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
                                         <h3 className="w-4/5">{exercise.name || 'Unnamed exercise'}</h3>
                                         <p className="w-1/5 text-end">{exercise.sets} {exercise.sets && exercise.sets === 1 ? 'set' : 'sets'}</p>
