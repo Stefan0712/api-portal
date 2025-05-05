@@ -17,7 +17,7 @@ import { DragDropContext, Droppable, Draggable, } from '@hello-pangea/dnd';
 
 interface IPhase {
     id: string;
-    position: number;
+    order: number;
     name: string;
     exercises: Exercise[];
 }
@@ -48,7 +48,7 @@ const NewWorkout: React.FC = () => {
     const [groupName, setGroupName] = useState<string>(''); // State to hold the value of Target Group input
 
 
-    const [phases, setPhases] = useState<IPhase[]>([{id: 'id-phase-1', position: 1, name: 'Warm-up', exercises: []}, {id: 'id-phase-2', position: 2, name: 'Workout', exercises: []}, {id: 'id-phase-3', position: 3, name: 'Cooldown', exercises: []}]);
+    const [phases, setPhases] = useState<IPhase[]>([{id: 'id-phase-1', order: 1, name: 'Warm-up', exercises: []}, {id: 'id-phase-2', order: 2, name: 'Workout', exercises: []}, {id: 'id-phase-3', order: 3, name: 'Cooldown', exercises: []}]);
     const [phaseToEdit, setPhaseToEdit] = useState<string | null>(null);
     const [phaseName, setPhaseName] = useState<string>('');
     const handleSaveWorkout = async (data: Workout) =>{
@@ -159,6 +159,7 @@ const NewWorkout: React.FC = () => {
     const getTotalDuration = () => exercises.reduce((sum, exercise) => sum + (exercise.duration ?? 0), 0);
 
     const handleDragEnd = (result) => {
+        console.log(exercises)
         const { source, destination, draggableId } = result;
         if (!destination) return;
         if (source.droppableId === destination.droppableId && source.index === destination.index) return;
@@ -169,7 +170,7 @@ const NewWorkout: React.FC = () => {
         if (source.droppableId === 'pool') {
             // Dragging from the exercise pool
             const original = allExercises.find(ex => ex._id === draggableId);
-            draggedExercise = { ...original, _id: `${original._id}-${Date.now()}` }; // new _id makes it unique
+            draggedExercise = { ...original, _id: original._id, tempId: uuidv4() };
 
         } else {
             // Dragging from a phase
@@ -289,7 +290,7 @@ const NewWorkout: React.FC = () => {
                             <div className="flex gap-2 w-full h-[400px] p-[10px] overflow-x-hidden">
                                 <DragDropContext onDragEnd={handleDragEnd}>
                                     <ExerciseList currentExercises={exercises} addExercise={handleAddExercise} exercises={allExercises} setExercises={(items)=>setAllExercises(items)} />
-                                    <button type="button" onClick={() => setPhases((phases) => [...phases, {id: uuidv4(), position: phases.length, name: 'New Phase', exercises: [] }])} className="flex-shrink-0 primary-color w-[100px] h-full p-1 flex flex-col items-center justify-center gap-2" key={"Phase-add"}>
+                                    <button type="button" onClick={() => setPhases((phases) => [...phases, {id: uuidv4(), order: phases.length, name: 'New Phase', exercises: [] }])} className="flex-shrink-0 primary-color w-[100px] h-full p-1 flex flex-col items-center justify-center gap-2" key={"Phase-add"}>
                                         <img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" />
                                     </button>
                                     <div className="flex gap-2 h-full overflow-x-auto overflow-y-hidden scrollbar-thin">
@@ -307,7 +308,7 @@ const NewWorkout: React.FC = () => {
                                                     {(provided) => (
                                                     <div ref={provided.innerRef} {...provided.droppableProps} className="flex flex-col gap-2 flex-1 overflow-y-auto">
                                                         {phase.exercises.length > 0 ? (phase.exercises.map((exercise, index) => (
-                                                            <Draggable draggableId={exercise._id} index={index} key={'Exercise-'+index}>
+                                                            <Draggable draggableId={exercise.tempId || exercise._id} index={index} key={'Exercise-'+index}>
                                                             {(provided) => (
                                                                 <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="w-full h-[40px] flex-shrink-0 flex items-center gap-4">
                                                                 <h4>{exercise.name}</h4>

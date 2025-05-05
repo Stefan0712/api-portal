@@ -160,7 +160,6 @@ const Workouts = () => {
                             <h2 className="font-bold mb-2 text-2xl">{selectedItem.name}</h2>
                             {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
                                 <button className="flex gap-1 items-center" onClick={handleSaveWorkout}><img className="h-[20px] w-[20px]" src={userWorkouts && userWorkouts.saved?.length > 0 ? userWorkouts?.saved.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Add : IconLibrary.Add} alt="" /></button>
-                                {console.log(selectedItem.authorId, userData.id)}
                                 <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={userWorkouts && userWorkouts.favorites?.length > 0 ? userWorkouts?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" /></button>
                                     {userData.id === selectedItem.authorId || userData.role==='admin' ? (
                                         <div className="flex gap-3">

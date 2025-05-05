@@ -16,12 +16,12 @@ const ExerciseList: React.FC<ExercisePickerProps> = ({addExercise, currentExerci
 
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [items, setItems] = useState<Exercise[]>([]);
-
     const handleGetExercises = async () =>{
         try{
             const response = await axios.get<Exercise[]>(`${process.env.REACT_APP_API_URL}/exercise/`);
             setItems(response.data);
             setExercises(response.data)
+            
         } catch (error){
             console.error("Error fetching exercises: ", error)
         }
@@ -58,7 +58,7 @@ const ExerciseList: React.FC<ExercisePickerProps> = ({addExercise, currentExerci
                         {exercises && exercises?.length > 0 ? (
                             exercises.map((item, index) =>
                                 checkIfAdded(item) ? null : (
-                                    <Draggable draggableId={item._id} index={index} key={item._id} >
+                                    <Draggable draggableId={item.tempId || item._id} index={index} key={item._id} >
                                         {(provided) => (
                                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="w-full h-[40px] flex-shrink-0 flex items-center gap-4">
                                                 <h4>{item.name}</h4>
