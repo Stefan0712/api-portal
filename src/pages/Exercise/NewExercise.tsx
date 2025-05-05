@@ -44,9 +44,11 @@ const NewExercise: React.FC = () => {
 
     const handleSaveExercise = async (data: Exercise) =>{
         try{
-            const response = axios.post(`${process.env.REACT_APP_API_URL}/exercise`, data, {withCredentials: true});
-            showMessage("Exercise saved successfully", "success");
-            navigate('/exercises');
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise`, data, {withCredentials: true});
+            if(response.status === 201){
+                showMessage("Exercise saved successfully", "success");
+                navigate('/exercises');
+            }
         } catch (error){
             console.log("Error saving exercise: ",error);
             showMessage("Error saving exercise", "error");
@@ -64,11 +66,11 @@ const NewExercise: React.FC = () => {
                 source: 'database', 
                 description, 
                 reference, 
-                difficulty, 
+                difficulty: difficulty.length > 0 ? difficulty : 'beginner', 
                 sets, 
-                duration: parseInt(duration), 
+                duration: parseInt(duration) || 0, 
                 durationUnit: 'min',
-                rest: parseInt(rest),
+                rest: parseInt(rest) || 0,
                 restUnit: 'seconds',
                 visibility: 'private',
                 notes,
@@ -148,7 +150,7 @@ const NewExercise: React.FC = () => {
     }else {
         return ( 
             <div>
-                <div className="flex gap-4 px-[20px] items-center">
+                <div className="flex gap-4 p-[20px] items-center">
                     <Link to={'/exercises'}><img className="w-[25px] h-[25px]" src={IconLibrary.BackArrow} alt=""></img></Link>
                     <h2 className="font-bold text-2xl">Create Exercise</h2>
                     <button className="w-[100px] h-[40px] rounded accent-background text-white ml-auto" type="button" onClick={handleSubmit}>Save</button>
