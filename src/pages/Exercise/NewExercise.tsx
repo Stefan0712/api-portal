@@ -44,7 +44,7 @@ const NewExercise: React.FC = () => {
 
     const handleSaveExercise = async (data: Exercise) =>{
         try{
-            const response = axios.post(`${process.env.REACT_APP_API_URL}/exercise`, data);
+            const response = axios.post(`${process.env.REACT_APP_API_URL}/exercise`, data, {withCredentials: true});
             showMessage("Exercise saved successfully", "success");
             navigate('/exercises');
         } catch (error){

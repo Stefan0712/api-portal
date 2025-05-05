@@ -68,7 +68,7 @@ export interface Phase {
     id: string;
     position: number;
     name: string;
-    exercises: Exercise[];
+    exercises: Exercise[] | string[];
 }
 export interface Workout {
     _id?: string;

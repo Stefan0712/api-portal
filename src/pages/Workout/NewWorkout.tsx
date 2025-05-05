@@ -39,7 +39,7 @@ const NewWorkout: React.FC = () => {
     const [name, setName] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [reference, setReference] = useState<string>('');
-    const [difficulty, setDifficulty] = useState<string>('');
+    const [difficulty, setDifficulty] = useState<string>('beginner');
     const [exerciseTags, setExerciseTags] = useState<Tag[]>([]);
     const [equipments, setEquipments] = useState<Equipment[]>([]);
     const [duration, setDuration] = useState<string>('');
@@ -48,35 +48,29 @@ const NewWorkout: React.FC = () => {
     const [groupName, setGroupName] = useState<string>(''); // State to hold the value of Target Group input
 
 
-    const [phases, setPhases] = useState<IPhase[]>([{id: 'id-phase-1', position: 1, name: 'Warm-up', exercises: []}, {id: 'id-phase-2', position: 2, name: 'Workout', exercises: []}, {id: 'id-phase-2', position: 3, name: 'Cooldown', exercises: []}]);
+    const [phases, setPhases] = useState<IPhase[]>([{id: 'id-phase-1', position: 1, name: 'Warm-up', exercises: []}, {id: 'id-phase-2', position: 2, name: 'Workout', exercises: []}, {id: 'id-phase-3', position: 3, name: 'Cooldown', exercises: []}]);
     const [phaseToEdit, setPhaseToEdit] = useState<string | null>(null);
     const [phaseName, setPhaseName] = useState<string>('');
     const handleSaveWorkout = async (data: Workout) =>{
         try{
-            const response = axios.post(`${process.env.REACT_APP_API_URL}/workout`, data);
-            showMessage("Workout saved successfully","success");
-            navigate('/workouts');
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/workout`, data, {withCredentials: true});
+            if(response.status === 201){
+                showMessage("Workout saved successfully","success");
+                navigate('/workouts');
+            }
         } catch (error){
-            console.log("Error saving workout: ",error)
+            console.log("Error saving workout: ",error);
+            console.error(error)
         }
     }
 
     const handleSubmit = ()=>{
-        if(isUserLoggedIn && userData){
+        if(isUserLoggedIn && userData && userData.id){
 
             const createdAt = new Date().toISOString(); // Get raw date and time for keeping track of when the exercise was created;
-            let exercisesIds: string[] = []; //empty array to store the ids and sources of exercises
     
             //extract only the id and source from each exercise
-            exercises.forEach((item: Exercise)=>{ 
-                if(item._id){
-                    console.log(item.duration)
-                    exercisesIds.push(item._id);
-                    
-                }else{
-                    showMessage(`Failed to push the item with id ${item._id}`,"error");
-                }
-            });
+            const phasesIds = phases.map((phase: IPhase)=>({...phase, exercises: phase.exercises.map(item=>item._id)}));
             const workoutData: Workout = {
                 createdAt, 
                 authorId: userData.id,
@@ -91,8 +85,8 @@ const NewWorkout: React.FC = () => {
                 visibility: 'private',
                 imageUrl: '',
                 targetGroups: muscleGroups, 
-                exercises: exercisesIds, 
-                phases,
+                exercises, 
+                phases: phasesIds || [],
                 tags: exerciseTags, 
                 equipment: equipments, 
             };
@@ -230,7 +224,7 @@ const NewWorkout: React.FC = () => {
                             <div className="top w-full h-[300px] flex gap-[20px]">
                                 <div className="flex flex-col h-full gap-2 w-1/2 p-3">
                                     <h3 className="font-bold text-xl">Workout Info</h3> 
-                                    <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="name" id="name" required={true} minLength={3} maxLength={20} onChange={(e) => setName(e.target.value)} value={name} placeholder="Name"></input>
+                                    <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="name" id="name" required={true} minLength={3} maxLength={50} onChange={(e) => setName(e.target.value)} value={name} placeholder="Name"></input>
                                     <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="description" id="description" onChange={(e) => setDescription(e.target.value)} value={description} minLength={0} maxLength={300} placeholder="Description"></input>
                                     <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="url" name="reference" id="reference" onChange={(e) => setReference(e.target.value)} value={reference} placeholder="Reference URL"></input>
                                     <fieldset className="flex w-full gap-[10px]">

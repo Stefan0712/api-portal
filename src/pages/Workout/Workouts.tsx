@@ -8,7 +8,7 @@ import { IconLibrary } from "../../IconLibrary";
 import { formatDateToPretty } from "../../utils/dateFormat";
 import { useMessage } from "../../context/MessageContext";
 
-
+type WorkoutType = 'my-workouts' | 'saved' | 'favorites' | 'created';
 
 const Workouts = () => {
 
@@ -16,6 +16,7 @@ const Workouts = () => {
     const [items, setItems] = useState<Workout[]>([])
     const [selectedItem, setSelectedItem] = useState<Workout | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [workoutType, setWorkoutType] = useState<string>('my-workouts');
 
     const [userWorkouts, setUserWorkouts] = useState<{favorites: string[], saved: string[], created: string[]} | null>(null);
 
@@ -159,6 +160,7 @@ const Workouts = () => {
                             <h2 className="font-bold mb-2 text-2xl">{selectedItem.name}</h2>
                             {isUserLoggedIn && userData ? <div className="ml-auto flex gap-5">
                                 <button className="flex gap-1 items-center" onClick={handleSaveWorkout}><img className="h-[20px] w-[20px]" src={userWorkouts && userWorkouts.saved?.length > 0 ? userWorkouts?.saved.includes(selectedItem._id) ? IconLibrary.Checkmark : IconLibrary.Add : IconLibrary.Add} alt="" /></button>
+                                {console.log(selectedItem.authorId, userData.id)}
                                 <button className="flex gap-1 items-center" onClick={handleToggleFavorite}><img className="h-[20px] w-[20px]" src={userWorkouts && userWorkouts.favorites?.length > 0 ? userWorkouts?.favorites.includes(selectedItem._id) ? IconLibrary.StarFilled : IconLibrary.StarEmpty : IconLibrary.StarEmpty} alt="" /></button>
                                     {userData.id === selectedItem.authorId || userData.role==='admin' ? (
                                         <div className="flex gap-3">
@@ -211,10 +213,12 @@ const Workouts = () => {
                                 <p><b>Exercises: </b>{selectedItem.exercises?.length || 'Not Set'}</p>
                             </div>
                             <div className="flex flex-col gap-[10px] overflow-x-hidden overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-500 scrollbar-track-gray-200">
-                                {selectedItem.exercises && selectedItem.exercises.length > 0 ? selectedItem.exercises.map((exercise,index)=><div className="secondary-color flex-shrink-0 px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
+                                {selectedItem.phases && selectedItem.phases.length > 0 ? selectedItem.phases.map((phase,index)=><div>
+                                    {phase.exercises && phase.exercises.length > 0 ? phase.exercises.map((exercise,index)=><div className="secondary-color flex-shrink-0 px-[10px] flex items-center rounded w-full h-[40px] flex gap-[10px]" key={'group-'+index}>
                                         <h3 className="w-4/5">{exercise.name || 'Unnamed exercise'}</h3>
                                         <p className="w-1/5 text-end">{exercise.sets} {exercise.sets && exercise.sets === 1 ? 'set' : 'sets'}</p>
-                                    </div>):<p  className="primary-color rounded w-full h-[40px] flex gap-[10px]">No exercises</p>}
+                                    </div> ): <h1>Phase is empty</h1>}
+                                </div>):<p  className="primary-color rounded w-full h-[40px] flex gap-[10px]">No exercises</p>}
                             </div>
                         </div>
                     </div> : <div className="flex items-center justify-center w-full h-full"><h1 className="text-2xl font-bold">Select a workout</h1></div>}
