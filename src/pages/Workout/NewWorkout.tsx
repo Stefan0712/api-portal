@@ -127,24 +127,13 @@ const NewWorkout: React.FC = () => {
         }
     }
     const addmuscleGroups = (newItem: ITargetGroups) =>{
-        console.log(newItem)
-        const alreadyExists = muscleGroups.some(item => item.id === newItem.id);
-        console.log(alreadyExists, muscleGroups)
+        const alreadyExists = muscleGroups.some(item => item.id === newItem.id || item.name === newItem.name);
         if (!alreadyExists) {
             setMuscleGroups(prev => [...prev, newItem]);
         } else {
-            console.log("Muscle Group already added.");
+            showMessage("This muscle group already exists", "error")
         }
 
-    }
-    const handleAddExercise = (exercise: Exercise)=>{
-        setExercises((exercises)=>[...exercises, exercise]);
-        if(exercise.equipment && exercise.equipment.length > 0){
-            exercise.equipment.forEach(item=>addEquipment(item))
-        }
-        if(exercise.muscleGroups && exercise.muscleGroups.length > 0){
-            exercise.muscleGroups.forEach(item=>addmuscleGroups(item))
-        }
     }
     const handleRemoveExercise = (id: string, phaseId: string) =>{
         if(id && phaseId){
@@ -159,7 +148,6 @@ const NewWorkout: React.FC = () => {
     const getTotalDuration = () => exercises.reduce((sum, exercise) => sum + (exercise.duration ?? 0), 0);
 
     const handleDragEnd = (result) => {
-        console.log(exercises)
         const { source, destination, draggableId } = result;
         if (!destination) return;
         if (source.droppableId === destination.droppableId && source.index === destination.index) return;
@@ -170,6 +158,14 @@ const NewWorkout: React.FC = () => {
         if (source.droppableId === 'pool') {
             // Dragging from the exercise pool
             const original = allExercises.find(ex => ex._id === draggableId);
+            if(original){
+                if(original.equipment && original.equipment.length > 0){
+                    original.equipment.forEach(item=>!equipments.includes(item) ? addEquipment(item) : null);
+                }
+                if(original.muscleGroups && original.muscleGroups.length > 0){
+                    original.muscleGroups.forEach(item=>!muscleGroups.includes(item) ? addmuscleGroups(item) : null);
+                }
+            }
             draggedExercise = { ...original, _id: original._id, tempId: uuidv4() };
 
         } else {
@@ -284,7 +280,7 @@ const NewWorkout: React.FC = () => {
                             <div className="font-bold text-xl w-full pl-[15px] h-[50px]" onClick={()=>console.log(phases)}>Exercises</div>
                             <div className="flex gap-2 w-full h-[400px] p-[10px] overflow-x-hidden">
                                 <DragDropContext onDragEnd={handleDragEnd}>
-                                    <ExerciseList currentExercises={exercises} addExercise={handleAddExercise} exercises={allExercises} setExercises={(items)=>setAllExercises(items)} />
+                                    <ExerciseList currentExercises={exercises} addExercise={console.log('This will be removed')} exercises={allExercises} setExercises={(items)=>setAllExercises(items)} />
                                     <button type="button" onClick={() => setPhases((phases) => [...phases, {id: uuidv4(), order: phases.length, name: 'New Phase', exercises: [] }])} className="flex-shrink-0 primary-color w-[100px] h-full p-1 flex flex-col items-center justify-center gap-2" key={"Phase-add"}>
                                         <img src={IconLibrary.Add} className="w-[40px] h-[40px]" alt="" />
                                     </button>
