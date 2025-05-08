@@ -15,6 +15,7 @@ import {MessageProvider} from './context/MessageContext.tsx';
 import MessageToast from './pages/common/MessageToast.tsx';
 import Equipment from './pages/Dashboard/pages/Equipment/Equipment.tsx';
 import Community from './pages/Community/Community.tsx';
+import Planner from './pages/Planner/Planner.tsx';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/equipment" element={<Equipment />} />
+              <Route path="/planner" element={<Planner />} />
             </Routes>
           </div>
         </div>
