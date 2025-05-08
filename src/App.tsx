@@ -3,9 +3,9 @@ import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import Exercises from './pages/Exercise/Exercises.tsx';
 import Workouts from './pages/Workout/Workouts.tsx';
 import Guides from './pages/Exercise/Exercises.tsx';
-import Profile from './pages/Profile.tsx';
-import Login from './pages/Login.tsx';
-import Register from './pages/Register.tsx';
+import Profile from './pages/User/Profile.tsx';
+import Login from './pages/User/Login.tsx';
+import Register from './pages/User/Register.tsx';
 import NewExercise from './pages/Exercise/NewExercise.tsx';
 import NewWorkout from './pages/Workout/NewWorkout.tsx';
 import EditExercise from './pages/Exercise/EditExercise.tsx';
@@ -14,6 +14,7 @@ import Nav from './pages/common/Nav.tsx';
 import {MessageProvider} from './context/MessageContext.tsx';
 import MessageToast from './pages/common/MessageToast.tsx';
 import Equipment from './pages/Dashboard/pages/Equipment/Equipment.tsx';
+import Community from './pages/Community/Community.tsx';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
               <Route path='/workouts/new' element={<NewWorkout />} />
               <Route path='/workout/:id/edit' element={<EditWorkout />} />
               <Route path="/guides" element={<Guides />} />
+              <Route path="/community" element={<Community />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

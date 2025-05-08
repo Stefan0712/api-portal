@@ -75,11 +75,21 @@ import Community from './assets/community.svg';
 import Friends from './assets/friends.svg';
 import List from './assets/list.svg';
 import Activity from './assets/activity.svg';
+import HeartEmpty from './assets/heart-empty.svg';
+import HeartFilled from './assets/heart-filled.svg';
+import Comment from './assets/comment.svg';
+import BookmarkFilled from './assets/bookmark-filled.svg';
+import BookmarkEmpty from './assets/bookmark-empty.svg';
 
 
 
 
 export const IconLibrary = {
+    Comment,
+    BookmarkFilled,
+    BookmarkEmpty,
+    HeartEmpty,
+    HeartFilled,
     Play,
     InfoCircle,
     Back,

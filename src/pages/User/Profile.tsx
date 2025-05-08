@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "../axios";
-import { IUser } from "../types/interfaces";
-import { isLoggedIn } from "../utils/auth";
-import ErrorLoginPage from "./common/LoginErrorPage";
-import { formatDateToPretty } from "../utils/dateFormat";
+import axios from "axios";
+import { IUser } from "../../types/interfaces";
+import { isLoggedIn } from "../../utils/auth";
+import ErrorLoginPage from "../common/LoginErrorPage";
+import { formatDateToPretty } from "../../utils/dateFormat";
 
 
 const Profile = () => {

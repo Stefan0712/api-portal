@@ -121,4 +121,25 @@ export interface IUser {
     createdWorkouts: string[];
     updatedAt: Date;
   }
+
+export interface StatusPost {
+    title: string,
+    body: string,
+    privacy: "friends" | "public" | "private",
+    createdAt: Date,
+    likes: string[],
+    comments: string[],
+    tags: Tag[],
+    type: string,
+    author: {
+        username: string,
+        _id: string,
+    } | string,
+}
+export interface NewStatusPost {
+    title: string,
+    body: string,
+    privacy: "friends" | "public" | "private",
+    tags: Tag[],
+}
   

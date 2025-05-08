@@ -5,11 +5,12 @@ export function formatDateToDMY(dateString: string): string {
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
 }
-export function formatDateToPretty(dateString: string): string {
-    const date = new Date(dateString);
+export function formatDateToPretty(dateInput: string | Date): string {
+    const date = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
 }
+  
 export function extractTime(dateString: string): string {
     const date = new Date(dateString);
     const hours = String(date.getHours()).padStart(2, '0');
