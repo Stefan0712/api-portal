@@ -1,18 +1,32 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { isLoggedIn, logoutUser } from "../../utils/auth";
 import { IconLibrary } from "../../IconLibrary";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Nav = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const [isApiRunning, setIsApiRunning] = useState(false);
     
 
     const handleLogout = () =>{
         logoutUser();
         navigate('/login');
     }
-    
+    const checkApiConnection = async () =>{
+        try{
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/test`, {withCredentials: true})
+            if(response.status === 200){
+                setIsApiRunning(true);
+            }
+        }catch(error){
+            setIsApiRunning(false);
+            console.error(error);
+        }
+    }
+    useEffect(()=>{checkApiConnection()},[])
     return ( 
         <nav className='navigation w-[250px] flex-shrink-0 px-[15px] menu-color text-white text-opacity-60 flex flex-col py-[20px] overflow-hidden h-full'>
             <h1 className="text-xl font-bold mb-[30px]">EasyFit</h1>
@@ -29,7 +43,8 @@ const Nav = () => {
                 <Link to="/" className={`flex gap-2 items-center w-full h-[30px] transition-transform duration-200 hover:translate-x-1 ${location.pathname === 'asd' ? 'selected-nav-button' : ''}`}><img className="w-[15px] h-[15px]" src={IconLibrary.Activity} alt="home button" />My Activity</Link>
             </div>
             
-            <div className="mt-auto content-color flex flex-col rounded-xl align-center px-[15px] py-[10px] border border-gray-800">
+            <div className="mt-auto content-color flex flex-col rounded-xl align-center px-[15px] py-[10px] border border-gray-800 gap-4">
+                <div className={`${isApiRunning ? 'bg-green-500' : 'bg-red-500'} text-white rounded p-3 mt-auto flex gap-2 items-center justify-between`}>{isApiRunning ? 'API online' : "API offline"}<img className="w-[20px] h-[20px]" src={IconLibrary.Restart} onClick={checkApiConnection} alt="refresh"/></div>
                 {
                     isLoggedIn() ? 
                         <div className="grid grid-cols-[1fr_50px] w-full">
