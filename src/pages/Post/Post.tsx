@@ -20,7 +20,7 @@ const Post: React.FC<PostProps> = ({postData}) => {
     const [showMenu, setShowMenu] = useState(false);
 
     const [likes, setLikes] = useState<string[]>(postData.likes || []);
-    const [comments, setComments] = useState<string[]>(postData.comments || []);
+    const [comments, setComments] = useState<Comment[] | string[]>(postData.comments || []);
 
     const [comment, setComment] = useState<string>('');
 
@@ -59,6 +59,9 @@ const Post: React.FC<PostProps> = ({postData}) => {
             showMessage("There has been a server error.", "error");
         }
     }
+    const updateComments = (newList: Comment[]) =>{
+        setComments(newList)
+    }
     return ( 
         <div className="w-full p-[15px] rounded-xl secondary-color flex flex-col gap-[20px] relative">
             {showMenu ? <Menu cancel={()=>setShowMenu(false)}  setNewList={console.log} type="post" itemId={postData._id}/> : null}
@@ -82,7 +85,7 @@ const Post: React.FC<PostProps> = ({postData}) => {
                     <button onClick={handleAddComment}><img className='h-[20px] w-[20px]' src={IconLibrary.Send} alt='add comment'></img></button>
                 </div>
                 <div className="flex flex-col gap-3 min-h-[50px] rounded-l">
-                    {comments && comments.length > 0 ? comments.map((item,index)=><Comment key={'Comment-'+index} data={item} />) : <p>No comments</p>}
+                    {comments && comments.length > 0 ? comments.map((item,index)=><Comment updateComments={updateComments} key={'Comment-'+index} data={item} />) : <p>No comments</p>}
                 </div>
             </div>
         </div> 

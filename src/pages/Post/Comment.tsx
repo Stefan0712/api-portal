@@ -5,19 +5,22 @@ import { formatDateToPretty } from "../../utils/dateFormat";
 import { useEffect, useState } from "react";
 import { useMessage } from "../../context/MessageContext";
 import SubComment from "./SubComment.tsx";
+import Menu from "./Menu.tsx";
 
 
 
 
 interface CommentProps {
     data: IComment;
+    updateComments:(newList: IComment[])=>void,
 }
 
-const Comment: React.FC<CommentProps> = ({data}) => {
+const Comment: React.FC<CommentProps> = ({data, updateComments}) => {
 
     const {showMessage} = useMessage();
     const userId = localStorage.getItem('userId') || '';
     const [expandComments, setExpandComments] = useState<boolean>(false);
+    const [showMenu, setShowMenu] = useState(false);
 
     const [likes, setLikes] = useState<string[]>(data.likes || []);
     const [comments, setComments] = useState<IComment[]>(data.comments || []);
@@ -60,14 +63,18 @@ const Comment: React.FC<CommentProps> = ({data}) => {
             setLikes(prev=>[...prev, userId])
         }
     }
+    const updateList = (id) =>{
+        updateComments([...comments.filter(item=>item._id!==id)])
+    }
     return ( 
-        <div className="flex flex-col gap-2 px-[10px] primary-color p-3 rounded">
+        <div className="flex flex-col gap-2 px-[10px] primary-color p-3 rounded relative">
+            {showMenu ? <Menu cancel={()=>setShowMenu(false)}  setNewList={()=>updateList(data._id)} type="comment" itemId={data._id}/> : null}
             <div className="w-full flex justify-between">
                 <div className='flex gap-2 items-center mr-auto'>
                     <img className='h-[40px] w-[40px]' src={IconLibrary.Profile} alt='profile picture'></img>
                     <p>{data.author?.username} on <b className="text-white text-opacity-50">{data.createdAt ? formatDateToPretty(data.createdAt) : null}</b></p>
                 </div>
-                <button><img className='h-[20px] w-[20px]' src={IconLibrary.Dots} alt='menu'></img></button>
+                <button onClick={()=>setShowMenu(prev=>!prev)}><img className='h-[20px] w-[20px]' src={IconLibrary.Dots} alt='menu'></img></button>
             </div>
             <p>{data.body}</p>
             <div className="flex gap-[30px]">
