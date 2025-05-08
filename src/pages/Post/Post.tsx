@@ -5,6 +5,7 @@ import { formatDateToPretty } from "../../utils/dateFormat";
 import Comment from "./Comment";
 import { useMessage } from "../../context/MessageContext";
 import axios from "axios";
+import Menu from "./Menu";
 
 
 interface PostProps {
@@ -16,6 +17,7 @@ const Post: React.FC<PostProps> = ({postData}) => {
     const {showMessage} = useMessage();
 
     const [expandComments, setExpandComments] = useState<boolean>(false);
+    const [showMenu, setShowMenu] = useState(false);
 
     const [likes, setLikes] = useState<string[]>(postData.likes || []);
     const [comments, setComments] = useState<string[]>(postData.comments || []);
@@ -58,13 +60,14 @@ const Post: React.FC<PostProps> = ({postData}) => {
         }
     }
     return ( 
-        <div className="w-full p-[15px] rounded-xl secondary-color flex flex-col gap-[20px]">
+        <div className="w-full p-[15px] rounded-xl secondary-color flex flex-col gap-[20px] relative">
+            {showMenu ? <Menu cancel={()=>setShowMenu(false)}  setNewList={console.log} type="post" itemId={postData._id}/> : null}
             <div className="w-full flex justify-between">
                 <div className='flex gap-2 items-center mr-auto'>
                     <img className='h-[40px] w-[40px]' src={IconLibrary.Profile} alt='profile picture'></img>
                     <p>{postData.author.username} on <b className="text-white text-opacity-50">{formatDateToPretty(postData.createdAt)}</b></p>
                 </div>
-                <button><img className='h-[20px] w-[20px]' src={IconLibrary.Dots} alt='menu'></img></button>
+                <button onClick={()=>setShowMenu(prev=>!prev)}><img className='h-[20px] w-[20px]' src={IconLibrary.Dots} alt='menu'></img></button>
             </div>
             <p>{postData.body}</p>
             <div className="flex gap-[30px]">
