@@ -1,10 +1,11 @@
 {
   "files": {
-    "main.css": "/api-portal/static/css/main.a1a67b12.css",
-    "main.js": "/api-portal/static/js/main.2b6fd2aa.js",
+    "main.css": "/api-portal/static/css/main.e81e9d89.css",
+    "main.js": "/api-portal/static/js/main.ac6e178d.js",
     "static/js/453.fe9e54d8.chunk.js": "/api-portal/static/js/453.fe9e54d8.chunk.js",
     "static/media/settings.svg": "/api-portal/static/media/settings.dfcebfd4cd0e3bf55fe731758a563602.svg",
     "static/media/muscle.svg": "/api-portal/static/media/muscle.2e4dde1846aa7d14dfb5f1ecac32e4dc.svg",
+    "static/media/profile.svg": "/api-portal/static/media/profile.ae1ee11082a8a3c3a0393afeef8e156f.svg",
     "static/media/meal.svg": "/api-portal/static/media/meal.cc88922fcf278b67da4729ffc3335659.svg",
     "static/media/exercise.svg": "/api-portal/static/media/exercise.79b6fe3b9140d6d203807951ecf4ed42.svg",
     "static/media/list.svg": "/api-portal/static/media/list.34154c70752f30a5a37e8a2d37c847d2.svg",
@@ -14,13 +15,14 @@
     "static/media/disableFullscreen.svg": "/api-portal/static/media/disableFullscreen.3e53f76ffbaa37d5041b82a2a5537d6e.svg",
     "static/media/enableFullscreen.svg": "/api-portal/static/media/enableFullscreen.86a291e032dc6952740fd9e86d6545cf.svg",
     "static/media/hide.svg": "/api-portal/static/media/hide.9be35eaa007cb44c5768991eb3b9eee6.svg",
+    "static/media/bookmark-empty.svg": "/api-portal/static/media/bookmark-empty.0b73146edcc60310c2a3470483cb0231.svg",
     "static/media/quantity.svg": "/api-portal/static/media/quantity.71035e71fd9f55b9c42f8175ee72cbcc.svg",
     "static/media/goals.svg": "/api-portal/static/media/goals.1d6270e32b9b4695443a4f4c4235afd0.svg",
     "static/media/edit.svg": "/api-portal/static/media/edit.5b2e8ed164287e5ead4d77ba82812c51.svg",
     "static/media/guides.svg": "/api-portal/static/media/guides.109b85922cbaaafad6abd26e0367042c.svg",
     "static/media/star-filled.svg": "/api-portal/static/media/star-filled.3df995ef7f5fd55ae0e8caa0b22de720.svg",
+    "static/media/bookmark-filled.svg": "/api-portal/static/media/bookmark-filled.e5d85b1b298734fdf6d2c2499b5a5212.svg",
     "static/media/download.svg": "/api-portal/static/media/download.876191660fee459e1e3611a61a1c06c0.svg",
-    "static/media/profile.svg": "/api-portal/static/media/profile.efd93e6590ee994daec8e6deb1461a74.svg",
     "static/media/friends.svg": "/api-portal/static/media/friends.ae4e7a9fc0916b44d8988a733d30d9d8.svg",
     "static/media/tag.svg": "/api-portal/static/media/tag.d8630337c131afbccd056616933775cb.svg",
     "static/media/save.svg": "/api-portal/static/media/save.82956760d8d34eaf8c1df6a35dd8037b.svg",
@@ -29,10 +31,13 @@
     "index.html": "/api-portal/index.html",
     "static/media/dumbbell.svg": "/api-portal/static/media/dumbbell.198d9eb583527ad1049958cd795eb362.svg",
     "static/media/workout.svg": "/api-portal/static/media/workout.198d9eb583527ad1049958cd795eb362.svg",
+    "static/media/heart-empty.svg": "/api-portal/static/media/heart-empty.0319b4b2a51880a08c54f6b5f917735d.svg",
     "static/media/menu.svg": "/api-portal/static/media/menu.42ffcc0d9173397657cd866887d39081.svg",
     "static/media/planner.svg": "/api-portal/static/media/planner.9a101234c2768d5344f87ce098e55bcc.svg",
+    "static/media/comment.svg": "/api-portal/static/media/comment.1f81357b8d88daea7669ecf0f0a7b25c.svg",
     "static/media/food.svg": "/api-portal/static/media/food.a72fe281f28d4837296ccf2749319b1d.svg",
     "static/media/no.svg": "/api-portal/static/media/no.e656c70adb2f4a9f6516643d7f02403e.svg",
+    "static/media/send.svg": "/api-portal/static/media/send.f41c9a5829b2eb7502be1c0f5d53e653.svg",
     "static/media/logout.svg": "/api-portal/static/media/logout.66eb43e0185d67acecfc15fb51e6ba36.svg",
     "static/media/infoCircle.svg": "/api-portal/static/media/infoCircle.2637b42f93f8681ed0b5fac2b6a2bca9.svg",
     "static/media/skip.svg": "/api-portal/static/media/skip.03c7cdd92b9d0e7fa43700effb8729f7.svg",
@@ -42,6 +47,7 @@
     "static/media/calories.svg": "/api-portal/static/media/calories.92ba15d57adf918164224e899f9385d0.svg",
     "static/media/circle.svg": "/api-portal/static/media/circle.71f0eabb69e37cd87bd1739c55f7112f.svg",
     "static/media/filter.svg": "/api-portal/static/media/filter.fa0cc2fcfdcf8c1637f48c3051e6296f.svg",
+    "static/media/heart-filled.svg": "/api-portal/static/media/heart-filled.721f59c893913249c52ba521ac791164.svg",
     "static/media/dots.svg": "/api-portal/static/media/dots.0134d43af8d38f521d9cc94585f1e90c.svg",
     "static/media/maximise.svg": "/api-portal/static/media/maximise.03a665ae045668afdccc59af884c1001.svg",
     "static/media/add.svg": "/api-portal/static/media/add.40420e7a248b92fafeaf5c63a232228d.svg",
@@ -74,12 +80,12 @@
     "static/media/clipboard.svg": "/api-portal/static/media/clipboard.53cc1850890226ef59696d900a462e70.svg",
     "static/media/previous.svg": "/api-portal/static/media/previous.8aefe30ba0188b831ef98d9d1956a5cc.svg",
     "static/media/next.svg": "/api-portal/static/media/next.d4cbd790f65d0bfe5bb99503a158fcbf.svg",
-    "main.a1a67b12.css.map": "/api-portal/static/css/main.a1a67b12.css.map",
-    "main.2b6fd2aa.js.map": "/api-portal/static/js/main.2b6fd2aa.js.map",
+    "main.e81e9d89.css.map": "/api-portal/static/css/main.e81e9d89.css.map",
+    "main.ac6e178d.js.map": "/api-portal/static/js/main.ac6e178d.js.map",
     "453.fe9e54d8.chunk.js.map": "/api-portal/static/js/453.fe9e54d8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a1a67b12.css",
-    "static/js/main.2b6fd2aa.js"
+    "static/css/main.e81e9d89.css",
+    "static/js/main.ac6e178d.js"
   ]
 }
