@@ -23,7 +23,6 @@ const Community = () => {
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/post/`,{withCredentials: true});
             if(response.status === 200){
                 setPosts(response.data);
-                console.log(response.data)
             }
         }catch(error){
             console.error(error)
@@ -33,10 +32,10 @@ const Community = () => {
     useEffect(()=>{fetchPosts()},[])
    
     return ( 
-        <div className="p-[10px] h-screen w-full overflow-hidden flex flex-col gap-3">
+        <div className="p-[10px] h-full w-full overflow-hidden flex flex-col gap-3">
             <div className="w-full h-[50px] flex items-center justify-between"><h1 className="text-2xl font-bold">Community Feed</h1></div>
             <div className="w-full h-full flex">
-                <div className="w-2/3 h-full flex flex-col gap-3">
+                <div className="w-2/3 h-full flex flex-col gap-3 overflow-y-auto pb-[100px] scrollbar-thin scrollbar-thumb scrollbar-thumb-rounded scrollbar-thumb-white scrollbar-track-transparent pr-[10px]">
                     <NewStatusPost addPost={addPost} />
                     <div className="flex gap-4 justify-end">
                         <select className="bg-transparent" onChange={(e)=>setSort(e.target.value)} value={sort}>

@@ -9,10 +9,10 @@ interface IErrors {
     title: string[]; 
     body: string[]
 }
-interface NewStatusPostProps {
+interface NewPostProps {
     addPost: (post: StatusPost) => void;
   }
-const NewStatusPost: React.FC<NewStatusPostProps> = ({addPost}) => {
+const NewPost: React.FC<NewPostProps> = ({addPost}) => {
 
     const { showMessage } = useMessage();
 
@@ -22,21 +22,21 @@ const NewStatusPost: React.FC<NewStatusPostProps> = ({addPost}) => {
     const [errors, setErrors] = useState<IErrors>({title: [], body: []});
     const [tags, setTags] = useState<Tag[]>([])
 
-    const handleAddStatusPost = () =>{
-        const currentErrors = validateStatusPost();
+    const handleAddPost = () =>{
+        const currentErrors = validatePost();
         setErrors(currentErrors);
         if(currentErrors.title.length < 1 && currentErrors.body.length < 1){
-            const newStatusPost: IStatusPost = {
+            const newPost: IStatusPost = {
                 title,
                 body,
                 tags,
                 privacy
             }
-            console.log(newStatusPost)
-            handleSendData(newStatusPost);
+            console.log(newPost)
+            handleSendData(newPost);
         }
     }
-    const validateStatusPost = () =>{
+    const validatePost = () =>{
         let tempErrors: IErrors = {title: [], body: []};
         if(title.length < 1){
             tempErrors.title.push('Title cannot be empty')
@@ -59,7 +59,7 @@ const NewStatusPost: React.FC<NewStatusPostProps> = ({addPost}) => {
     const handleSendData = async (newPostData: IStatusPost) =>{
         console.log("handleSendData started")
         try{
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/post/status-post`,newPostData,{withCredentials: true});
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/post`,newPostData,{withCredentials: true});
             if(response.status === 201){
                 showMessage('Status Post successfully created', 'success');
                 addPost(response.data);
@@ -84,7 +84,7 @@ const NewStatusPost: React.FC<NewStatusPostProps> = ({addPost}) => {
                         <option className='menu-color text-white' value={'friends'}>Friends</option>
                         <option className='menu-color text-white' value={'private'}>Private</option>
                     </select>
-                    <button className="w-[125px] h-[40px] accent-background rounded" onClick={handleAddStatusPost}>Post</button>
+                    <button className="w-[125px] h-[40px] accent-background rounded" onClick={handleAddPost}>Post</button>
                 </div>
                 <div className='flex flex-col gap-2 flex-1'>
                     <div className='w-full flex gap-2'>
@@ -104,4 +104,4 @@ const NewStatusPost: React.FC<NewStatusPostProps> = ({addPost}) => {
      );
 }
  
-export default NewStatusPost;
+export default NewPost;

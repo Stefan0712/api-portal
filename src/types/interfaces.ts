@@ -1,3 +1,4 @@
+
 export interface Exercise {
     _id?: string;
     sourceId?: string;
@@ -123,6 +124,7 @@ export interface IUser {
   }
 
 export interface StatusPost {
+    _id?: string,
     title: string,
     body: string,
     privacy: "friends" | "public" | "private",
@@ -142,4 +144,19 @@ export interface NewStatusPost {
     privacy: "friends" | "public" | "private",
     tags: Tag[],
 }
+export interface Comment {
+    _id?: string;
+    body: string;
+    author: string;
+    postId: string;
+    comments: Comment[];
+    parentCommentId?: string | null;
+    likes: string[];
+    dislikes: string[];
+    createdAt: Date;
+    editedAt?: Date;
+    isEdited: boolean;
+    reportedBy: string[];
+    isDeleted: boolean;
+  }
   

@@ -78,6 +78,7 @@ import Activity from './assets/activity.svg';
 import HeartEmpty from './assets/heart-empty.svg';
 import HeartFilled from './assets/heart-filled.svg';
 import Comment from './assets/comment.svg';
+import Send from './assets/send.svg';
 import BookmarkFilled from './assets/bookmark-filled.svg';
 import BookmarkEmpty from './assets/bookmark-empty.svg';
 
@@ -85,6 +86,7 @@ import BookmarkEmpty from './assets/bookmark-empty.svg';
 
 
 export const IconLibrary = {
+    Send,
     Comment,
     BookmarkFilled,
     BookmarkEmpty,
