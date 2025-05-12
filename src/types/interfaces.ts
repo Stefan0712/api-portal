@@ -159,4 +159,34 @@ export interface Comment {
     reportedBy: string[];
     isDeleted: boolean;
   }
-  
+  export interface PlanExercise {
+    _id?: string;
+    exerciseId: string;
+    startTime: string;
+    duration: number;
+    note: string;
+    targetGroups: string[];
+  }
+  export interface Day {
+    exercises: PlanExercise[];
+    goals: string[];
+  }
+  export interface ActivityPlan {
+    name: string;
+    description: string;
+    tags: string[];
+    difficulty: string;
+    visibility: string;
+    author: string;
+    days: {
+        mon: Day;
+        tue: Day;
+        wed: Day;
+        thu: Day;
+        fri: Day;
+        sat: Day;
+        sun: Day;
+    };
+    createdAt: Date;
+    updatedAt: Date;
+  }

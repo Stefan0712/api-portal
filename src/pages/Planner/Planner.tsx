@@ -23,7 +23,7 @@ const Planner = () => {
             <div className="w-full h-full secondary-color rounded p-3 flex gap-[10px] overflow-hidden">
                 <div className="w-full h-full rounded p-[10px]">
                     <div className="h-full w-full overflow-hidden">
-                        {screen === "weekly" ? <Activity setScreen={setScreen} /> : screen === "monthly" ? <Meal setScreen={setScreen} /> : <Activity setScreen={setScreen} />}
+                        {screen === "weekly" ? <Activity /> : screen === "meal" ? <Meal /> : <Activity />}
                     </div>  
                 </div>
             </div>

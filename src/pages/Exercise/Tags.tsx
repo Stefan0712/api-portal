@@ -44,6 +44,7 @@ const Tags: React.FC<CreateTagProps> = ({addTag, author, allTags}) => {
         display: 'grid', 
         gridTemplateColumns: '50px 50px 1fr 50px', 
         gap: '5px',
+        alignItems: 'center'
         
     }
 
