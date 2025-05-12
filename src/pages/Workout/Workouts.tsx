@@ -40,7 +40,7 @@ const Workouts = () => {
         try{
             const response = await axios.get<Workout>(`${process.env.REACT_APP_API_URL}/workout/${id}`, {withCredentials: true});
             setSelectedItem(response.data);
-            console.log(response.data)
+            console.log(response.data);
         } catch (error) {
             console.error("Error fetching workout: ", error)
         }

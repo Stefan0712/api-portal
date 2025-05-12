@@ -56,7 +56,9 @@ const Details: React.FC<DetailsProps> = ({name, description, visibility, difficu
             
             <div className="px-[10px] flex flex-col gap-2">
                 {userId ? <Tags addTag={handleAddTag} allTags={tags} author={userId} /> : null}
-                {tags && tags.length > 0 ? tags.map((tag,index)=><div key={'added-tag-'+index}className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0"><div className="h-[15px] w-[15px] rounded" style={{backgroundColor: tag.color}}></div><p>{tag.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setTags((tags)=>[...tags.filter(it=>it.id!==tag.id)]) }/></div>) : null}
+                <div className="h-[200px] overflow-x-hidden overflow-y-auto flex flex-col gap-1">
+                    {tags && tags.length > 0 ? tags.map((tag,index)=><div key={'added-tag-'+index}className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0"><div className="h-[15px] w-[15px] rounded" style={{backgroundColor: tag.color}}></div><p>{tag.name}</p><img className=" w-[20px] h-[20px] ml-auto" src={IconLibrary.No} onClick={()=>setTags((tags)=>[...tags.filter(it=>it.id!==tag.id)]) }/></div>) : null}
+                </div>
             </div>
         </div>
      );

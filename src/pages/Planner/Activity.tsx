@@ -67,8 +67,7 @@ const Activity = () => {
                     <div className="w-full h-[40px] flex items-center justify-center text-xl font-bold">Sunday</div>
                 </div>
                 <div className="w-full h-full flex flex-col gap-1 primary-color rounded">
-                    <div className="w-full h-[40px] flex items-center justify-center text-xl font-bold">Plan Details</div>
-
+                    <div className="w-full h-[40px] flex items-center justify-center text-xl font-bold">Summaries</div>
                 </div>
             </div>
             <div className="w-1/4 primary-color rounded h-full">
