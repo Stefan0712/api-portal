@@ -1,12 +1,10 @@
 import { useState } from "react";
-import Weekly from "./Weekly";
-import Monthly from "./Monthly";
-import PlanList from "./PlanList";
-import { IconLibrary } from "../../IconLibrary";
+import Activity from "./Activity";
+import Meal from "./Meal";
 
 const Planner = () => {
 
-    const [screen, setScreen] = useState('list');
+    const [screen, setScreen] = useState('activity');
 
 
 
@@ -14,12 +12,18 @@ const Planner = () => {
 
     return ( 
         <div className="w-full h-full flex flex-col primary-color p-[10px] overflow-hidden">
-            <h1 className="w-full h-[50px] font-bold text-2xl flex items-center gap-2"><button onClick={()=>setScreen('list')}><img className="h-[20px] w-[20px]" src={IconLibrary.BackArrow} alt="back" /></button> Planner {screen}</h1>
+            <div className="w-full h-[50px] flex items-center gap-2 justify-between mb-[10px]">
+                    <h1 className="font-bold text-2xl"> Planner {screen}</h1>
+                    <div className="h-50px px-[5px] flex gap-1">
+                        <button className={`h-[40px] px-[10px] rounded ${screen === 'activity' ? 'secondary-color' : ''}`} onClick={()=>setScreen('activity')}>Activity Planner</button>
+                        <button className={`h-[40px] px-[10px] rounded ${screen === 'meal' ? 'secondary-color' : ''}`} onClick={()=>setScreen('meal')}>Meal Planner</button>
+                    </div>
+                </div>
             
             <div className="w-full h-full secondary-color rounded p-3 flex gap-[10px] overflow-hidden">
-                <div className="w-full h-full primary-color rounded p-[10px]">
+                <div className="w-full h-full rounded p-[10px]">
                     <div className="h-full w-full overflow-hidden">
-                        {screen === "weekly" ? <Weekly setScreen={setScreen} /> : screen === "monthly" ? <Monthly setScreen={setScreen} /> : <PlanList setScreen={setScreen} screen={screen}/>}
+                        {screen === "weekly" ? <Activity setScreen={setScreen} /> : screen === "monthly" ? <Meal setScreen={setScreen} /> : <Activity setScreen={setScreen} />}
                     </div>  
                 </div>
             </div>
