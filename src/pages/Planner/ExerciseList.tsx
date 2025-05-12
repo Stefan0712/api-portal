@@ -1,7 +1,121 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Exercise } from "../../types/interfaces";
+import { useMessage } from "../../context/MessageContext";
+import { IconLibrary } from "../../IconLibrary";
+
 const ExerciseList = () => {
+
+    const {showMessage} = useMessage();
+
+    const [category, setCategory] = useState('personal');
+    const [allItems, setAllItems] = useState<Exercise[] | null>(null);
+    const [myItems, setMyItems] = useState<{created: Exercise[], saved: Exercise[], favorites: Exercise[]} | null>(null);
+    const [filteredItems, setFilteredItems] = useState<Exercise[] | null>(null);
+
+    const [showCreated, setShowCreated] = useState<boolean>(true);
+    const [showSaved, setShowSaved] = useState<boolean>(true);
+    const [showFavorites, setShowFavorites] = useState<boolean>(true);
+
+
+
+
+    const fetchAllItems = async () =>{
+        try{
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/exercise`, {withCredentials: true});
+            if(response.status === 200){
+                setAllItems(response.data);
+                setFilteredItems(response.data)
+            }
+        }catch(error){
+            console.error(error)
+            showMessage('There was been a server error.', 'error');
+        }
+    }
+    const fetchMyItems = async () =>{
+        try{
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/exercise/my-exercises`, {withCredentials: true});
+            if(response.status === 200){
+                setMyItems(response.data);
+                setFilteredItems(filterItems(response.data));
+            }
+        }catch(error){
+            console.error(error)
+            showMessage('There was been a server error.', 'error');
+        }
+    }
+    const switchCategory = (category: string)=>{
+        setCategory(category);
+        if(category === 'all'){
+            fetchAllItems();
+        }else if(category === 'personal'){
+            fetchMyItems();
+        }
+    }
+
+    useEffect(()=>{
+        if(myItems){
+            console.log("Filters ran")
+            setFilteredItems(filterItems(myItems));
+        }
+    },[showCreated, showFavorites, showSaved]);
+
+    useEffect(()=>{switchCategory('personal')},[])
+
+
+
+    const filterItems = (items: {created: Exercise[], saved: Exercise[], favorites: Exercise[]}) =>{
+        console.log(items)
+        let tempItems: Exercise[] = [];
+        if(items){
+            if(showCreated){
+            tempItems.push(...items.created)
+            }
+            if(showSaved){
+                tempItems.push(...items.saved)
+            }
+            if(showFavorites){
+                tempItems.push(...items.favorites)
+            }
+        }
+        console.log(tempItems)
+        return tempItems;
+    }
     return ( 
-        <h1>Exercise List</h1>
-     );
+        <div className="flex flex-col px-[10px] gap-2">
+            
+            <select value={category} onChange={(e)=>switchCategory(e.target.value)} className="h-[40px] secondary-color rounded pl-[5px]">
+                <option value={'all'}>Public Exercises</option>
+                <option value={'personal'}>My Exercises</option>
+            </select>
+            {category === 'personal' ? 
+                <div className="flex flex-wrap gap-2">
+                    <fieldset className="flex gap-2 items-center">
+                        <input type="checkbox" checked={showCreated} onChange={(e)=>setShowCreated(e.target.checked)} name="created" id="created" className="h-[20px] w-[20px] rounded"></input>
+                        <label htmlFor="created">Created</label>
+                    </fieldset> 
+                    <fieldset className="flex gap-2 items-center">
+                        <input type="checkbox" checked={showSaved} onChange={(e)=>setShowSaved(e.target.checked)} name="saved" id="saved" className="h-[20px] w-[20px] rounded"></input>
+                        <label htmlFor="created">Saved</label>
+                    </fieldset> 
+                    <fieldset className="flex gap-2 items-center">
+                        <input type="checkbox" checked={showFavorites} onChange={(e)=>setShowFavorites(e.target.checked)} name="favorites" id="favorites" className="h-[20px] w-[20px] rounded"></input>
+                        <label htmlFor="created">Favorites</label>
+                    </fieldset> 
+                </div>
+            : null}
+            <div className="flex flex-col flex-1 gap-2 overflow-y-auto">
+                {filteredItems && filteredItems.length > 0 ? filteredItems?.map((item,index)=>(<div key={'Exercise-'+index}>
+                    <div className="w-full h-[40px] flex-shrink-0 flex items-center gap-4 justify-between secondary-color px-[10px] rounded">
+                    <h4>{item.name}</h4>
+                    <button type="button" className="small-square transparent-bg">
+                        <img src={IconLibrary.Add} className="w-[30px] h-[30px]" alt="" />
+                    </button>
+                    </div>
+                </div>)) : null}
+            </div>
+        </div>
+    );
 }
  
 export default ExerciseList;

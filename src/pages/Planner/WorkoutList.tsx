@@ -105,8 +105,8 @@ const WorkoutList = () => {
                 </div>
             : null}
             <div className="flex flex-col flex-1 gap-2 overflow-y-auto">
-                {filteredItems && filteredItems.length > 0 ? filteredItems?.map((item,index)=>(<div key={'Exercise-'+index}>
-                    <div className="w-full h-[40px] flex-shrink-0 flex items-center gap-4">
+                {filteredItems && filteredItems.length > 0 ? filteredItems?.map((item,index)=>(<div key={'Workout-'+index}>
+                    <div className="w-full h-[40px] flex-shrink-0 flex items-center gap-4 justify-between secondary-color px-[10px] rounded">
                     <h4>{item.name}</h4>
                     <button type="button" className="small-square transparent-bg">
                         <img src={IconLibrary.Add} className="w-[30px] h-[30px]" alt="" />
