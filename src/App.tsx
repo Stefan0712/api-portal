@@ -16,6 +16,7 @@ import MessageToast from './pages/common/MessageToast.tsx';
 import Equipment from './pages/Dashboard/pages/Equipment/Equipment.tsx';
 import Community from './pages/Community/Community.tsx';
 import Planner from './pages/Planner/Planner.tsx';
+import EditProfile from './pages/User/EditProfile.tsx';
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/equipment" element={<Equipment />} />
               <Route path="/planner" element={<Planner />} />
+              <Route path="/edit-profile" element={<EditProfile />} />
             </Routes>
           </div>
         </div>
