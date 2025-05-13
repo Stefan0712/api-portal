@@ -190,3 +190,41 @@ export interface Comment {
     createdAt: Date;
     updatedAt: Date;
   }
+
+  export interface Food {
+    name: String,
+    qty: Number,
+    unit: String,
+    protein: Number,
+    carbs: Number,
+    fats: Number,
+    sugar: Number,
+    calories: Number,
+    sodium: Number,
+    time: String,
+    type: String,
+    note?: String
+  }
+  export interface FoodDay {
+    name: string,
+    foods: Food[],
+  } 
+
+  export interface MealPlan {
+    name: string,
+    description: string,
+    tags: Tag[],
+    visibility: string,
+    author: string,
+    goals: string[],
+    days: {
+        mon: FoodDay;
+        tue: FoodDay;
+        wed: FoodDay;
+        thu: FoodDay;
+        fri: FoodDay;
+        sat: FoodDay;
+        sun: FoodDay;
+    },
+    createdAt: Date,
+  }

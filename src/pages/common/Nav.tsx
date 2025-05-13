@@ -48,7 +48,7 @@ const Nav = () => {
                 {
                     isLoggedIn() ? 
                         <div className="grid grid-cols-[1fr_50px] w-full">
-                            <Link to="/profile"><h3>{localStorage.getItem('username')}</h3><p>{localStorage.getItem('role')}</p></Link>
+                            <Link to="/my-profile"><h3>{localStorage.getItem('username')}</h3><p>{localStorage.getItem('role')}</p></Link>
                             <button className="w-[50px] h-[50x] flex items-center justify-center" type="button" onClick={handleLogout}><img className="w-[30px] h-[30px]" src={IconLibrary.Logout} alt="home button" /></button>
                         </div>
                     :
