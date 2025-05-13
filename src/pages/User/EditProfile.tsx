@@ -1,26 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
-import { IUser } from "../../types/interfaces";
-
-
-interface Badges {
-    id: string,
-    name: string,
-    value: number
-}
+import axios from "axios";
+import { useMessage } from "../../context/MessageContext";
 
 interface ProfileData {
     name?: string,
     username?: string,
-    _id: string,
+    _id?: string,
     email?: string,
     age?: number,
     gender?: string,
     height?: number,
     weight?: number,
     bio?: string,
-    isPrivate: boolean,
     profileSettings: {
       showMyWorkouts: string,
       showMyExercises: string,
@@ -33,24 +26,27 @@ interface ProfileData {
 }
 const EditProfile = () => {
 
+    const {showMessage} = useMessage();
+    const [userData, setUserData] = useState<ProfileData | null>(null);
     const navigate = useNavigate();
+
     const [username, setUsername] = useState<string>("");
     const [name, setName] = useState<string>("");
     const [bio, setBio] = useState<string>("");
-    const [age, setAge] = useState<string>("");
+    const [age, setAge] = useState<number>(0);
     const [gender, setGender] = useState<string>("");
-    const [height, setHeight] = useState<string>("");
-    const [weight, setWeight] = useState<string>("");
-    const [showMyWorkouts, setShowMyWorkouts] = useState<string>("false");
-    const [showMyExercises, setShowMyExercises] = useState<string>("false");
-    const [showProfile, setShowProfile] = useState<string>("false");
-    const [showMyActivity, setShowMyActivity] = useState<string>("false");
-    const [showMyDetails, setShowMyDetails] = useState<string>("false");
-    const [showMyPosts, setShowMyPosts] = useState<string>("false");
-    const [showMyPlans, setShowMyPlans] = useState<string>("false");
+    const [height, setHeight] = useState<number>(0);
+    const [weight, setWeight] = useState<number>(0);
+    const [showMyWorkouts, setShowMyWorkouts] = useState<string>("private");
+    const [showMyExercises, setShowMyExercises] = useState<string>("private");
+    const [showProfile, setShowProfile] = useState<string>("private");
+    const [showMyActivity, setShowMyActivity] = useState<string>("private");
+    const [showMyDetails, setShowMyDetails] = useState<string>("private");
+    const [showMyPosts, setShowMyPosts] = useState<string>("private");
+    const [showMyPlans, setShowMyPlans] = useState<string>("private");
     const [email, setEmail] = useState<string>('');
 
-    const [userData, setUserData] = useState<IUser | null>(null);
+    
 
 
     const handleSaveProfile = () =>{
@@ -59,10 +55,10 @@ const EditProfile = () => {
             username, 
             name, 
             bio, 
-            age: typeof age === 'string' ? parseInt(age) : age,
+            age,
             gender, 
-            height: typeof height === 'string' ? parseInt(height) : height, 
-            weight: typeof weight === 'string' ? parseInt(weight) : weight,
+            height, 
+            weight,
             profileSettings:{
                 showMyWorkouts,
                 showProfile,
@@ -73,9 +69,59 @@ const EditProfile = () => {
                 showMyPosts
             }
         };
-        //navigate('/my-profile');
+        console.log(profileData)
+        handleUpdateProfile(profileData);
+        
        }
     }
+
+    const handleUpdateProfile = async (profileData: ProfileData) =>{
+        try{
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}/user/update-user`, profileData, {withCredentials: true});
+            if(response.status === 200){
+                showMessage("Profile updated successfully", "success");
+                navigate('/my-profile');
+            }
+        }catch(error){
+            console.error(error)
+            showMessage("There was a server error", "error");
+        }
+    }
+    const getProfileData = async () =>{
+        try{
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/update-user`, {withCredentials: true});
+            if(response.status === 200){
+                setUserData(response.data.user);
+                populateData(response.data.user);
+            }
+        }catch(error){
+            console.error(error)
+            showMessage("There was a server error", "error");
+        }
+    }
+    useEffect(()=>{getProfileData()},[]);
+
+    const populateData = (data: ProfileData) =>{
+        setUsername(data.username || '');
+        setName(data.name || '');
+        setBio(data.bio || '');
+        setAge(data.age || 0);
+        setGender(data.gender || '');
+        setHeight(data.height || 0);
+        setWeight(data.weight || 0);
+        setEmail(data.email || '');
+
+       if(data.profileSettings){
+            setShowMyWorkouts(data.profileSettings.showMyWorkouts);
+            setShowMyExercises(data.profileSettings.showMyExercises);
+            setShowProfile(data.profileSettings.showProfile);
+            setShowMyActivity(data.profileSettings.showMyActivity);
+            setShowMyDetails(data.profileSettings.showMyDetails);
+            setShowMyPosts(data.profileSettings.showMyPosts);
+            setShowMyPlans(data.profileSettings.showMyPlans);
+       }
+    }
+
     const fieldsetStyles = 'w-full flex flex-col gap-2 h-[75px]';
     const inputStyles = 'w-full h-[40px] rounded secondary-color pl-2';
     const labelStyles = 'text-white text-opacity-50'
@@ -103,7 +149,7 @@ const EditProfile = () => {
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>Age</label>
-                        <input className={inputStyles} type="number" name="age" id="age" value={age} onChange={(e) => setAge(e.target.value)} />
+                        <input className={inputStyles} type="number" name="age" id="age" value={age} onChange={(e) => setAge(parseInt(e.target.value))} />
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>Gender</label>
@@ -111,11 +157,11 @@ const EditProfile = () => {
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>Height (cm)</label>
-                        <input className={inputStyles} type="number" name="height" id="height" value={height} onChange={(e) => setHeight(e.target.value)} />
+                        <input className={inputStyles} type="number" name="height" id="height" value={height} onChange={(e) => setHeight(parseInt(e.target.value))} />
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>Weight (kg)</label>
-                        <input className={inputStyles} type="number" name="weight" id="weight" value={weight} onChange={(e) => setWeight(e.target.value)} />
+                        <input className={inputStyles} type="number" name="weight" id="weight" value={weight} onChange={(e) => setWeight(parseInt(e.target.value))} />
                     </fieldset>
                 </div>
                 <div className="w-1/2 h-full flex flex-col gap-2">
@@ -123,53 +169,60 @@ const EditProfile = () => {
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>Workouts</label>
                         <select className={inputStyles} name="showMyWorkouts" id="showMyWorkouts" value={showMyWorkouts} onChange={(e) => setShowMyWorkouts(e.target.value)}>
-                            <option value={"false"}>Hide</option>
-                            <option value={"true"}>Show</option>
+                            <option value={"private"}>Private</option>
+                            <option value={"friends"}>Friends Only</option>
+                            <option value={"public"}>Public</option>
                         </select>
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>Profile</label>
                         <select className={inputStyles} name="showProfile" id="showProfile" value={showProfile} onChange={(e) => setShowProfile(e.target.value)}>
-                            <option value={"false"}>Hide</option>
-                            <option value={"true"}>Show</option>
+                            <option value={"private"}>Private</option>
+                            <option value={"friends"}>Friends Only</option>
+                            <option value={"public"}>Public</option>
                         </select>
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>Exercises</label>
                         <select className={inputStyles} name="showMyExercises" id="showMyExercises" value={showMyExercises} onChange={(e) => setShowMyExercises(e.target.value )}>
-                            <option value={"false"}>Hide</option>
-                            <option value={"true"}>Show</option>
+                            <option value={"private"}>Private</option>
+                            <option value={"friends"}>Friends Only</option>
+                            <option value={"public"}>Public</option>
                         </select>
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>My Activity</label>
                         <select className={inputStyles} name="showMyActivity" id="showMyActivity" value={showMyActivity} onChange={(e) => setShowMyActivity(e.target.value)}>
-                            <option value={"false"}>Private</option>
-                            <option value={"true"}>Public</option>
+                            <option value={"private"}>Private</option>
+                            <option value={"friends"}>Friends Only</option>
+                            <option value={"public"}>Public</option>
                         </select>
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>Personal details</label>
                         <select className={inputStyles} name="showMyDetails" id="showMyDetails" value={showMyDetails} onChange={(e) => setShowMyDetails(e.target.value)}>
-                            <option value={"false"}>Private</option>
-                            <option value={"true"}>Public</option>
+                            <option value={"private"}>Private</option>
+                            <option value={"friends"}>Friends Only</option>
+                            <option value={"public"}>Public</option>
                         </select>
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>My Plans</label>
                         <select className={inputStyles} name="showMyPlans" id="showMyPlans" value={showMyPlans} onChange={(e) => setShowMyPlans(e.target.value)}>
-                            <option value={"false"}>Private</option>
-                            <option value={"true"}>Public</option>
+                            <option value={"private"}>Private</option>
+                            <option value={"friends"}>Friends Only</option>
+                            <option value={"public"}>Public</option>
                         </select>
                     </fieldset>
                     <fieldset  className={fieldsetStyles}>
                         <label className={labelStyles}>My Posts</label>
                         <select className={inputStyles} name="showMyPosts" id="showMyPosts" value={showMyPosts} onChange={(e) => setShowMyPosts(e.target.value)}>
-                            <option value={"false"}>Private</option>
-                            <option value={"true"}>Public</option>
+                            <option value={"private"}>Private</option>
+                            <option value={"friends"}>Friends Only</option>
+                            <option value={"public"}>Public</option>
                         </select>
                     </fieldset>
-                    <button className="accent-background h-[40px] mt-[30px] w-full rounded">Update profile</button>
+                    <button className="accent-background h-[40px] mt-[30px] w-full rounded" onClick={handleSaveProfile}>Update profile</button>
                 </div>
             </form>
         </div>
