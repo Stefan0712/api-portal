@@ -17,7 +17,6 @@ const Profile = () => {
     const getData = async () =>{
         try{
             const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/private`, {headers: {Authorization: `Bearer ${localStorage.getItem("token")}`}});
-            console.log(response.data.user);
             setUserData(response.data.user);
         }catch(error){
             console.error('Failed to get profile data', error)

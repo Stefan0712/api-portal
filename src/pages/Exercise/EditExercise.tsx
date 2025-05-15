@@ -185,13 +185,13 @@ const EditExercise: React.FC = () => {
             <div>
                 <div className="flex gap-4 p-[20px] items-center">
                     <Link to={'/exercises'}><img className="w-[25px] h-[25px]" src={IconLibrary.BackArrow} alt=""></img></Link>
-                    <h2 className="font-bold text-2xl">Create Exercise</h2>
+                    <h2 className="font-bold text-2xl">Edit Exercise</h2>
                     <button className="w-[100px] h-[40px] rounded accent-background text-white ml-auto" type="button" onClick={handleSubmit}>Save</button>
                 </div>
                     <form className="flex flex-wrap p-[20px]">
                             <div className="flex flex-col gap-2 w-1/2 h-[250px] p-3">
                                 <h3 className="font-bold text-xl">Exercise Info</h3> 
-                                <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="name" id="name" required={true} minLength={3} maxLength={20} onChange={(e) => setName(e.target.value)} value={name} placeholder="Name"></input>
+                                <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="name" id="name" required={true} minLength={3} maxLength={50} onChange={(e) => setName(e.target.value)} value={name} placeholder="Name"></input>
                                 <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="description" id="description" onChange={(e) => setDescription(e.target.value)} value={description} minLength={0} maxLength={300} placeholder="Description"></input>
                                 <div className="w-full flex gap-3">
                                     <input className="h-[40px] rounded w-1/2 pl-[10px] secondary-color" type="url" name="reference" id="reference" onChange={(e) => setReference(e.target.value)} value={reference} placeholder="Reference URL"></input>

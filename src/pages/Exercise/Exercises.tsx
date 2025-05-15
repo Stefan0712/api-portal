@@ -17,66 +17,38 @@ const Exercises = () => {
     const [items, setItems] = useState<Exercise[]>([]);
     const [selectedItem, setSelectedItem] = useState<Exercise | null>(null);
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [usersExercises, setUsersExercises] = useState<{favorites: string[], saved: string[], created: string[]} | null>(null)
     const isUserLoggedIn = isLoggedIn();
     const userData = getUserData();
     const [source, setSource] = useState('user');
 
-    useEffect(()=>{
-        fetchItems();
-        if(userData && isUserLoggedIn){
-            fetchUsersExercises();
-        }
-    },[]);
-
+    useEffect(()=>{fetchItems('user')},[])
     const fetchItems = async (type: string = 'user') =>{
         try{
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/exercise/${type === 'user' ? 'my-exercises' : ''}`, {withCredentials: true});
-            if(type === 'user'){
-
-                const initialFavorites = response.data?.favorites || [];
-                const initialCreated = response.data?.created || [];
-                const initialSaved = response.data?.saved || [];
-
-                const initialArray = [...initialFavorites, ...initialCreated , ...initialSaved ];
-                const uniqueArray = Array.from(new Map(initialArray.map(obj => [obj._id, obj])).values());
-                setItems(uniqueArray);
-                console.log(uniqueArray)
-            }else{
-                setItems(response.data);
-            }
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/exercise/${type === 'user' ? '?created=true&saved=true&favorites=true' : ''}`, {withCredentials: true});
+            setItems(response.data);
             console.log(response.data)
         } catch (error){
             console.error("Error fetching exercises: ", error)
         }
     }
-    const getExerciseData = async (id: string) =>{
-        fetchUsersExercises();
+    const getExerciseData = async (id: string, types: {isSaved: boolean, isCreated: boolean, isFavorite: boolean}) =>{
         try{
             const response = await axios.get<Exercise>(`${process.env.REACT_APP_API_URL}/exercise/view/${id}`, {withCredentials: true});
             if(response.status === 200){
                 const data = {
                     ...response.data,
-                    isFavorite: usersExercises?.favorites?.some(item => item._id === response.data._id) || false,
-                    isSaved: usersExercises?.saved?.some(item => item._id === response.data._id) || false,
-                    isCreated: usersExercises?.created?.some(item => item._id === response.data._id) || false,
-                  };
-                  
+                    isFavorite: types.isFavorite,
+                    isSaved: types.isSaved,
+                    isCreated: types.isCreated,
+                };
+                
                 setSelectedItem(data);
                 console.log(data)
             }
         } catch (error) {
             console.error("Error fetching exercises: ", error)
         }
-    }
-    const fetchUsersExercises = async () =>{
-        try{
-            const response = await axios.get(`${process.env.REACT_APP_API_URL}/exercise/my-exercises`,{withCredentials: true});
-            setUsersExercises(response.data);
-            console.log(response.data)
-        } catch (error) {
-            console.error("Error getting user's exercises: ", error)
-        }
+       
     }
     const handleDeleteExercise = async () =>{
         try{
@@ -89,48 +61,32 @@ const Exercises = () => {
                     fetchItems('user');
                 }
             }
-            
         } catch (error) {
             console.error(`Error deleting exercise: `, error);
         }
-        
     }
     const handleSaveExercise = async () =>{
-        try{
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise/save/${selectedItem._id}`,{}, {withCredentials: true});
-            if(response.status === 200){
-                setUsersExercises(prev => {
-                    if (!prev) return prev;
-                    const isSaved = prev.saved.includes(selectedItem._id);
-
-                    return {
-                        ...prev, 
-                        saved: isSaved ? prev.saved.filter(id => id !== selectedItem._id) : [...prev.saved, selectedItem._id]
-                    } 
-                });
-                showMessage(response.data.message, "success");
-                
-            }else if(response.status === 500){
-                showMessage("Failed to add exercise to saved exercises. Server error.", "error")
+        if(selectedItem){
+            try{
+                const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise/save/${selectedItem._id}`,{}, {withCredentials: true});
+                if(response.status === 200){
+                    setSelectedItem(prev => ({...prev, isSaved: !prev.isSaved}));
+                    showMessage(response.data.message, "success");
+                    
+                }else if(response.status === 500){
+                    showMessage("Failed to add exercise to saved exercises. Server error.", "error")
+                }
+            } catch (error){
+                showMessage("Error fetching exercises", "error");
+                console.error(error)
             }
-        } catch (error){
-            showMessage("Error fetching exercises", "error");
-            console.error(error)
         }
     };
     const handleToggleFavorite = async () =>{
         try{
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/exercise/favorite/${selectedItem._id}`,{}, {withCredentials: true});
             if(response.status === 200){
-                setUsersExercises(prev => {
-                    if (!prev) return prev;
-                    const isFavorited = prev.favorites.includes(selectedItem._id);
-
-                    return {
-                        ...prev, 
-                        favorites: isFavorited ? prev.favorites.filter(id => id !== selectedItem._id) : [...prev.favorites, selectedItem._id]
-                    } 
-                });
+                setSelectedItem(prev => ({...prev, isFavorite: !prev.isFavorite}));
                 showMessage(response.data.message, "success");
             }else if(response.status === 500){
                 showMessage("Failed to add exercise to favorite exercises. Server error.", "error")
@@ -146,18 +102,18 @@ const Exercises = () => {
             <div className="w-full flex-1 overflow-hidden grid grid-cols-[350px_1fr] gap-[10px] primary-color border border-white border-opacity-5 rounded p-2">
                 <div className="flex flex-col gap-[10px] overflow-hidden flex-1 flex-shrink-0">
                     <div className="flex-1 flex flex-col gap-2 overflow-hidden">
-                        <div className="h-[100px] w-full flex flex-wrap gap-2 px-[5px]">
+                        <div className={`${source === 'user' ? 'h-[100px]' : 'h-[50px]'} w-full flex flex-col gap-2 px-[5px]`}>
                             <div className="w-full flex items-center gap-2"><button className={`${source === 'user' ? 'secondary-color' : ''} w-1/2 h-[40px] px-[15px] rounded`} onClick={()=>(fetchItems('user'), setSource('user'), setSelectedItem(null))}>My Exercises</button><button className={`${source === 'all' ? 'secondary-color' : ''} w-1/2 h-[40px] px-[15px] rounded`} onClick={()=>(fetchItems('all'), setSource('all'), setSelectedItem(null))}>Explore Exercises</button></div>
-                            <select className="secondary-color h-[40px] w-full px-[15px] rounded">
+                            {source === 'user' ? <select className="secondary-color h-[40px] w-full px-[15px] rounded">
                                 <option>All</option>
                                 <option>Created</option>
                                 <option>Saved</option>
                                 <option>Favorites</option>
-                            </select>
+                            </select> : null}
                         </div>
                         <div className="h-full flex-1 flex flex-col gap-2 overflow-y-auto overflow-x-hidden scrollbar-hide">
                             {items && items.length && Array.isArray(items) ? items?.map((item, index)=> (
-                                <div className={`item w-full h-[90px] flex-shrink-0 menu-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getExerciseData(item._id)}>
+                                <div className={`item w-full h-[90px] flex-shrink-0 menu-color rounded py-[5px] px-[10px] ${selectedItem?._id===item._id ? 'selected-item' : ''}`} key={index} onClick={()=>getExerciseData(item._id, {isSaved: item.isSaved || false, isFavorite: item.isFavorited || false, isCreated: item.isCreated || false})}>
                                     <h3 className="font-bold text-lg">{item.name}</h3>
                                     <div className="flex gap-[10px] overflow-hidden w-full text-white text-opacity-50 whitespace-nowrap">
                                         {item.muscleGroups && item.muscleGroups.length > 0 ? item.muscleGroups.map((group,index)=><p key={'group-'+index}>{group.name}</p>):<p>No groups</p>}
@@ -195,7 +151,7 @@ const Exercises = () => {
                                 <p>{selectedItem.description || 'No description'}</p>
                             </div>
                             <div className="w-1/3">
-                                <p><b>Author:</b> Stefan</p>
+                                <p><b>Author:</b> {selectedItem.author.username || 'Unknown'}</p>
                                 <p><b>Created at:</b> {formatDateToPretty(selectedItem.createdAt) || 'Not Set'}</p>
                                 <p><b>Difficulty:</b> {selectedItem.difficulty || 'Not Set'}</p>
                             </div>

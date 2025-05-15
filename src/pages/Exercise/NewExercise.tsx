@@ -63,7 +63,7 @@ const NewExercise: React.FC = () => {
                 authorId: userData.id,
                 isCompleted: false, 
                 name,
-                source: 'database', 
+                createdBy: 'user', 
                 description, 
                 reference, 
                 difficulty: difficulty.length > 0 ? difficulty : 'beginner', 
@@ -158,7 +158,7 @@ const NewExercise: React.FC = () => {
                     <form className="flex flex-wrap p-[20px]">
                             <div className="flex flex-col gap-2 w-1/2 h-[250px] p-3">
                                 <h3 className="font-bold text-xl">Exercise Info</h3> 
-                                <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="name" id="name" required={true} minLength={3} maxLength={20} onChange={(e) => setName(e.target.value)} value={name} placeholder="Name"></input>
+                                <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="name" id="name" required={true} minLength={3} maxLength={50} onChange={(e) => setName(e.target.value)} value={name} placeholder="Name"></input>
                                 <input className="h-[40px] rounded w-full pl-[10px] secondary-color" type="text" name="description" id="description" onChange={(e) => setDescription(e.target.value)} value={description} minLength={0} maxLength={300} placeholder="Description"></input>
                                 <div className="w-full flex gap-3">
                                     <input className="h-[40px] rounded w-1/2 pl-[10px] secondary-color" type="url" name="reference" id="reference" onChange={(e) => setReference(e.target.value)} value={reference} placeholder="Reference URL"></input>
@@ -211,7 +211,7 @@ const NewExercise: React.FC = () => {
                                 </div>  
                                 <div className="flex flex-col gap-2 h-[150px] overflow-x-hidden overflow-y-auto primary-color rounded p-2 pr-[20px]">
                                     {instructions?.length > 0 ? instructions.map((instruction, index)=>(
-                                            <div className="w-full mh-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0" id={'instruction'} key={'instruction-'+index}>
+                                            <div className="w-full h-[40px] flex gap-2 secondary-color px-2 items-center rounded flex-shrink-0" id={'instruction'} key={'instruction-'+index}>
                                                 <h4>{index+1}. {instruction}</h4>
                                                 <button className="ml-auto" type="button" onClick={()=>handleRemoveInstruction(instruction)}><img className="w-[20px] h-[20px]" src={IconLibrary.No}  alt=""></img></button>
                                             </div>

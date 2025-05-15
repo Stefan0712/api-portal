@@ -5,7 +5,7 @@ export interface Exercise {
     createdAt: string; 
     updatedAt?: string | null;
     authorId: string;
-    source: string;
+    createdBy: string;
     isCompleted: boolean;
     name: string;
     description: string;
@@ -23,6 +23,9 @@ export interface Exercise {
     muscleGroups: TargetGroups[];
     tags: Tag[];
     instructions: string[];
+    isSaved?: boolean;
+    isCreated?: boolean;
+    isFavorited?: boolean;
 }
 export interface TargetGroups {
     id: string;
